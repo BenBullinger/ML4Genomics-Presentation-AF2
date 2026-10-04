@@ -34,6 +34,8 @@
 		}
 		\setbeamertemplate{footline}{}
 		\begin{frame}[noframenumbering]
+			% The picture is as large as the page; the box sizes tell TeX it fits the text area
+			\makebox[\textwidth][l]{\raisebox{-5pt}[\dimexpr\height-5pt\relax][0pt]{%
 			\begin{tikzpicture}
 				\useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
 				\node [
@@ -52,7 +54,8 @@
 							\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate
 					    \end{minipage}			
 					};
-			\end{tikzpicture}
+			\end{tikzpicture}%
+			}}
 		\end{frame}
 	}
 }
