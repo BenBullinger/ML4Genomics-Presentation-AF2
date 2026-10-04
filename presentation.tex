@@ -68,7 +68,7 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
 \begin{frame}{Sequence in, structure out}
   \vspace{0.8cm}
   \begin{center}
-    {\Large MTYKLILNGK\ldots \;$\longmapsto$\; all-atom 3D coordinates}
+    {\Large MTYKLILNGK\ldots \;$\longmapsto$\; 3D coordinates of all heavy atoms}
     \\[1.2cm]
     {\large A structure takes months of experimental effort; sequences number in the billions.}
     \\[3mm]
@@ -81,7 +81,8 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
   \begin{columns}[c]
     \begin{column}{0.42\textwidth}
       \centering
-      \paperfig[0.85\linewidth]{2}{40 597 443 63}
+      \paperfig[0.85\linewidth]{2}{40 598.6 436.8 54}%
+      \llap{\textcolor{white}{\rule[-0.5pt]{0.04\linewidth}{0.015\linewidth}}}% white box over a corner of panel e
     \end{column}
     \begin{column}{0.54\textwidth}
       {\large Median backbone accuracy 0.96\,\AA\ r.m.s.d.$_{95}$; the next best method 2.8\,\AA.}
@@ -126,9 +127,9 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
   \begin{center}
     \paperfig[0.85\linewidth]{4}{245 524 25 207}
     \\[6mm]
-    {\large Every edge $ij$ is updated through the third edges $ik$, $kj$.}
+    {\large Every edge $ij$ is updated from the other two edges of all its triangles.}
     \\[2mm]
-    {\large \alert{The triangle inequality, built into attention.}}
+    {\large \alert{An inductive bias motivated by the triangle inequality.}}
   \end{center}
 \end{frame}
 
@@ -143,7 +144,7 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
       \\[6mm]
       {\large Invariant point attention keeps the update equivariant.}
       \\[2mm]
-      {\large \alert{No chain constraint during refinement.}}
+      {\large \alert{No chain constraint inside the structure module.}}
     \end{column}
   \end{columns}
 \end{frame}
@@ -154,11 +155,11 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
 \begin{frame}{FAPE: a loss over local frames}
   \vspace{0.6cm}
   \begin{center}
-    {\Large $\mathrm{FAPE} \;=\; \operatorname*{mean}_{k,\,i}\; \bigl\| (R_k, \mathbf{t}_k)^{-1} \mathbf{x}_i \;-\; (R_k^{\mathrm{true}}, \mathbf{t}_k^{\mathrm{true}})^{-1} \mathbf{x}_i^{\mathrm{true}} \bigr\|$}
+    {\large $\mathrm{FAPE} \;=\; \frac{1}{Z}\,\operatorname*{mean}_{k,\,i}\; \min\Bigl( d_{\mathrm{clamp}},\; \bigl\| (\bm{R}_k, \bm{t}_k)^{-1} \bm{x}_i \;-\; (\bm{R}_k^{\mathrm{true}}, \bm{t}_k^{\mathrm{true}})^{-1} \bm{x}_i^{\mathrm{true}} \bigr\| \Bigr)$}
     \\[1.2cm]
-    {\large Every atom scored in the frame of every residue, clamped $L^1$.}
+    {\large Every atom scored in every backbone and side-chain frame,\\ clamped $L^1$ with $Z = d_{\mathrm{clamp}} = 10$\,\AA.}
     \\[3mm]
-    {\large \alert{Invariant to pose, and the source of AlphaFold's chirality.}}
+    {\large \alert{Invariant to pose, and the main source of AlphaFold's chirality.}}
   \end{center}
 \end{frame}
 
@@ -177,14 +178,14 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
 % ---------------------------------------------------------------------------------------------
 \section{What makes it work}
 
-\begin{frame}{Every piece earns its accuracy}
+\begin{frame}{Which pieces earn their accuracy}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering
-      \paperfig[0.95\linewidth]{5}{317 540 25 52}
+      \paperfig[0.95\linewidth]{5}{309 540 25 48}
     \end{column}
     \begin{column}{0.46\textwidth}
-      {\large Ablating self-distillation, IPA, recycling, or the triangle updates each costs accuracy.}
+      {\large Ablating self-distillation, IPA, recycling, or the triangle updates together with the pair bias and gating each costs accuracy.}
       \\[6mm]
       {\large \alert{No single trick; a stack of compounding ones.}}
     \end{column}
@@ -195,12 +196,12 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
       \centering
-      \paperfig[0.95\linewidth]{5}{317 415 25 272}
+      \paperfig[0.95\linewidth]{5}{309 415 25 272}
     \end{column}
     \begin{column}{0.46\textwidth}
-      {\large A frozen structure module read out at every block: most targets fold in the first few.}
+      {\large With the trunk frozen, a separate structure module is trained to read out each block. LmrP (T1024) obtains the correct structure early in the network.}
       \\[6mm]
-      {\large \alert{ORF8 of SARS-CoV-2 needs all 48.}}
+      {\large \alert{ORF8 of SARS-CoV-2 needs nearly all 4\,$\times$\,48 block evaluations.}}
     \end{column}
   \end{columns}
 \end{frame}
@@ -209,7 +210,7 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
   \begin{columns}[c]
     \begin{column}{0.44\textwidth}
       \centering
-      \paperfig[0.9\linewidth]{3}{40 486 302 199}
+      \paperfig[0.9\linewidth]{3}{40 483 302 180.5}
     \end{column}
     \begin{column}{0.52\textwidth}
       {\large pLDDT, predicted per residue, tracks the true lDDT-C$\alpha$.}
@@ -217,6 +218,7 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
       {\large \alert{Calibrated confidence made the proteome-scale database usable.}}
     \end{column}
   \end{columns}
+  \reffootnote{K.~Tunyasuvunakool et al., \textit{Nature} 596, 2021.}
 \end{frame}
 
 \begin{frame}{Where it still fails}
@@ -245,9 +247,9 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
     \\[4mm]
     {\large Triangles for the pair geometry; frames and FAPE for the atoms; recycling throughout.}
     \\[4mm]
-    {\large A GPU minute per structure, with calibrated confidence.}
+    {\large About one GPU minute per model for 384 residues, with reliable confidence.}
     \\[1.2cm]
-    {\normalsize \textit{Open then, answered since: complexes (AlphaFold-Multimer), ligands and nucleic acids (AlphaFold~3).}}
+    {\normalsize \textit{Open then, addressed since: complexes (AlphaFold-Multimer), ligands and nucleic acids (AlphaFold~3).}}
   \end{center}
   \vfill
   {\scriptsize J.~Jumper et al., ``Highly accurate protein structure prediction with AlphaFold,'' \textit{Nature} 596, 583--589 (2021).}
