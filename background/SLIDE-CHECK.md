@@ -11,7 +11,7 @@ How sources are cited here:
 - The paper prints no numbers for Fig. 4. The numbers given here for the ablations (Fig. 4a) are means over the three training runs per row. They and the numbers for the trajectories (Fig. 4b) are measured on the vector graphics of the figure.
 - Independent readers compared this file with the sources. Their corrections are included.
 
-History: the version of this file from 2026-10-04 listed nine statements on the slides that contradicted the paper or were stronger than it, and figure crops that cut off content. All of them were corrected in `presentation.tex`. On 2026-10-05 three slides were added (5, 10 and 17), which moved the numbers of the later slides, and the highlighted line of slide 15 was reworded because it claimed more than its source. Later on 2026-10-05 the deck was reworked after a visual review by four independent evaluators. Section 4 lists what was drawn, redrawn or marked and where each of these comes from.
+History: the version of this file from 2026-10-04 listed nine statements on the slides that contradicted the paper or were stronger than it, and figure crops that cut off content. All of them were corrected in the slide source, which is `main.tex` since 2026-10-05 and was `presentation.tex` before. On 2026-10-05 three slides were added (5, 10 and 17), which moved the numbers of the later slides, and the highlighted line of slide 15 was reworded because it claimed more than its source. Later on 2026-10-05 the deck was reworked after a visual review by four independent evaluators. Section 4 lists what was drawn, redrawn or marked and where each of these comes from.
 
 ## 1. Open points
 
@@ -30,7 +30,7 @@ History: the version of this file from 2026-10-04 listed nine statements on the 
 
 **Length of the talk.** After the visual review the speaker notes have about 3,440 words, which is 26.5 minutes at 130 words per minute. `SCRIPT.md` lists what to cut.
 
-**Old build in the repo.** `presentation.pdf` in the repo root is still the build with 15 slides from before 2026-10-04. The slide numbers in this file follow `presentation.tex`.
+**File names.** Ben renamed the slide source from `presentation.tex` to `main.tex` on 2026-10-05. VS Code builds `main.pdf` next to it on every save. The slide numbers in this file follow `main.tex`.
 
 ## 2. Slide by slide: what is supported, and questions to expect
 
@@ -236,7 +236,7 @@ Four independent evaluators judged the deck for this venue: a lecturer who grade
 
 - Headlines are black: "We avoid coloured headlines." (https://ethz.ch/staffnet/en/service/communication/corporate-design/font.html)
 - Two colours: "ideally, no more than two corporate design colours should be combined" (https://ethz.ch/staffnet/en/service/communication/corporate-design/colours.html). Blue is the one highlighted statement of a slide. Red marks what to look at in a figure. The figures from the paper keep their own colours.
-- The theme files `beamer*themeeth.sty` and `elements/` are the LaTeX part of ETH's presentation template (https://ethz.ch/staffnet/en/service/communication/corporate-design/templates.html). The evaluator found four of the five files and both images identical to the download. `beamerouterthemeeth.sty` differs in its footer. The deck sets its footer in `presentation.tex`: ETH logo, the five sections with the current one in black, slide number.
+- The theme files `beamer*themeeth.sty` and `elements/` are the LaTeX part of ETH's presentation template (https://ethz.ch/staffnet/en/service/communication/corporate-design/templates.html). The evaluator found four of the five files and both images identical to the download. `beamerouterthemeeth.sty` differs in its footer. The footer shows only the slide number. It first also had the ETH logo and the five sections. Ben removed both on 2026-10-05 as not necessary.
 - Mathematics is set in the serif font of the theme, so vectors and matrices are bold italic. The Euler font of the earlier version is gone.
 
 **Per slide.** "Marks" are red outlines, lines and labels drawn on a figure of the paper. "Covered" means that a small label of the paper figure is hidden and written again in the slide font.

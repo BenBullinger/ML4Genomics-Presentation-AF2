@@ -4,7 +4,7 @@
 %%  Ben Bullinger. The ETH theme of Saverio Bolognani (beamer*themeeth.sty,
 %%  elements/), which is the LaTeX part of ETH's presentation template.
 %%
-%%  Build:   latexmk -pdf presentation.tex   (inside Presentation-AF/)
+%%  Build:   latexmk -pdf main.tex
 %%  Figures are cropped from the paper itself: _AF2.pdf, by page and trim.
 %% ============================================================================
 \documentclass[11pt,aspectratio=169]{beamer}
@@ -26,16 +26,8 @@
 }
 \makeatother
 
-% Foot of a slide: ETH logo, the sections with the current one in black, slide number
-\setbeamerfont{section in head/foot}{size=\scriptsize}
-\setbeamercolor{section in head/foot}{fg=black}
-\setbeamertemplate{section in head/foot}{\insertsectionhead}
-\setbeamertemplate{section in head/foot shaded}{\color{ETHGray!55}\insertsectionhead}
+% Foot of a slide: the slide number
 \setbeamertemplate{footline}{%
-  \leavevmode\hspace{1cm}%
-  \includegraphics[width=13mm,trim=0mm 0.3mm 0mm 0mm]{elements/eth_logo_kurz_pos}%
-  \hspace{5mm}%
-  \insertsectionnavigationhorizontal{102mm}{}{\hskip0pt plus1filll}%
   \hfill{\scriptsize\insertframenumber/\inserttotalframenumber}\hspace{1cm}\vspace{3mm}}
 
 % Packages
@@ -149,7 +141,7 @@
 \AtBeginSection[]{}
 
 % Metadata
-\title{Highly accurate protein structure prediction with AlphaFold}
+\title{Highly accurate protein structure\texorpdfstring{\\}{ }prediction with AlphaFold}
 \author{Evita Bosch Pokunevich \and Ben Bullinger}
 \institute[ETH Z\"urich \\ Department of Computer Science]{ETH Z\"urich, Department of Computer Science}
 \date[]{Machine Learning for Genomics, Fall 2026 \\[1mm]
@@ -158,7 +150,7 @@ Paper by Jumper et al., \textit{Nature} 596 (2021)}
 \begin{document}
 
 \def\titlefigure{elements/title-page-image}
-\setlength{\titleboxwidth}{0.5\textwidth}
+\setlength{\titleboxwidth}{0.85\textwidth}
 \titleframe
 
 \tocframe
