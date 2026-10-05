@@ -150,7 +150,9 @@ Paper by Jumper et al., \textit{Nature} 596 (2021)}
 \begin{document}
 
 \def\titlefigure{elements/title-page-image}
-\setlength{\titleboxwidth}{0.85\textwidth}
+% The banner is as wide as the longer line of the title, with a margin of 10 mm at its right
+\settowidth{\titleboxwidth}{\usebeamerfont{title}Highly accurate protein structure}
+\addtolength{\titleboxwidth}{5mm}
 \titleframe
 
 \tocframe
