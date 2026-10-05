@@ -6,7 +6,7 @@ Downloaded on 2026-10-04. Each file was opened and its title page checked agains
 
 Two limits decide what is in the repo:
 
-- **Size.** Overleaf recommends "less than 100 MB if using GitHub sync" (https://docs.overleaf.com/getting-started/free-and-premium-plans/plan-limits). The repo is at 108 MB since `AF1.pdf` and `AF3.pdf` were added to the root on 2026-10-05, which is over the recommendation. Removing one of the two copies of the AlphaFold 3 paper saves 8.6 MB. Overleaf's hard limits are 50 MB per file and 7 MB of editable text; the largest file here has 21 MB and the text files have 0.2 MB.
+- **Size.** Overleaf recommends "less than 100 MB if using GitHub sync" (https://docs.overleaf.com/getting-started/free-and-premium-plans/plan-limits). The repo is at 108 MB since `AF1.pdf` and `AF3.pdf` were added to the root on 2026-10-05, which is over the recommendation. Removing one of the two copies of the AlphaFold 3 paper saves 8.6 MB. Overleaf's hard limits are 50 MB per file and 7 MB of editable text. The largest file here has 21 MB and the text files have 0.2 MB.
 - **Licences.** The repository is private. Before it is made public, remove the files that print no open licence: the two Nobel documents, the AlphaFold 1 manuscript, the CASP14 manuscript, the three papers in `4-cited-methods`, and `Petar-EEML.pdf` in the root.
 
 Seven files are therefore not in the repo. They are listed at the end.
