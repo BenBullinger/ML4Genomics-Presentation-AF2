@@ -2,7 +2,7 @@
 
 Downloaded on 2026-10-04. Each file was opened and its title page checked against the citation below.
 
-`SLIDE-CHECK.md` in this folder compares the statements on the slides with the paper and lists the questions to expect, each with its source.
+`SLIDE-CHECK.md` in this folder gives the source of every statement on the slides and lists the questions to expect. `SCRIPT.md` in the repo root has the speaker notes and the timing.
 
 Two limits decide what is in the repo:
 
@@ -24,7 +24,7 @@ Seven files are therefore not in the repo. They are listed at the end.
 |---|---|---|
 | `Nobel2024-scientific-background.pdf` | Nobel Committee for Chemistry, scientific background to the 2024 prize (17 pages). | A short overview of the history up to AlphaFold 2. Read this first for the biology. |
 | `Anfinsen1972-Nobel-lecture.pdf` | Anfinsen's Nobel lecture on protein folding. | Slide 2 cites Anfinsen 1973 (Science), which I could not download. This lecture is on the same subject. |
-| `Marks2011-coevolution.pdf` | Marks et al., PLoS ONE 6, e28766 (2011). Reference 23 of the paper. | Shows that couplings between positions, inferred from an alignment alone, predict which residues are close in 3D. Answers "why does an MSA contain structure". |
+| `Marks2011-coevolution.pdf` | Marks et al., PLoS ONE 6, e28766 (2011). Reference 23 of the paper. | Cited on slide 5. Shows that couplings between positions, inferred from an alignment alone, predict which residues are close in 3D. |
 | `Senior2020-AlphaFold1-submitted-version.pdf` | AlphaFold 1, Nature 577, 706–710 (2020), the authors' submitted manuscript from UCL Discovery. Reference 10. | The earlier system: predicts distance distributions, then minimizes a potential by gradient descent. |
 | `Yang2019-trRosetta-preprint.pdf` | bioRxiv preprint of Yang et al., PNAS 117, 1496–1503 (2020). Reference 44. | A method that predicts distances from alignment statistics and then builds coordinates. The SI names it as the example for such inputs (SI 1.13.1). |
 | `Kryshtafovych2021-CASP14-overview-accepted-version.pdf` | The CASP organizers' report on CASP14, Proteins (2021), accepted manuscript from the University of Basel's repository. | Explains CASP and gives the organizers' verdict on AlphaFold 2. |
@@ -34,24 +34,24 @@ Seven files are therefore not in the repo. They are listed at the end.
 
 | File | What it is | Why it is here |
 |---|---|---|
-| `Tunyasuvunakool2021-human-proteome.pdf` | Companion paper, Nature (2021). Reference 39. | AlphaFold applied to 98.5% of human proteins. Has the evidence on pLDDT that slide 13 cites. |
+| `Tunyasuvunakool2021-human-proteome.pdf` | Companion paper, Nature (2021). Reference 39. | AlphaFold applied to 98.5% of human proteins. Has the evidence on pLDDT that slide 15 cites. Named on slide 17. |
 | `Jumper2021-AF2-at-CASP14.pdf` | "Applying and improving AlphaFold at CASP14", Proteins (2021). | How the system was run during CASP14, including the manual interventions and the story of ORF8. |
 
 ## 3-after: what came at the same time and later
 
 | File | What it is | Why it is here |
 |---|---|---|
-| `Baek2021-RoseTTAFold.pdf` | Baek et al., Science 373, 871–876 (2021), author manuscript from eScholarship. | The academic method first published online on the same day as AlphaFold 2. |
-| `Lin2022-ESMFold-preprint.pdf` | bioRxiv version of Lin et al., Science (2023). | Structure from one sequence with a protein language model in place of the MSA. |
-| `Abramson2024-AlphaFold3.pdf`, `-SI.pdf`, `-addendum.pdf` | Abramson et al., Nature 630 (2024), with supplement and code-release addendum. | Named on the summary slide. Removes the frames and the equivariance that slides 8 and 9 present. |
+| `Baek2021-RoseTTAFold.pdf` | Baek et al., Science 373, 871–876 (2021), author manuscript from eScholarship. | The academic method first published online on the same day as AlphaFold 2. Named on slide 17. |
+| `Lin2022-ESMFold-preprint.pdf` | bioRxiv version of Lin et al., Science (2023). | Structure from one sequence with a protein language model in place of the MSA. Named on slide 17. |
+| `Abramson2024-AlphaFold3.pdf`, `-SI.pdf`, `-addendum.pdf` | Abramson et al., Nature 630 (2024), with supplement and code-release addendum. | Named on slide 17. Predicts structures without the frames and the equivariance that slides 9 to 11 present. |
 | `Terwilliger2024-predictions-vs-experiment.pdf` | Terwilliger et al., Nature Methods (2024). | Compares predictions with experimental maps. For questions on what predictions cannot replace. |
 
 ## 4-cited-methods: methods the paper borrows
 
 | File | What it is |
 |---|---|
-| `Xie2020-noisy-student.pdf` | Reference 35, cited on slide 10 (self-distillation). |
-| `Devlin2019-BERT.pdf` | Reference 37, cited on slide 10 (masked prediction). |
+| `Xie2020-noisy-student.pdf` | Reference 35, cited on slide 12 (self-distillation). |
+| `Devlin2019-BERT.pdf` | Reference 37, cited on slide 12 (masked prediction). |
 | `Rao2021-MSA-Transformer.pdf` | Reference 38. Pre-trains attention over alignments. AlphaFold 2 trains its masked-MSA loss jointly instead. |
 
 ## Downloaded but not in the repo
@@ -60,9 +60,9 @@ Ben has these in `HS26/ML4Genomics/AF2-not-in-repo/`, next to the repo. Everyone
 
 | File | What it is | Why it is not in the repo | Link |
 |---|---|---|---|
-| `video1-T1024-LmrP.mp4` to `video4-T1091.mp4` | Supplementary Videos 1–4: the predicted structure after each of the 192 block evaluations (4 passes × 48 Evoformer blocks). Video 3 is ORF8, the hard target on slide 12. Video 2 is the 2,180-residue chain on slide 4. | Size: 22 MB together. | https://doi.org/10.1038/s41586-021-03819-2, section "Supplementary information" |
+| `video1-T1024-LmrP.mp4` to `video4-T1091.mp4` | Supplementary Videos 1–4: the predicted structure after each of the 192 block evaluations (4 passes × 48 Evoformer blocks). Video 3 is ORF8, the hard target on slide 14. Video 2 is the 2,180-residue chain on slide 4. | Size: 22 MB together. | https://doi.org/10.1038/s41586-021-03819-2, section "Supplementary information" |
 | `Ahdritz2023-OpenFold-preprint.pdf` | bioRxiv version of Ahdritz et al., Nature Methods (2024). A trainable reimplementation of AlphaFold 2 and what retraining it shows. | Size: 14 MB. | https://doi.org/10.1101/2022.11.20.517210 |
-| `Evans2021-AlphaFold-Multimer-preprint.pdf` | AlphaFold 2 retrained for complexes, bioRxiv version of 10 March 2022. Named on the summary slide. | Marked "All rights reserved. No reuse allowed without permission." | https://doi.org/10.1101/2021.10.04.463034 |
+| `Evans2021-AlphaFold-Multimer-preprint.pdf` | AlphaFold 2 retrained for complexes, bioRxiv version of 10 March 2022. Named on slide 17. | Marked "All rights reserved. No reuse allowed without permission." | https://doi.org/10.1101/2021.10.04.463034 |
 | `Jumper2021-AF2-reporting-summary.pdf` | Nature's reporting form. | Not needed. It is also pages 11–12 of `AF.pdf`. | same page as the videos |
 
 ## Not downloaded

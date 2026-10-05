@@ -70,9 +70,11 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
   \begin{center}
     {\Large MTYKLILNGK\ldots \;$\longmapsto$\; 3D coordinates of all heavy atoms}
     \\[1.2cm]
-    {\large A structure takes months of experimental effort; sequences number in the billions.}
-    \\[3mm]
-    {\large \alert{Fifty years of the protein folding problem, scored blind at CASP.}}
+    {\large Experiment: months to years per structure}
+    \\[2mm]
+    {\large Billions of known sequences}
+    \\[4mm]
+    {\large \alert{Open for more than 50 years}}
   \end{center}
   \reffootnote{J.~Jumper et al., \textit{Nature} 596, 2021. C.~B.~Anfinsen, 1973.}
 \end{frame}
@@ -85,31 +87,74 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
       \llap{\textcolor{white}{\rule[-0.5pt]{0.04\linewidth}{0.015\linewidth}}}% white box over a corner of panel e
     \end{column}
     \begin{column}{0.54\textwidth}
-      {\large Median backbone accuracy 0.96\,\AA\ r.m.s.d.$_{95}$; the next best method 2.8\,\AA.}
-      \\[6mm]
-      {\large A carbon atom is about 1.4\,\AA\ wide.}
+      {\large Median backbone error}
+      \\[3mm]
+      {\large AlphaFold: 0.96\,\AA}
       \\[2mm]
-      {\large \alert{Error at the scale of the atoms themselves.}}
+      {\large Next best: 2.8\,\AA}
+      \\[2mm]
+      {\large Carbon atom: 1.4\,\AA\ wide}
+      \\[5mm]
+      {\large \alert{Error below one atom width}}
     \end{column}
   \end{columns}
 \end{frame}
 
 \begin{frame}{Predictions on top of experiment}
   \begin{center}
-    \paperfig[0.8\linewidth]{2}{173 609 25 63}
+    \paperfig[0.8\linewidth]{2}{176 609 25 51}
     \\[4mm]
-    {\large \alert{Backbone, side chains, and a 2{,}180-residue chain, without intervention.}}
+    {\large \alert{Backbone, side chains, a 2{,}180-residue chain}}
   \end{center}
 \end{frame}
 
 % ---------------------------------------------------------------------------------------------
 \section{The network}
 
+\begin{frame}{The input: a multiple sequence alignment (MSA)}
+  \begin{columns}[c]
+    \begin{column}{0.5\textwidth}
+      \centering
+      % An illustration, not real data: columns 3 and 9 change together.
+      \begin{tikzpicture}[x=4.1mm, y=5.4mm]
+        \fill[ETHBlue!18] (2.5,-6.5) rectangle (3.5,-0.5);
+        \fill[ETHBlue!18] (8.5,-6.5) rectangle (9.5,-0.5);
+        \foreach \row [count=\r] in {
+            {M,T,K,V,L,I,N,G,E,L,A,F},
+            {M,S,K,V,L,V,N,G,E,L,A,F},
+            {M,T,R,I,L,I,N,G,D,L,A,Y},
+            {M,T,E,V,L,I,N,G,K,L,-,F},
+            {M,T,E,V,L,I,D,G,K,L,A,Y},
+            {M,S,D,V,L,I,N,G,R,V,A,F}} {
+          \foreach \aa [count=\c] in \row {
+            \node[font=\ttfamily, inner sep=0pt] at (\c,-\r) {\aa};
+          }
+        }
+        \draw[ETHBlue, thick] (3,-0.35) .. controls (3,1.1) and (9,1.1) .. (9,-0.35);
+        \node[font=\footnotesize, text=ETHBlue] at (6,1.3) {in contact in 3D};
+        \node[font=\footnotesize, anchor=east] at (0.4,-1) {target};
+        \node[font=\footnotesize, anchor=east, align=right] at (0.4,-4) {related\\sequences};
+        \node[font=\footnotesize, align=center] at (6.5,-7.7) {K, R: positive charge\\D, E: negative charge};
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      {\large Rows: related proteins}
+      \\[2mm]
+      {\large Columns: aligned positions}
+      \\[5mm]
+      {\large Contacts may change together}
+      \\[5mm]
+      {\large \alert{Input: the sequences themselves}}
+    \end{column}
+  \end{columns}
+  \reffootnote{D.~S.~Marks et al., \textit{PLoS ONE} 6, 2011.}
+\end{frame}
+
 \begin{frame}{One pipeline, end to end}
   \begin{center}
     \paperfig[0.95\linewidth]{2}{40 419 25 214}
     \\[4mm]
-    {\large MSA and templates in, coordinates out; the whole stack recycled three times.}
+    {\large MSA and templates in, coordinates out. Recycled three times.}
   \end{center}
 \end{frame}
 
@@ -117,19 +162,19 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
   \begin{center}
     \paperfig[0.92\linewidth]{4}{40 616 25 52}
     \\[4mm]
-    {\large An MSA representation and a pair representation, exchanging information.}
+    {\large MSA and pair representation exchange information}
     \\[2mm]
-    {\large \alert{48 blocks, no shared weights.}}
+    {\large \alert{48 blocks, no shared weights}}
   \end{center}
 \end{frame}
 
 \begin{frame}{Pairs updated through triangles}
   \begin{center}
-    \paperfig[0.85\linewidth]{4}{245 524 25 207}
+    \paperfig[0.85\linewidth]{4}{247 519.7 25 206}
     \\[6mm]
-    {\large Every edge $ij$ is updated from the other two edges of all its triangles.}
+    {\large Edge $ij$ is updated from the edges $ik$ and $jk$}
     \\[2mm]
-    {\large \alert{An inductive bias motivated by the triangle inequality.}}
+    {\large \alert{Inductive bias from the triangle inequality}}
   \end{center}
 \end{frame}
 
@@ -140,13 +185,27 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
       \paperfig[0.95\linewidth]{4}{40 358 302 295}
     \end{column}
     \begin{column}{0.46\textwidth}
-      {\large Each residue is a rotation and a translation --- a residue gas, refined all at once.}
-      \\[6mm]
-      {\large Invariant point attention keeps the update equivariant.}
-      \\[2mm]
-      {\large \alert{No chain constraint inside the structure module.}}
+      {\large One frame per residue:\\ rotation and translation}
+      \\[5mm]
+      {\large All frames updated at once}
+      \\[5mm]
+      {\large \alert{No chain constraint}}
     \end{column}
   \end{columns}
+\end{frame}
+
+\begin{frame}{Invariant point attention}
+  \vspace{0.6cm}
+  \begin{center}
+    {\Large $a_{ij} \;=\; \operatorname{softmax}_j \Bigl( \bm{q}_i^{\top} \bm{k}_j \;+\; b_{ij} \;-\; \sum_{p} \bigl\| T_i \circ \vec{\bm{q}}_{ip} - T_j \circ \vec{\bm{k}}_{jp} \bigr\|^2 \Bigr)$}
+    \\[1.2cm]
+    {\large Usual attention, pair bias, distances between 3D points}
+    \\[3mm]
+    {\large Points live in the frame $T_i = (\bm{R}_i, \bm{t}_i)$ of residue $i$}
+    \\[5mm]
+    {\large \alert{Invariant to global rotation and translation}}
+  \end{center}
+  \reffootnote{Supplementary Information, Algorithm 22. One head, scaling constants omitted.}
 \end{frame}
 
 % ---------------------------------------------------------------------------------------------
@@ -157,20 +216,20 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
   \begin{center}
     {\large $\mathrm{FAPE} \;=\; \frac{1}{Z}\,\operatorname*{mean}_{k,\,i}\; \min\Bigl( d_{\mathrm{clamp}},\; \bigl\| (\bm{R}_k, \bm{t}_k)^{-1} \bm{x}_i \;-\; (\bm{R}_k^{\mathrm{true}}, \bm{t}_k^{\mathrm{true}})^{-1} \bm{x}_i^{\mathrm{true}} \bigr\| \Bigr)$}
     \\[1.2cm]
-    {\large Every atom scored in every backbone and side-chain frame,\\ clamped $L^1$ with $Z = d_{\mathrm{clamp}} = 10$\,\AA.}
-    \\[3mm]
-    {\large \alert{Invariant to pose, and the main source of AlphaFold's chirality.}}
+    {\large Every atom in every frame, \quad $Z = d_{\mathrm{clamp}} = 10$\,\AA}
+    \\[5mm]
+    {\large \alert{Invariant to pose. Main source of chirality.}}
   \end{center}
 \end{frame}
 
 \begin{frame}{Trained beyond the PDB}
   \vspace{0.6cm}
   \begin{center}
-    {\large Self-distillation: predict 350{,}000 Uniclust structures, keep the confident ones, retrain.}
+    {\large Self-distillation: 350{,}000 predicted structures}
+    \\[4mm]
+    {\large Masked-MSA loss, trained jointly}
     \\[6mm]
-    {\large A BERT-style masked-MSA loss, learned jointly, in place of hand-crafted covariation statistics.}
-    \\[6mm]
-    {\large \alert{The unlabelled sequence universe becomes training data.}}
+    {\large \alert{Training uses sequences without structures}}
   \end{center}
   \reffootnote{Noisy-student self-distillation: Q.~Xie et al., 2020. BERT: J.~Devlin et al., 2019.}
 \end{frame}
@@ -185,9 +244,11 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
       \paperfig[0.95\linewidth]{5}{309 540 25 48}
     \end{column}
     \begin{column}{0.46\textwidth}
-      {\large Ablating self-distillation, IPA, recycling, or the triangle updates together with the pair bias and gating each costs accuracy.}
-      \\[6mm]
-      {\large \alert{No single trick; a stack of compounding ones.}}
+      {\large One row: one component removed}
+      \\[2mm]
+      {\large Left of the line: accuracy lost}
+      \\[5mm]
+      {\large \alert{Many components contribute}}
     \end{column}
   \end{columns}
 \end{frame}
@@ -199,9 +260,11 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
       \paperfig[0.95\linewidth]{5}{309 415 25 272}
     \end{column}
     \begin{column}{0.46\textwidth}
-      {\large With the trunk frozen, a separate structure module is trained to read out each block. LmrP (T1024) obtains the correct structure early in the network.}
-      \\[6mm]
-      {\large \alert{ORF8 of SARS-CoV-2 needs nearly all 4\,$\times$\,48 block evaluations.}}
+      {\large Trunk frozen, one structure module per block}
+      \\[4mm]
+      {\large LmrP (T1024): correct early}
+      \\[4mm]
+      {\large \alert{ORF8 (T1064): nearly all 4\,$\times$\,48 blocks}}
     \end{column}
   \end{columns}
 \end{frame}
@@ -213,9 +276,9 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
       \paperfig[0.9\linewidth]{3}{40 483 302 180.5}
     \end{column}
     \begin{column}{0.52\textwidth}
-      {\large pLDDT, predicted per residue, tracks the true lDDT-C$\alpha$.}
-      \\[6mm]
-      {\large \alert{Calibrated confidence made the proteome-scale database usable.}}
+      {\large pLDDT: predicted lDDT-C$\alpha$ per residue}
+      \\[5mm]
+      {\large \alert{Predictions need a well-calibrated confidence}}
     \end{column}
   \end{columns}
   \reffootnote{K.~Tunyasuvunakool et al., \textit{Nature} 596, 2021.}
@@ -228,11 +291,11 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
       \paperfig[0.9\linewidth]{6}{40 585 340 55}
     \end{column}
     \begin{column}{0.52\textwidth}
-      {\large Accuracy drops below about 30 effective sequences in the MSA.}
-      \\[6mm]
-      {\large Weak on chains shaped by hetero-contacts.}
-      \\[2mm]
-      {\large \alert{The evolutionary record is still an input, not an option.}}
+      {\large Fewer than about 30 effective sequences}
+      \\[4mm]
+      {\large Chains shaped by other chains}
+      \\[5mm]
+      {\large \alert{Needs enough related sequences}}
     \end{column}
   \end{columns}
 \end{frame}
@@ -240,16 +303,35 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
 % ---------------------------------------------------------------------------------------------
 \section{Conclusion}
 
+\begin{frame}{What followed}
+  \vspace{0.3cm}
+  \begin{center}
+    {\large
+    \begin{tabular}{@{}r@{\hspace{5mm}}l@{}}
+      2021 & RoseTTAFold, published the same day \\[2.5mm]
+      2021 & 98.5\% of human proteins predicted \\[2.5mm]
+      2021 & AlphaFold-Multimer: complexes \\[2.5mm]
+      2022 & ESMFold: language model, no MSA \\[2.5mm]
+      2024 & AlphaFold~3: diffusion, ligands, nucleic acids \\[2.5mm]
+      2024 & Nobel Prize in Chemistry \\
+    \end{tabular}}
+    \\[5mm]
+    {\large \alert{AlphaFold~3 predicts without frames or equivariance}}
+  \end{center}
+  \reffootnote{M.~Baek et al., 2021. K.~Tunyasuvunakool et al., 2021. R.~Evans et al., 2021.}
+  \reffootnote{Z.~Lin et al., 2022. J.~Abramson et al., 2024.}
+\end{frame}
+
 \begin{frame}{Summary}
   \vspace{0.6cm}
   \begin{center}
-    {\large Geometric and evolutionary inductive bias, learned end to end, reaches atomic accuracy.}
+    {\large Evolution and geometry, trained end to end}
     \\[4mm]
-    {\large Triangles for the pair geometry; frames and FAPE for the atoms; recycling throughout.}
+    {\large Triangles, frames, FAPE, recycling}
     \\[4mm]
-    {\large About one GPU minute per model for 384 residues, with reliable confidence.}
-    \\[1.2cm]
-    {\normalsize \textit{Open then, addressed since: complexes (AlphaFold-Multimer), ligands and nucleic acids (AlphaFold~3).}}
+    {\large About one GPU minute per model (384 residues)}
+    \\[6mm]
+    {\large \alert{Median error below one atom width}}
   \end{center}
   \vfill
   {\scriptsize J.~Jumper et al., ``Highly accurate protein structure prediction with AlphaFold,'' \textit{Nature} 596, 583--589 (2021).}
