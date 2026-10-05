@@ -146,13 +146,16 @@
   \texorpdfstring{\\[-0.5mm]{\usebeamerfont{date}Paper by Jumper et al., \textit{Nature} 596 (2021)}}{}}
 \author{Evita Bosch Pokunevich \and Ben Bullinger}
 \institute[ETH Z\"urich \\ Department of Computer Science]{ETH Z\"urich, Department of Computer Science}
-\date[]{Machine Learning for Genomics, Fall 2026}
+\date[]{Machine Learning for Genomics (263-5351-00L), Fall 2026}
 
 \begin{document}
 
 \def\titlefigure{elements/title-page-image}
-% The banner is as wide as the longer line of the title, with a margin of 10 mm at its right
+% The banner is as wide as its longest line, with a margin of 10 mm at its right.
+% The longest line is the longer title line or the course line.
 \settowidth{\titleboxwidth}{\usebeamerfont{title}Highly accurate protein structure}
+\settowidth{\dimen0}{\usebeamerfont{date}\insertdate}
+\ifdim\dimen0>\titleboxwidth \setlength{\titleboxwidth}{\dimen0}\fi
 \addtolength{\titleboxwidth}{5mm}
 \titleframe
 
