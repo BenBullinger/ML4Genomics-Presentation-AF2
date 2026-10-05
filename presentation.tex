@@ -5,7 +5,7 @@
 %%  FRL talk (beamer*themeeth.sty, elements/).
 %%
 %%  Build:   latexmk -pdf presentation.tex   (inside Presentation-AF/)
-%%  Figures are cropped from the paper itself: AF.pdf, by page and trim.
+%%  Figures are cropped from the paper itself: _AF2.pdf, by page and trim.
 %% ============================================================================
 \documentclass[11pt,aspectratio=169]{beamer}
 
@@ -28,6 +28,20 @@
 % Packages
 \usepackage{amsmath,amssymb,amsthm,mathtools,bm}
 \usepackage{graphicx}
+\usetikzlibrary{arrows.meta}
+% The chain drawn on the FAPE slide: one frame k (red) and one atom i.
+\newcommand{\fapechain}[4]{% colour, atom i-1, atom i, label of atom i
+  \draw[#1!45, line width=1.2pt, line cap=round, line join=round]
+    (0,0) -- (0.8,0.5) -- (1.6,0.1) -- (2.3,0.8) -- #2 -- #3;
+  \foreach \p in {(0,0), (0.8,0.5), (2.3,0.8), #2} \fill[#1!45] \p circle (2.2pt);
+  \draw[ETHRed, line width=1pt, -{Latex[length=4pt]}] (1.6,0.1) -- ++(45:0.75);
+  \draw[ETHRed, line width=1pt, -{Latex[length=4pt]}] (1.6,0.1) -- ++(135:0.75);
+  \draw[#1, line width=1.3pt, -{Latex[length=5pt]}, shorten >=2.6pt] (1.6,0.1) -- #3;
+  \fill[#1] #3 circle (2.8pt);
+  \fill[ETHRed] (1.6,0.1) circle (2.2pt);
+  \node[font=\footnotesize, text=ETHRed] at (1.75,-0.3) {$k$};
+  \node[font=\footnotesize, text=#1] at #3 [shift={#4}] {$i$};
+}
 \usepackage{booktabs}
 \usepackage{microtype}
 \usepackage{pifont}
@@ -42,7 +56,7 @@
 }
 
 % A figure cut from the paper: page, trim (l b r t), width
-\newcommand{\paperfig}[3][0.9\linewidth]{\includegraphics[page=#2,trim=#3,clip,width=#1]{AF.pdf}}
+\newcommand{\paperfig}[3][0.9\linewidth]{\includegraphics[page=#2,trim=#3,clip,width=#1]{_AF2.pdf}}
 
 % One outline slide after the title, not a repeat before every section
 \AtBeginSection[]{}
@@ -212,13 +226,40 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
 \section{Training}
 
 \begin{frame}{FAPE: a loss over local frames}
-  \vspace{0.6cm}
   \begin{center}
-    {\large $\mathrm{FAPE} \;=\; \frac{1}{Z}\,\operatorname*{mean}_{k,\,i}\; \min\Bigl( d_{\mathrm{clamp}},\; \bigl\| (\bm{R}_k, \bm{t}_k)^{-1} \bm{x}_i \;-\; (\bm{R}_k^{\mathrm{true}}, \bm{t}_k^{\mathrm{true}})^{-1} \bm{x}_i^{\mathrm{true}} \bigr\| \Bigr)$}
-    \\[1.2cm]
-    {\large Every atom in every frame, \quad $Z = d_{\mathrm{clamp}} = 10$\,\AA}
+    % An illustration, not real data. The prediction is the experimental chain,
+    % rotated as a whole, with the last two atoms displaced.
+    \begin{tikzpicture}[x=9.5mm, y=9.5mm]
+      \begin{scope}[shift={(0,0.1)}]
+        \fapechain{black}{(3.1,0.6)}{(3.6,1.4)}{(0.25,0.1)}
+      \end{scope}
+      \node[font=\small] at (1.9,-1.75) {experiment};
+      \begin{scope}[shift={(5.6,-1.0)}, rotate=38]
+        \fapechain{ETHBlue}{(3.2,0.2)}{(4.0,0.4)}{(0.28,0.05)}
+      \end{scope}
+      \node[font=\small, text=ETHBlue] at (7.0,-1.75) {prediction};
+      \begin{scope}[shift={(10.3,-0.5)}]
+        \draw[ETHRed, line width=1pt, -{Latex[length=4pt]}] (0,0) -- ++(45:0.75);
+        \draw[ETHRed, line width=1pt, -{Latex[length=4pt]}] (0,0) -- ++(135:0.75);
+        \begin{scope}
+          \draw[black, line width=1.3pt, -{Latex[length=5pt]}, shorten >=2.6pt] (0,0) -- (2.0,1.3);
+          \draw[ETHBlue, line width=1.3pt, -{Latex[length=5pt]}, shorten >=2.6pt] (0,0) -- (2.4,0.3);
+          \draw[ETHRed, line width=1pt, densely dashed] (2.0,1.3) -- (2.4,0.3);
+          \fill[black] (2.0,1.3) circle (2.8pt);
+          \fill[ETHBlue] (2.4,0.3) circle (2.8pt);
+          \coordinate (gap) at (2.2,0.8);
+        \end{scope}
+        \fill[ETHRed] (0,0) circle (2.2pt);
+        \node[font=\small, text=ETHRed, anchor=west] at ([xshift=2.5mm]gap) {error};
+        \node[font=\footnotesize, text=ETHRed] at (0.15,-0.4) {$k$};
+      \end{scope}
+      \node[font=\small] at (11.8,-1.75) {both, seen from frame $k$};
+    \end{tikzpicture}
     \\[5mm]
-    {\large \alert{Invariant to pose. Main source of chirality.}}
+    {$\mathrm{FAPE} \;=\; \frac{1}{Z}\,\operatorname*{mean}_{k,\,i}\; \min\Bigl( d_{\mathrm{clamp}},\; \bigl\| (\bm{R}_k, \bm{t}_k)^{-1} \bm{x}_i \;-\; (\bm{R}_k^{\mathrm{true}}, \bm{t}_k^{\mathrm{true}})^{-1} \bm{x}_i^{\mathrm{true}} \bigr\| \Bigr)$,
+    \quad $Z = d_{\mathrm{clamp}} = 10$\,\AA}
+    \\[5mm]
+    {\large \alert{Rotation: no change. Mirror image: penalised.}}
   \end{center}
 \end{frame}
 
@@ -312,11 +353,11 @@ Paper by J.~Jumper, R.~Evans, A.~Pritzel et al.\ (DeepMind), \textit{Nature} 596
       2021 & 98.5\% of human proteins predicted \\[2.5mm]
       2021 & AlphaFold-Multimer: complexes \\[2.5mm]
       2022 & ESMFold: language model, no MSA \\[2.5mm]
-      2024 & AlphaFold~3: diffusion, ligands, nucleic acids \\[2.5mm]
+      2024 & AlphaFold~3: proteins, DNA, RNA and ligands in one model \\[2.5mm]
       2024 & Nobel Prize in Chemistry \\
     \end{tabular}}
     \\[5mm]
-    {\large \alert{AlphaFold~3 predicts without frames or equivariance}}
+    {\large \alert{AlphaFold~3: more accurate than specialised tools}}
   \end{center}
   \reffootnote{M.~Baek et al., 2021. K.~Tunyasuvunakool et al., 2021. R.~Evans et al., 2021.}
   \reffootnote{Z.~Lin et al., 2022. J.~Abramson et al., 2024.}

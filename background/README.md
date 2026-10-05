@@ -6,7 +6,7 @@ Downloaded on 2026-10-04. Each file was opened and its title page checked agains
 
 Two limits decide what is in the repo:
 
-- **Size.** Overleaf recommends "less than 100 MB if using GitHub sync" (https://docs.overleaf.com/getting-started/free-and-premium-plans/plan-limits). The repo is at 92 MB. Overleaf's hard limits are 50 MB per file and 7 MB of editable text; the largest file here has 21 MB and the text files have 0.2 MB.
+- **Size.** Overleaf recommends "less than 100 MB if using GitHub sync" (https://docs.overleaf.com/getting-started/free-and-premium-plans/plan-limits). The repo is at 108 MB since `AF1.pdf` and `AF3.pdf` were added to the root on 2026-10-05, which is over the recommendation. Removing one of the two copies of the AlphaFold 3 paper saves 8.6 MB. Overleaf's hard limits are 50 MB per file and 7 MB of editable text; the largest file here has 21 MB and the text files have 0.2 MB.
 - **Licences.** The repository is private. Before it is made public, remove the files that print no open licence: the two Nobel documents, the AlphaFold 1 manuscript, the CASP14 manuscript, the three papers in `4-cited-methods`, and `Petar-EEML.pdf` in the root.
 
 Seven files are therefore not in the repo. They are listed at the end.
@@ -15,8 +15,10 @@ Seven files are therefore not in the repo. They are listed at the end.
 
 | File | What it is |
 |---|---|
-| `AF.pdf` | Jumper et al., "Highly accurate protein structure prediction with AlphaFold", Nature 596, 583–589 (2021). The slides cut their figures from it. |
-| `AF-SI.pdf` | Its Supplementary Information, 62 pages: Supplementary Methods 1.1–1.17, Algorithms 1–32, Supplementary Figures 1–15, Tables 1–6. This is the full specification of the method. PDF page = printed page + 1. |
+| `_AF2.pdf` | Jumper et al., "Highly accurate protein structure prediction with AlphaFold", Nature 596, 583–589 (2021). The slides cut their figures from it. |
+| `AF1.pdf` | Senior et al., "Improved protein structure prediction using potentials from deep learning", Nature 577, 706–710 (2020), the published version. The earlier system: a network predicts distance distributions, then a potential built from them is minimized by gradient descent. The authors' submitted manuscript is also in `1-context`. |
+| `AF3.pdf` | Abramson et al., "Accurate structure prediction of biomolecular interactions with AlphaFold 3", Nature 630, 493–500 (2024). The same file as `3-after/Abramson2024-AlphaFold3.pdf`. |
+| `_AF2-SI.pdf` | Its Supplementary Information, 62 pages: Supplementary Methods 1.1–1.17, Algorithms 1–32, Supplementary Figures 1–15, Tables 1–6. This is the full specification of the method. PDF page = printed page + 1. |
 
 ## 1-context: what the paper builds on
 
@@ -63,7 +65,7 @@ Ben has these in `HS26/ML4Genomics/AF2-not-in-repo/`, next to the repo. Everyone
 | `video1-T1024-LmrP.mp4` to `video4-T1091.mp4` | Supplementary Videos 1–4: the predicted structure after each of the 192 block evaluations (4 passes × 48 Evoformer blocks). Video 3 is ORF8, the hard target on slide 14. Video 2 is the 2,180-residue chain on slide 4. | Size: 22 MB together. | https://doi.org/10.1038/s41586-021-03819-2, section "Supplementary information" |
 | `Ahdritz2023-OpenFold-preprint.pdf` | bioRxiv version of Ahdritz et al., Nature Methods (2024). A trainable reimplementation of AlphaFold 2 and what retraining it shows. | Size: 14 MB. | https://doi.org/10.1101/2022.11.20.517210 |
 | `Evans2021-AlphaFold-Multimer-preprint.pdf` | AlphaFold 2 retrained for complexes, bioRxiv version of 10 March 2022. Named on slide 17. | Marked "All rights reserved. No reuse allowed without permission." | https://doi.org/10.1101/2021.10.04.463034 |
-| `Jumper2021-AF2-reporting-summary.pdf` | Nature's reporting form. | Not needed. It is also pages 11–12 of `AF.pdf`. | same page as the videos |
+| `Jumper2021-AF2-reporting-summary.pdf` | Nature's reporting form. | Not needed. It is also pages 11–12 of `_AF2.pdf`. | same page as the videos |
 
 ## Not downloaded
 
@@ -71,8 +73,8 @@ These sites block scripted downloads or need the ETH subscription. Open them in 
 
 - Anfinsen 1973, Science 181, 223–230: https://doi.org/10.1126/science.181.4096.223
 - Zemla 2003, the original definition of GDT (reference 33): https://doi.org/10.1093/nar/gkg571
-- Zhang and Skolnick 2004, the TM-score (reference 27): https://doi.org/10.1002/prot.20264 (the formula is also in `AF-SI.pdf`, section 1.9.7)
+- Zhang and Skolnick 2004, the TM-score (reference 27): https://doi.org/10.1002/prot.20264 (the formula is also in `_AF2-SI.pdf`, section 1.9.7)
 - Pereira et al. 2021, "High-accuracy protein structure prediction in CASP14" (reference 57): https://doi.org/10.1002/prot.26171
 - Published versions of files that are here as preprint or manuscript: AlphaFold 1 https://doi.org/10.1038/s41586-019-1923-7, trRosetta https://doi.org/10.1073/pnas.1914677117, CASP14 overview https://doi.org/10.1002/prot.26237, RoseTTAFold https://doi.org/10.1126/science.abj8754, ESMFold https://doi.org/10.1126/science.ade2574, OpenFold https://doi.org/10.1038/s41592-024-02272-z. For AlphaFold-Multimer I found only the preprint.
 
-Code, not downloaded: https://github.com/deepmind/alphafold (from the paper's "Code availability"). The algorithms in `AF-SI.pdf` are the better source for the talk.
+Code, not downloaded: https://github.com/deepmind/alphafold (from the paper's "Code availability"). The algorithms in `_AF2-SI.pdf` are the better source for the talk.

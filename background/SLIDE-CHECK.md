@@ -4,8 +4,8 @@ This file follows the deck of 2026-10-05: the title slide and 18 numbered slides
 
 How sources are cited here:
 
-- "p. 587" is a printed page of the article (`AF.pdf`). "Methods" is the unnumbered Methods section after p. 589.
-- "SI 1.9.2" is a section of the Supplementary Information (`AF-SI.pdf`). "Alg. 28" is an algorithm in it.
+- "p. 587" is a printed page of the article (`_AF2.pdf`). "Methods" is the unnumbered Methods section after p. 589.
+- "SI 1.9.2" is a section of the Supplementary Information (`_AF2-SI.pdf`). "Alg. 28" is an algorithm in it.
 - Slide numbers are the numbers printed on the slides. Slide 1 is the outline.
 - I read the article and the Supplementary Information in full. Of all other papers I read only the passages cited.
 - The paper prints no numbers for Fig. 4. The numbers given here for the ablations (Fig. 4a) are means over the three training runs per row. They and the numbers for the trajectories (Fig. 4b) are measured on the vector graphics of the figure.
@@ -84,6 +84,8 @@ Supported: MSA and templates in, coordinates out (Fig. 1e). "Recycled three time
 - **How many models and samples at prediction time?** Five models, ranked by their mean pLDDT (SI 1.12.2). Averaging over several MSA samples ("ensembling") adds 0.1 GDT at 8 times the cost (SI 1.12.2). The CASP14 numbers in the paper use 3 samples; "we turn off ensembling for most inference" (Methods, "Inference regimen").
 - **How much do templates matter?** Removing them changes CASP14 accuracy by −0.3 GDT, and the interval of every run includes zero (Fig. 4a).
 
+- **How did AlphaFold 1 get from the network to a structure?** Its network predicted distance distributions for residue pairs from MSA features that include "the parameters of a regularized pseudolikelihood-trained Potts model". A potential built from them was minimized by gradient descent; "In CASP13, we obtained 5,000 optimization runs for each chain". In CASP13 it reached a TM-score of 0.7 or more for 24 of 43 free-modelling domains, and its authors wrote that the accuracy "can still not be relied on for the detailed understanding of hard structures" (Senior 2020, `AF1.pdf`, abstract and Methods).
+
 ### Slide 7: The Evoformer block
 
 Supported: two representations that exchange information (p. 585). 48 blocks without shared weights (Fig. 3a, Alg. 6).
@@ -122,7 +124,7 @@ Supported: the formula is line 7 of Alg. 22 for one attention head. The head ind
 
 ### Slide 11: FAPE: a loss over local frames
 
-Supported: the formula is Alg. 28 with Z = d_clamp = 10 Å. The final loss uses all backbone and side-chain frames (SI 1.9.2). Invariant to rotation and translation of the prediction, not to reflection (SI 1.9.2). "The main source of chirality" (p. 587).
+The drawing is my own illustration of Alg. 28 (one frame k, one atom i, the prediction rotated as a whole with two atoms displaced); it is not data and it is flat, so it cannot show a mirror image. Supported: the formula is Alg. 28 with Z = d_clamp = 10 Å. The final loss uses all backbone and side-chain frames (SI 1.9.2). Invariant to rotation and translation of the prediction, not to reflection (SI 1.9.2). "The main source of chirality" (p. 587).
 
 - **Why not a loss on pairwise distances?** A model trained with the dRMSD loss frequently produced mirror structures (SI 1.9.3, Supplementary Fig. 9). dRMSD is "the distance-based equivalent of RMSD" (Mariani 2013, introduction). The score lDDT-Cα "cannot distinguish molecules of the opposite chirality" either (SI 1.9.3).
 - **Why the clamp?** Errors are cut off at 10 Å. For the backbone this is done in 90% of the mini-batches and not in the other 10%. For side chains it is always done (Alg. 28; SI 1.11.5).
@@ -199,6 +201,7 @@ Supported, row by row:
 - AlphaFold-Multimer: "an AlphaFold model trained specifically for multimeric inputs" (Evans 2021, abstract; first posted on 4 October 2021 according to Europe PMC).
 - ESMFold: structure "directly from the primary protein sequence", without multiple sequence alignments (Lin et al., preprint of 2022).
 - AlphaFold 3: a "diffusion-based architecture" for "complexes including proteins, nucleic acids, small molecules, ions and modified residues" (Abramson 2024, abstract).
+- AlphaFold 3, benefit: "In all but one category, it achieves a substantially higher performance than strong methods that specialize in just the given task", and it "has also improved in protein complex accuracy relative to AlphaFold-Multimer (v.2.3)" (Abramson 2024, `AF3.pdf`, p. 493 and p. 497). The exception is RNA in CASP15, where a submission aided by human experts was better (p. 497).
 - Nobel Prize in Chemistry 2024 to David Baker, Demis Hassabis and John Jumper for computational protein design and protein structure prediction (`1-context/Nobel2024-scientific-background.pdf`).
 - Highlighted line: the diffusion module of AlphaFold 3 works "without rotational frames or any equivariant processing" (Abramson 2024, p. 495). Frames are still used in one place: "While we no longer use rigid frames for the core prediction task, we do use frames for the PAE confidence head" (its supplement, section 7). So the line says "predicts structures without frames", not "has no frames".
 

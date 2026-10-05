@@ -83,7 +83,7 @@ The related sequences are written below the target and lined up, so that positio
 
 Why does it help? Residues that touch in the structure may change together during evolution, because their interaction has to stay favourable. In the drawing, columns 3 and 9 always hold one positively and one negatively charged amino acid. In the first three rows the positive one is in column 3, in the last three rows in column 9. Marks and colleagues showed in 2011 that such pairs of columns can suffice to compute the fold of a protein.
 
-Many earlier methods gave their network only statistics of the MSA. AlphaFold also gives it the aligned sequences themselves.
+The first AlphaFold, from 2018, gave its network statistics of the MSA: the parameters of a statistical model fitted to the columns. AlphaFold 2 also gives it the aligned sequences themselves.
 
 ## Slide 6: One pipeline, end to end
 
@@ -102,6 +102,8 @@ The Evoformer, a stack of 48 blocks, updates both arrays. The paper calls this p
 After that, three outputs are fed back as additional inputs: the pair representation, the first MSA row and the predicted structure. The network runs again with the same weights. This is called recycling. It is done three times, so the network runs four times in total.
 
 The database searches happen before. Everything after them is one network, trained end to end.
+
+This is the main difference to the first AlphaFold. There a network predicted only the distances between residues. The structure was then found by gradient descent on these distances, repeated thousands of times for one protein. Here the coordinates come out of the network itself.
 
 ## Slide 7: The Evoformer block
 
@@ -161,15 +163,19 @@ The change of each frame is then predicted in that residue's own coordinates. If
 
 ## Slide 11: FAPE: a loss over local frames
 
-How is a predicted structure compared with the experimental one? The loss is called frame aligned point error, FAPE. In the formula, "true" marks the experimental structure, k counts frames and i counts atoms.
+How is a predicted structure compared with the experimental one? The loss is called frame aligned point error, FAPE. The drawing is an illustration, not data.
 
-*Point at the two halves of the difference in the formula.*
+*Point at the left drawing, then the middle one.*
 
-Take one frame and one atom. Write the position of the atom in the coordinates of that frame, once in the prediction and once in the experimental structure. Take the distance between the two positions. FAPE is the mean of this distance over all frames and all atoms. The frames are the backbone frame of every residue and frames for the parts of its side chain. Distances are cut off at 10 ångström, the d clamp on the slide. Z, also 10 ångström, makes the loss unitless.
+On the left is the experimental structure, in the middle the prediction. In each, take one frame, k, in red, and one atom, i. The arrow is the position of the atom as seen from the frame. The prediction lies rotated on the slide. That does not matter, because the arrow is measured inside the frame.
+
+*Point at the right drawing.*
+
+On the right both arrows are drawn from the same frame. The dashed line between their ends is the error for this frame and this atom. FAPE is the mean of this error over all frames and all atoms. The formula below says the same: "true" marks the experimental structure. The frames are the backbone frame of every residue and frames for the parts of its side chain. Distances are cut off at 10 ångström, the d clamp on the slide. Z, also 10 ångström, makes the loss unitless.
 
 Only positions relative to frames enter. So the loss does not change if the predicted structure is rotated or shifted as a whole.
 
-It does change if the structure is mirrored, because a frame is a right-handed coordinate system and the mirrored atoms lie at mirrored positions inside it. This matters: a protein and its mirror image are different molecules. The slide calls this property chirality. The authors tested it. A network trained with a loss on distances between atoms, which are the same in a mirror image, frequently produced mirror images.
+It does change if the structure is mirrored, because a frame is a right-handed coordinate system and the mirrored atoms lie at mirrored positions inside it. This matters: a protein and its mirror image are different molecules. The paper calls this property chirality. The authors tested it. A network trained with a loss on distances between atoms, which are the same in a mirror image, frequently produced mirror images.
 
 ## Slide 12: Trained beyond the PDB
 
@@ -231,9 +237,9 @@ Later work adds a third limit. A prediction does not account for ligands, which 
 
 What came after? On the day the paper appeared online, David Baker's group published RoseTTAFold, a network with three tracks: for the sequence, for residue pairs and for 3D coordinates. One week later the AlphaFold team published predictions for 98.5 percent of human proteins.
 
-The next three entries address the three limits of the previous slide. AlphaFold-Multimer, first posted in October 2021, is trained on complexes of several chains. ESMFold, from 2022, replaces the MSA by a protein language model. It is faster and less accurate than AlphaFold 2. AlphaFold 3, from 2024, also predicts complexes with small molecules, DNA and RNA. These are the ligands and nucleic acids on the slide.
+The next three entries address the three limits of the previous slide. AlphaFold-Multimer, first posted in October 2021, is trained on complexes of several chains. ESMFold, from 2022, replaces the MSA by a protein language model. It is faster and less accurate than AlphaFold 2. AlphaFold 3, from 2024, is one network for proteins, DNA, RNA, small molecules and ions.
 
-AlphaFold 3 generates the coordinates by diffusion. It predicts the structure without frames and without equivariance. This fits the row "No IPA" on slide 13.
+In almost all of these tasks AlphaFold 3 is more accurate than tools built for that one task, for example docking programs for small molecules. It is also more accurate than AlphaFold-Multimer on protein complexes. It generates the coordinates by diffusion and predicts the structure without frames and without equivariance. This fits the row "No IPA" on slide 13.
 
 In 2024 Demis Hassabis and John Jumper received the Nobel Prize in Chemistry, together with David Baker.
 
