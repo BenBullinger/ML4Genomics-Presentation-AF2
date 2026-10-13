@@ -57,11 +57,19 @@
 % A figure cut from the paper: page, trim (l b r t), width
 \newcommand{\paperfig}[3][0.9\linewidth]{\includegraphics[page=#2,trim=#3,clip,width=#1]{_AF2.pdf}}
 
+\newcommand{\paperfigSI}[3][0.9\linewidth]{\includegraphics[page=#2,trim=#3,clip,width=#1]{_AF2-SI.pdf}}
+
 % A figure cut from the paper with marks drawn on top: width, page, trim as for \paperfig.
 % Inside the environment (0,0) is the lower left corner of the figure and (1,1) the upper right.
 \newenvironment{marked}[3][\linewidth]{%
   \begin{tikzpicture}
     \node[anchor=south west, inner sep=0pt] (fig) at (0,0) {\paperfig[#1]{#2}{#3}};
+    \begin{scope}[x={(fig.south east)}, y={(fig.north west)}]}%
+  {\end{scope}\end{tikzpicture}}
+\newenvironment{markedSI}[3][\linewidth]{%
+  \begin{tikzpicture}
+    \node[anchor=south west, inner sep=0pt] (fig) at (0,0)
+      {\includegraphics[page=#2,trim=#3,clip,width=#1]{_AF2-SI.pdf}};
     \begin{scope}[x={(fig.south east)}, y={(fig.north west)}]}%
   {\end{scope}\end{tikzpicture}}
 \tikzset{
@@ -167,8 +175,8 @@
 \begin{frame}[t]{Sequence in, structure out}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.56\textwidth}
-      \vspace{11mm}
-      {\LARGE MTYKLILNGK\ldots\hfill
+      \vspace{3mm}
+      {\LARGE SIFSYITESTGTPS\ldots\hfill
         \tikz[baseline=-0.6ex]\draw[line width=1.3pt, -{Latex[length=6pt]}] (0,0) -- (16mm,0);\hspace{2mm}\par}
       \vspace{1.5mm}
       {\small\color{ETHGray} sequence of amino acids\par}
@@ -178,15 +186,21 @@
       \key{The problem is more than 50 years old}
     \end{column}
     \begin{column}{0.42\textwidth}
+      \vspace{-15mm}
       \begin{marked}[0.8\linewidth]{2}{176 634 310 51}
         \fill[cover] (0.002,0.87) rectangle (0.07,1.01);
       \end{marked}\par
       \vspace{0.5mm}
       {\small\color{ETHGray} 3D coordinates of all heavy atoms\par}
+      \vspace{0.5mm}
+      {\small\color{ETHGray} Predicted (blue) vs experimental (green) structures\par}
     \end{column}
   \end{columns}
-  \reffootnote{Sequence and structure are examples of two proteins. The structure is Fig.~1b. C.~B.~Anfinsen, 1973.}
+  \reffootnote{Sequence and structure are T1049. The structure is Fig.1b (main paper)}
 \end{frame}
+
+% ---------------------------------------------------------------------------------------------
+\section{The benchmark}
 
 \begin{frame}[t]{CASP14: atomic accuracy, alone}
   % Redrawn from Fig. 1a. Height of each bar and its 95% interval are measured on the figure.
@@ -234,9 +248,40 @@
   \key{Prediction and experiment overlap, also in the side chains}
 \end{frame}
 
+
 % ---------------------------------------------------------------------------------------------
 \section{The network}
+\begin{frame}[t]{One pipeline, end to end}
+  \vspace{-2mm}
+  \begin{marked}[0.97\linewidth]{2}{40 419 25 214}
+    \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
+    \draw[callout] (0.238,0.70) rectangle (0.352,1.0);
+    \draw[callout] (0.238,0.13) rectangle (0.352,0.425);
+    \draw[callout] (0.528,0.25) rectangle (0.612,0.975);
+    \draw[callout] (0.758,0.25) rectangle (0.842,0.975);
+    \draw[callout] (0.413,0.0) rectangle (0.942,0.092);
+    \node[callout text, anchor=south] at (0.295,1.02) {MSA};
+    \node[callout text, anchor=north] at (0.295,0.11) {Templates};
+    \node[callout text, anchor=south] at (0.57,1.02) {Evoformer};
+    \node[callout text, anchor=south] at (0.80,1.02) {Structure module};
+    \node[callout text, anchor=north] at (0.678,-0.02) {Recycled three times};
+  \end{marked}
+  \par\vspace{2mm}
+  \key{Coordinates come out of the network itself}
+\end{frame}
 
+\begin{frame}[t]{One pipeline, end to end}
+  \vspace{-2mm}
+  \begin{markedSI}[0.97\linewidth]{16}{60 600 40 60}
+    \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
+  \end{markedSI}
+  \par\vspace{2mm}
+  \key{Coordinates come out of the network itself}
+\end{frame}
+
+
+% ---------------------------------------------------------------------------------------------
+\subsection{The data}
 \begin{frame}[t]{The input: a multiple sequence alignment (MSA)}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.56\textwidth}
@@ -275,24 +320,9 @@
   \reffootnote{D.~S.~Marks et al., \textit{PLoS ONE} 6, 2011. The alignment is an illustration, not data.}
 \end{frame}
 
-\begin{frame}[t]{One pipeline, end to end}
-  \vspace{-2mm}
-  \begin{marked}[0.97\linewidth]{2}{40 419 25 214}
-    \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
-    \draw[callout] (0.238,0.70) rectangle (0.352,1.0);
-    \draw[callout] (0.238,0.13) rectangle (0.352,0.425);
-    \draw[callout] (0.528,0.25) rectangle (0.612,0.975);
-    \draw[callout] (0.758,0.25) rectangle (0.842,0.975);
-    \draw[callout] (0.413,0.0) rectangle (0.942,0.092);
-    \node[callout text, anchor=south] at (0.295,1.02) {MSA};
-    \node[callout text, anchor=north] at (0.295,0.11) {Templates};
-    \node[callout text, anchor=south] at (0.57,1.02) {Evoformer};
-    \node[callout text, anchor=south] at (0.80,1.02) {Structure module};
-    \node[callout text, anchor=north] at (0.678,-0.02) {Recycled three times};
-  \end{marked}
-  \par\vspace{2mm}
-  \key{Coordinates come out of the network itself}
-\end{frame}
+
+% ---------------------------------------------------------------------------------------------
+\subsection{The network, in detail}
 
 \begin{frame}[t]{The Evoformer block}
   \locator{0.528}{0.25}{0.612}{0.975}
@@ -391,9 +421,6 @@
   \reffootnote{The formula is Algorithm 22 of the supplement for one head, without scaling constants.}
 \end{frame}
 
-% ---------------------------------------------------------------------------------------------
-\section{Training}
-
 \begin{frame}[t]{FAPE: a loss over local frames}
   % An illustration, not real data. The prediction is the experimental chain,
   % rotated as a whole, with the last two atoms displaced.
@@ -424,6 +451,11 @@
   \key{A rotation changes nothing. A mirror image is penalised.}
   \reffootnote{Supplementary Information, Algorithm 28, with $Z = d_{\text{clamp}} = 10$\,\AA. The drawing is an illustration.}
 \end{frame}
+
+
+
+% ---------------------------------------------------------------------------------------------
+\section{Training}
 
 \begin{frame}[t]{Trained beyond the PDB}
   \begin{columns}[T,onlytextwidth]
