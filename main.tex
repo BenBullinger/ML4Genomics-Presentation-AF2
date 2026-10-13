@@ -37,6 +37,7 @@
 \usepackage{booktabs}
 \usepackage{microtype}
 \usepackage{pifont}
+\usepackage{appendixnumberbeamer}  % backup slides after \appendix do not count in the slide total
 
 % Text on a slide: \say{...} is one statement, \key{...} the one highlighted statement
 \newcommand{\say}[1]{{\raggedright #1\par}\vspace{2.5mm}}
@@ -673,6 +674,31 @@
   \say{One model of 384 residues takes about one GPU minute}
   \key{The median backbone error is below one atom width}
   \reffootnote{J.~Jumper et al., ``Highly accurate protein structure prediction with AlphaFold,'' \textit{Nature} 596, 583--589 (2021).}
+\end{frame}
+
+% ---------------------------------------------------------------------------------------------
+% Part 2 of the guidelines (10 minutes): the exam question after the conclusion, then at least
+% two questions for the audience and a moderated discussion.
+\section{Questions}
+
+\begin{frame}[t]{Exam question}
+  \say{\textcolor{ETHGray}{Placeholder. The question from the course team arrives about seven days before the talk.}}
+  \say{\textcolor{ETHGray}{Our answer.}}
+\end{frame}
+
+\begin{frame}[t]{Questions for the audience}
+  \say{\textcolor{ETHGray}{Placeholder. At least two questions, then a moderated discussion.}}
+  \say{1.\ \textcolor{ETHGray}{First question.}}
+  \say{2.\ \textcolor{ETHGray}{Second question.}}
+\end{frame}
+
+% ---------------------------------------------------------------------------------------------
+% Backup slides for follow-up questions. Not shown unless asked. They do not count in the slide total.
+\appendix
+\section{Backup}
+
+\begin{frame}[t]{Backup}
+  \say{\textcolor{ETHGray}{Placeholder. Slides that answer likely follow-up questions, for example the full ablation table (Fig.~4a), the training stages (SI Table 4) or the IPA algorithm (SI Algorithm 22).}}
 \end{frame}
 
 \end{document}
