@@ -301,10 +301,56 @@
   \key{Coordinates come out of the network itself}
 \end{frame}
 
+% Draft (Ben, 14 October): the network in the message-passing formalism of geometric deep
+% learning (Bronstein, Bruna, Cohen, Veličković 2021; notation of Veličković's EEML 2026 tutorial).
+\begin{frame}[t]{AlphaFold 2 is message passing on a geometric graph}
+  \vspace{-3mm}
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.66\textwidth}
+      {$\displaystyle \mathbf h_u=\phi\Big(\mathbf x_u,\ \bigoplus_{v\in\mathcal N_u}\psi(\mathbf x_u,\mathbf x_v,\mathbf e_{uv})\Big)$\par}
+      \vspace{1mm}
+      {\footnotesize\color{ETHGray} message $\psi$, aggregation $\bigoplus$, update $\phi$ (Bronstein et al.\ 2021). Nodes: residues, $\mathbf s_u$ and frame $T_u$. Edges: $\mathbf z_{uv}$.\par}
+    \end{column}
+    \begin{column}{0.3\textwidth}
+      \centering
+      \begin{tikzpicture}[x=0.6mm, y=0.6mm]
+        \foreach \n/\pos/\ang in {u/{(0,0)}/60, v/{(20,5)}/-20, w/{(11,-12)}/110} {
+          \draw[ETHRed, line width=1.1pt, -{Latex[length=3.5pt]}] \pos -- ++(\ang:4.5);
+          \draw[ETHRed, line width=1.1pt, -{Latex[length=3.5pt]}] \pos -- ++(\ang+90:4.5);
+          \fill[ETHBlue] \pos circle (2.2pt);
+        }
+        \node[text=ETHBlue, anchor=east] at (-2,0) {$u$};
+        \node[text=ETHBlue, anchor=west] at (22,5) {$v$};
+        \node[text=ETHBlue, anchor=north] at (11,-14.5) {$w$};
+        \draw[black!50, line width=0.8pt, -{Latex[length=3.5pt]}] (2.5,0.6) -- (17.5,4.4) node[midway, above, sloped, font=\scriptsize, text=black!60] {$\mathbf z_{uv}$};
+        \draw[black!50, line width=0.8pt, -{Latex[length=3.5pt]}] (1.5,-1.8) -- (9.5,-10.3);
+        \draw[black!50, line width=0.8pt, -{Latex[length=3.5pt]}] (12.5,-10) -- (18.5,3);
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+  \vspace{1mm}
+  {\scriptsize
+  \renewcommand{\arraystretch}{1.0}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Block & message $\psi$ & into \\
+    \midrule
+    MSA row attention & $\psi(\mathbf m_{su},\mathbf m_{sv},\mathbf z_{uv})$, the edge biases the weight & node $u$ \\
+    outer product mean & $\psi(\mathbf m_{\cdot u},\mathbf m_{\cdot v})$, averaged over the sequences & edge $uv$ \\
+    triangle updates & $\psi(\mathbf z_{uw},\mathbf z_{wv})$ over every third node $w$ & edge $uv$ \\
+    IPA & $\psi(\mathbf s_u,\mathbf s_v,\mathbf z_{uv},\|T_u\circ\vec{\mathbf q}_u-T_v\circ\vec{\mathbf k}_v\|)$, values moved by $T_u^{-1}\!\circ T_v$ & node $u$ \\
+    backbone update & none, $\phi$ alone & frame $T_u$ \\
+    \bottomrule
+  \end{tabular}\par}
+  \vspace{0.5mm}
+  \say{Triangles are two-hop messages. They make the edges consistent with one structure.}
+  \key{Geometry enters only through distances. A frame is a gauge fixed by its atoms.}
+\end{frame}
+
 
 % ---------------------------------------------------------------------------------------------
 \subsection{The data}
-\begin{frame}[t]{The input: a multiple sequence alignment (MSA)}
+\begin{frame}[t]{Input: a multiple sequence alignment (MSA)}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.56\textwidth}
       \begin{tikzpicture}[x=4.7mm, y=4.9mm]
@@ -346,7 +392,7 @@
 % ---------------------------------------------------------------------------------------------
 \subsection{The network, in detail}
 
-\begin{frame}[t]{The Evoformer block}
+\begin{frame}[t]{Evoformer block}
   \locator{0.528}{0.25}{0.612}{0.975}
   \begin{marked}{4}{40 616 25 52}
     \fill[cover] (0.015,0.93) rectangle (0.04,1.01);
@@ -397,7 +443,7 @@
   \end{marked}
 \end{frame}
 
-\begin{frame}[t]{The structure module: residues as rigid bodies}
+\begin{frame}[t]{Structure module: residues as rigid bodies}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.48\textwidth}
       \locator{0.758}{0.25}{0.842}{0.975}%
@@ -718,8 +764,32 @@
 \appendix
 \section{Backup}
 
-\begin{frame}[t]{Backup}
-  \say{\textcolor{ETHGray}{Placeholder. Slides that answer likely follow-up questions, for example the full ablation table (Fig.~4a), the training stages (SI Table 4) or the IPA algorithm (SI Algorithm 22).}}
+\begin{frame}[t]{Backup: the whole network as residual updates}
+  \vspace{-2mm}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.0}
+  \begin{tabular}{@{}llll@{}}
+    \toprule
+    & Update & Message & SI \\
+    \midrule
+    \multicolumn{4}{@{}l}{\color{ETHGray} Evoformer, 48 blocks} \\
+    1 & $\mathbf m \leftarrow \mathbf m + \mathrm{RowAttention}(\mathbf m \mid \mathbf z)$ & node $\to$ node, edge biases the weight & Alg.\ 7 \\
+    2 & $\mathbf m \leftarrow \mathbf m + \mathrm{ColumnAttention}(\mathbf m)$ & across the sequences at one node & Alg.\ 8 \\
+    3 & $\mathbf m \leftarrow \mathbf m + \mathrm{MLP}(\mathbf m)$ & per node & Alg.\ 9 \\
+    4 & $\mathbf z \leftarrow \mathbf z + \mathrm{OuterProductMean}(\mathbf m)$ & node pair $\to$ edge & Alg.\ 10 \\
+    5 & $\mathbf z \leftarrow \mathbf z + \mathrm{TriangleMultiplication}(\mathbf z)$, out and in & edge pair $\to$ edge & Alg.\ 11, 12 \\
+    6 & $\mathbf z \leftarrow \mathbf z + \mathrm{TriangleAttention}(\mathbf z)$, start and end node & edge pair $\to$ edge & Alg.\ 13, 14 \\
+    7 & $\mathbf z \leftarrow \mathbf z + \mathrm{MLP}(\mathbf z)$ & per edge & Alg.\ 15 \\
+    \multicolumn{4}{@{}l}{\color{ETHGray} Structure module, 8 blocks with shared weights. At the start $\mathbf s_u=\mathbf m_{1u}$ and $T_u$ is the identity.} \\
+    8 & $\mathbf s \leftarrow \mathbf s + \mathrm{IPA}(\mathbf s,\mathbf z,T)$ & node $\to$ node, values moved by $T_u^{-1}\circ T_v$ & Alg.\ 22 \\
+    9 & $\mathbf s \leftarrow \mathbf s + \mathrm{MLP}(\mathbf s)$ & per node & Alg.\ 20 \\
+    10 & $T_u \leftarrow T_u \circ \mathrm{BackboneUpdate}(\mathbf s_u)$ & per node, in its own frame & Alg.\ 23 \\
+    \multicolumn{4}{@{}l}{\color{ETHGray} Recycling, 4 cycles} \\
+    11 & $\mathbf z \leftarrow \mathbf z + \mathrm{Embed}(d_{uv})$, C$\beta$ distances from the frames & frames $\to$ edges & Alg.\ 32 \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{2mm}
+  \say{Every line is $\mathbf h_u=\phi(\mathbf x_u,\bigoplus_v\psi)$ on nodes or on edges. Information moves in lines 1, 4, 5, 6, 8 and 11.}
 \end{frame}
 
 \end{document}
