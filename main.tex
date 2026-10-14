@@ -22,7 +22,13 @@
 \colorlet{accentcolor}{ETHBlue} 
 \setbeamerfont{frametitle}{size=\Large}
 \setbeamerfont{normal text}{size=\normalsize}
-\setbeamertemplate{frametitle}{\vspace{2mm}\insertframetitle\par\vspace{4mm}}
+% Frame title, with the subtitle in grey below it when a frame has one. The architecture
+% slides use the subtitle for the fact of slide 6 that they answer.
+\makeatletter
+\setbeamertemplate{frametitle}{\vspace{2mm}\insertframetitle\par
+  \ifx\insertframesubtitle\@empty\vspace{4mm}\else
+  {\vspace{0.5mm}\small\color{ETHGray}\insertframesubtitle\par}\vspace{1.5mm}\fi}
+\makeatother
 \useinnertheme[rounded,shaded=false]{tcolorbox}
 \setbeamercolor{block body}{fg=black,bg=white}
 \makeatletter
@@ -40,7 +46,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools,bm}
 \usepackage{graphicx}
 \usetikzlibrary{arrows.meta,calc}
-\usepackage{booktabs}
+\usepackage{booktabs,array}
 \usepackage{microtype}
 \usepackage{pifont}
 \usepackage{appendixnumberbeamer}  % backup slides after \appendix do not count in the slide total
@@ -93,7 +99,7 @@
 \definecolor{PaperCurveOrange}{RGB}{190,75,25}
 \definecolor{PaperCurveGreen}{RGB}{60,140,80}
 
-% Slides 7 to 10: a small copy of the pipeline (Fig. 1e) at the top right, with the part
+% Architecture slides: a small copy of the pipeline (Fig. 1e) at the top right, with the part
 % framed that the slide is about. Arguments: left, bottom, right, top of the frame.
 \newcommand{\locator}[4]{%
   \begin{tikzpicture}[remember picture, overlay]
@@ -172,7 +178,7 @@
 {\setbeamertemplate{footline}{}
 \begin{frame}[t,noframenumbering]{Notes from Ben, not part of the talk}
   \begin{itemize}
-    \item Side chain. Explain backbone and side chain once, on slide 2 or 4, before they are named (Fig.~1c, Fig.~2b, slide 10).
+    \item Side chain: now explained on slide 2 in one clause (Ben, 14 October). The whole deck was revised on 14 October along the four facts of slide 6, see \texttt{WORK-SPLIT.md}.
   \end{itemize}
 \end{frame}}
 \fi
@@ -201,7 +207,7 @@
       {\LARGE SIFSYITESTGTPS\ldots\hfill
         \tikz[baseline=-0.6ex]\draw[line width=1.3pt, -{Latex[length=6pt]}] (0,0) -- (16mm,0);\hspace{2mm}\par}
       \vspace{1.5mm}
-      {\small\color{ETHGray} sequence of amino acids\par}
+      {\small\color{ETHGray} sequence of amino acids. Each has the same backbone and its own side chain\par}
       \vspace{9mm}
       \say{An experiment takes months to years}
       \say{Billions of sequences are known}
@@ -215,10 +221,10 @@
       \vspace{0.5mm}
       {\small\color{ETHGray} 3D coordinates of all heavy atoms\par}
       \vspace{0.5mm}
-      {\small\color{ETHGray} Predicted (blue) vs experimental (green) structures\par}
+      {\small\color{ETHGray} Prediction in blue, experiment in green\par}
     \end{column}
   \end{columns}
-  \reffootnote{Sequence and structure are T1049. The structure is Fig.1b (main paper)}
+  \reffootnote{Sequence and structure are the CASP14 target T1049, PDB 6Y4F. The structure is Fig.~1b.}
 \end{frame}
 
 % ---------------------------------------------------------------------------------------------
@@ -292,60 +298,26 @@
   \key{Coordinates come out of the network itself}
 \end{frame}
 
-\begin{frame}[t]{One pipeline, end to end}
-  \vspace{-2mm}
-  \begin{markedSI}[0.97\linewidth]{16}{60 600 40 60}
-    \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
-  \end{markedSI}
+% The frame of the talk: each design choice answers a fact about proteins. The architecture
+% slides repeat the fact they answer as a grey subtitle, the ablation slide and the summary
+% come back to the four numbers.
+\begin{frame}[t]{Four facts about proteins, four design choices}
+  \vspace{-3mm}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{@{}p{5mm}p{0.40\textwidth}p{0.50\textwidth}@{}}
+    & {\small\color{ETHGray} Fact} & {\small\color{ETHGray} Design choice in AlphaFold 2} \\[1mm]
+    {\color{ETHRed}\bfseries 1} & The sequences in an MSA are a set. The residues are a chain. & Attention over the sequences themselves, along the rows and the columns. \\
+    {\color{ETHRed}\bfseries 2} & Distances in 3D must close triangles. & The pair representation is updated through triangles. \\
+    {\color{ETHRed}\bfseries 3} & A structure is the same after any rotation or translation. & One frame per residue. Attention sees only distances between points in the frames. \\
+    {\color{ETHRed}\bfseries 4} & A protein and its mirror image are different molecules. & The loss compares atoms in local frames. A mirror image is penalised. \\
+  \end{tabular}
   \par\vspace{2mm}
-  \key{Coordinates come out of the network itself}
+  \key{Removing any one of the four costs accuracy. The ablations measure how much.}
 \end{frame}
 
-% Draft (Ben, 14 October): the network in the message-passing formalism of geometric deep
-% learning (Bronstein, Bruna, Cohen, Veličković 2021; notation of Veličković's EEML 2026 tutorial).
-\begin{frame}[t]{AlphaFold 2 is message passing on a geometric graph}
-  \vspace{-3mm}
-  \begin{columns}[c,onlytextwidth]
-    \begin{column}{0.66\textwidth}
-      {$\displaystyle \mathbf h_u=\phi\Big(\mathbf x_u,\ \bigoplus_{v\in\mathcal N_u}\psi(\mathbf x_u,\mathbf x_v,\mathbf e_{uv})\Big)$\par}
-      \vspace{1mm}
-      {\footnotesize\color{ETHGray} message $\psi$, aggregation $\bigoplus$, update $\phi$ (Bronstein et al.\ 2021). Nodes: residues, $\mathbf s_u$ and frame $T_u$. Edges: $\mathbf z_{uv}$.\par}
-    \end{column}
-    \begin{column}{0.3\textwidth}
-      \centering
-      \begin{tikzpicture}[x=0.6mm, y=0.6mm]
-        \foreach \n/\pos/\ang in {u/{(0,0)}/60, v/{(20,5)}/-20, w/{(11,-12)}/110} {
-          \draw[ETHRed, line width=1.1pt, -{Latex[length=3.5pt]}] \pos -- ++(\ang:4.5);
-          \draw[ETHRed, line width=1.1pt, -{Latex[length=3.5pt]}] \pos -- ++(\ang+90:4.5);
-          \fill[ETHBlue] \pos circle (2.2pt);
-        }
-        \node[text=ETHBlue, anchor=east] at (-2,0) {$u$};
-        \node[text=ETHBlue, anchor=west] at (22,5) {$v$};
-        \node[text=ETHBlue, anchor=north] at (11,-14.5) {$w$};
-        \draw[black!50, line width=0.8pt, -{Latex[length=3.5pt]}] (2.5,0.6) -- (17.5,4.4) node[midway, above, sloped, font=\scriptsize, text=black!60] {$\mathbf z_{uv}$};
-        \draw[black!50, line width=0.8pt, -{Latex[length=3.5pt]}] (1.5,-1.8) -- (9.5,-10.3);
-        \draw[black!50, line width=0.8pt, -{Latex[length=3.5pt]}] (12.5,-10) -- (18.5,3);
-      \end{tikzpicture}
-    \end{column}
-  \end{columns}
-  \vspace{1mm}
-  {\scriptsize
-  \renewcommand{\arraystretch}{1.0}
-  \begin{tabular}{@{}lll@{}}
-    \toprule
-    Block & message $\psi$ & into \\
-    \midrule
-    MSA row attention & $\psi(\mathbf m_{su},\mathbf m_{sv},\mathbf z_{uv})$, the edge biases the weight & node $u$ \\
-    outer product mean & $\psi(\mathbf m_{\cdot u},\mathbf m_{\cdot v})$, averaged over the sequences & edge $uv$ \\
-    triangle updates & $\psi(\mathbf z_{uw},\mathbf z_{wv})$ over every third node $w$ & edge $uv$ \\
-    IPA & $\psi(\mathbf s_u,\mathbf s_v,\mathbf z_{uv},\|T_u\circ\vec{\mathbf q}_u-T_v\circ\vec{\mathbf k}_v\|)$, values moved by $T_u^{-1}\!\circ T_v$ & node $u$ \\
-    backbone update & none, $\phi$ alone & frame $T_u$ \\
-    \bottomrule
-  \end{tabular}\par}
-  \vspace{0.5mm}
-  \say{Triangles are two-hop messages. They make the edges consistent with one structure.}
-  \key{Geometry enters only through distances. A frame is a gauge fixed by its atoms.}
-\end{frame}
+
+
+
 
 
 % ---------------------------------------------------------------------------------------------
@@ -392,9 +364,9 @@
 % ---------------------------------------------------------------------------------------------
 \subsection{The network, in detail}
 
-\begin{frame}[t]{Evoformer block}
+\begin{frame}[t]{Evoformer block}{1. The sequences in an MSA are a set. The residues are a chain.}
   \locator{0.528}{0.25}{0.612}{0.975}
-  \begin{marked}{4}{40 616 25 52}
+  \begin{marked}[0.86\linewidth]{4}{40 616 25 52}
     \fill[cover] (0.015,0.93) rectangle (0.04,1.01);
     \draw[ETHRed, line width=1.6pt, -{Latex[length=5pt]}] (0.1605,0.225) -- (0.1605,0.585);
     \node[callout text, anchor=west] at (0.172,0.41) {pair to MSA};
@@ -408,11 +380,11 @@
     \node[figure label, font=\small, anchor=north west] at (0.028,0.085) {pairs};
   \end{marked}
   \par\vspace{2mm}
-  \say{The 48 blocks do not share weights}
+  \say{Attention along the rows and the columns. The 48 blocks do not share weights}
   \key{MSA and pair representation exchange information}
 \end{frame}
 
-\begin{frame}[t]{Pairs updated through triangles}
+\begin{frame}[t]{Pairs updated through triangles}{2. Distances in 3D must close triangles.}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.34\textwidth}
       \locator{0.528}{0.25}{0.612}{0.975}%
@@ -443,7 +415,7 @@
   \end{marked}
 \end{frame}
 
-\begin{frame}[t]{Structure module: residues as rigid bodies}
+\begin{frame}[t]{Structure module: residues as rigid bodies}{3. A structure is the same after any rotation or translation.}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.48\textwidth}
       \locator{0.758}{0.25}{0.842}{0.975}%
@@ -469,12 +441,12 @@
   \key{Nothing forces neighbouring residues to stay connected}
 \end{frame}
 
-\begin{frame}[t]{Invariant point attention}
+\begin{frame}[t]{Invariant point attention}{3. A structure is the same after any rotation or translation.}
   \locator{0.758}{0.25}{0.842}{0.975}
   {\large $\displaystyle a_{ij} \;=\; \text{softmax}_j \Bigl(\,
     \term{\bm{q}_i^{\top} \bm{k}_j}{usual attention} \;+\; \term{b_{ij}}{pair bias}
     \;-\; \term{\textstyle\sum_{p} \bigl\| T_i \circ \vec{\bm{q}}_{ip} - T_j \circ \vec{\bm{k}}_{jp} \bigr\|^2}{distances between 3D points} \,\Bigr)$\par}
-  \vspace{1mm}
+  \vspace{0mm}
   \begin{tikzpicture}[x=7.4mm, y=7.4mm]
     \ipapair
     \node[font=\small, anchor=north] at (1.8,-1.5) {Points are placed in the frames of $i$ and $j$};
@@ -489,7 +461,7 @@
   \reffootnote{The formula is Algorithm 22 of the supplement for one head, without scaling constants.}
 \end{frame}
 
-\begin{frame}[t]{FAPE: a loss over local frames}
+\begin{frame}[t]{FAPE: a loss over local frames}{4. A protein and its mirror image are different molecules.}
   % An illustration, not real data. The prediction is the experimental chain,
   % rotated as a whole, with the last two atoms displaced.
   \begin{tikzpicture}[x=9.5mm, y=9.5mm]
@@ -513,7 +485,7 @@
     \end{scope}
     \node[font=\small] at (11.6,-1.45) {both, seen from frame $k$};
   \end{tikzpicture}
-  \par\vspace{4mm}
+  \par\vspace{2mm}
   {$\displaystyle \text{FAPE} \;=\; \frac{1}{Z}\,\mathop{\text{mean}}_{k,\,i}\; \text{min}\Bigl( d_{\text{clamp}},\; \bigl\| (\bm{R}_k, \bm{t}_k)^{-1} \bm{x}_i \;-\; (\bm{R}_k^{\text{true}}, \bm{t}_k^{\text{true}})^{-1} \bm{x}_i^{\text{true}} \bigr\| \Bigr)$\par}
   \vspace{2mm}
   \key{A rotation changes nothing. A mirror image is penalised.}
@@ -571,7 +543,7 @@
   % Redrawn from Fig. 4a. The numbers are means over the training runs of a row, measured on
   % the figure (background/SLIDE-CHECK.md). Left: GDT on the CASP14 domains, 1 unit = 1 point.
   % Right: lDDT-Ca on PDB chains, drawn 2.5 times wider per point.
-  \begin{tikzpicture}[x=1.93mm, y=3.65mm]
+  \begin{tikzpicture}[x=1.93mm, y=3.3mm]
     \foreach \x in {-15,-10,-5} {
       \draw[ETHGray!35, line width=0.5pt] (\x,-10.6) -- (\x,-0.4);
       \node[font=\scriptsize, anchor=north] at (\x,-10.7) {\signed{\x}};
@@ -585,11 +557,11 @@
         {With self-distillation (added)}/2.2/1.9/ETHGray/ETHGray,
         {No templates}/-0.3/-0.4/ETHBlue/black,
         {No distogram head}/-1.2/-0.3/ETHBlue/black,
-        {No raw MSA}/-2.2/-1.3/ETHBlue/black,
-        {No IPA}/-2.3/-0.3/ETHRed/ETHRed,
+        {{\color{ETHRed}\bfseries 1}\enspace No raw MSA, only its statistics}/-2.2/-1.3/ETHBlue/black,
+        {{\color{ETHRed}\bfseries 3}\enspace No IPA}/-2.3/-0.3/ETHRed/ETHRed,
         {No masked-MSA head}/-2.4/-1.8/ETHBlue/black,
         {No recycling}/-4.5/-1.8/ETHBlue/black,
-        {No triangles, biasing or gating}/-4.6/-1.7/ETHBlue/black,
+        {{\color{ETHRed}\bfseries 2}\enspace No triangles, biasing or gating}/-4.6/-1.7/ETHBlue/black,
         {No end-to-end structure gradients}/-6.2/-2.6/ETHBlue/black,
         {No IPA and no recycling}/-16.3/-3.1/ETHRed/ETHRed} {
       \node[font=\footnotesize, anchor=east, inner sep=1pt, text=\ink, text height=1.5ex, text depth=0.4ex] at (-18,-\r) {\name};
@@ -610,9 +582,10 @@
     \node[font=\footnotesize, anchor=north] at (-7.5,-11.7) {GDT on CASP14 domains};
     \node[font=\footnotesize, anchor=north] at (17,-11.7) {lDDT-C$\alpha$ on PDB chains};
   \end{tikzpicture}
-  \par\vspace{1mm}
-  \key{Many components contribute}
-  \reffootnote{Redrawn from Fig.~4a. A bar is the mean change against the baseline over the training runs of a row.}
+  \par\vspace{0.5mm}
+  \say{{\color{ETHRed}\bfseries 4}\enspace With a mirror-blind loss instead of FAPE, the model often builds the mirror image}
+  \key{Each of the four choices costs accuracy on CASP14 when it is removed}
+  \reffootnote{Redrawn from Fig.~4a, the mean change against the baseline over the training runs of a row. Line 4: Suppl.\ Fig.~9.}
 \end{frame}
 
 \begin{frame}[t]{The structure forms inside the trunk}
@@ -724,23 +697,36 @@
 
 \begin{frame}[t]{Summary}
   \vspace{-2mm}
-  \begin{marked}[0.5\linewidth]{2}{40 419 25 214}
-    \fill[white, opacity=0.2] (0,0) rectangle (1,1);
-    \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
-    \draw[callout] (0.528,0.25) rectangle (0.612,0.975);
-    \draw[callout] (0.758,0.25) rectangle (0.842,0.975);
-    \draw[callout] (0.413,0.0) rectangle (0.942,0.092);
-    \draw[callout] (0.875,0.345) rectangle (0.998,0.76);
-    \node[callout text, anchor=south] at (0.57,1.03) {Triangles};
-    \node[callout text, anchor=south] at (0.80,1.03) {Frames};
-    \node[callout text, anchor=west] at (1.005,0.55) {FAPE};
-    \node[callout text, anchor=north] at (0.678,-0.03) {Recycling};
-  \end{marked}
-  \par\vspace{1mm}
-  \say{Evolution and geometry are trained end to end}
-  \say{One model of 384 residues takes about one GPU minute}
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.5\textwidth}
+      \begin{marked}[0.94\linewidth]{2}{40 419 25 214}
+        \fill[white, opacity=0.2] (0,0) rectangle (1,1);
+        \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
+        \draw[callout] (0.238,0.70) rectangle (0.352,1.0);
+        \draw[callout] (0.528,0.25) rectangle (0.612,0.975);
+        \draw[callout] (0.758,0.25) rectangle (0.842,0.975);
+        \draw[callout] (0.875,0.345) rectangle (0.998,0.76);
+        \node[callout text, anchor=south] at (0.295,1.03) {1};
+        \node[callout text, anchor=south] at (0.57,1.03) {2};
+        \node[callout text, anchor=south] at (0.80,1.03) {3};
+        \node[callout text, anchor=south] at (0.936,0.77) {4};
+      \end{marked}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \small
+      \begin{tabular}{@{}p{3.5mm}>{\raggedright\arraybackslash}p{0.58\linewidth}r@{}}
+        & & {\color{ETHGray} GDT lost} \\[0.5mm]
+        {\color{ETHRed}\bfseries 1} & attention over sequences & \textminus2.2 \\
+        {\color{ETHRed}\bfseries 2} & triangles on the pairs & \textminus4.6 \\
+        {\color{ETHRed}\bfseries 3} & frames and IPA & \textminus2.3 \\
+        {\color{ETHRed}\bfseries 4} & FAPE in local frames & mirrored \\
+      \end{tabular}
+    \end{column}
+  \end{columns}
+  \vspace{2mm}
+  \say{Evolution and geometry are trained end to end, in about one GPU minute per model}
   \key{The median backbone error is below one atom width}
-  \reffootnote{J.~Jumper et al., ``Highly accurate protein structure prediction with AlphaFold,'' \textit{Nature} 596, 583--589 (2021).}
+  \reffootnote{J.~Jumper et al., ``Highly accurate protein structure prediction with AlphaFold,'' \textit{Nature} 596, 583--589 (2021). GDT lost on CASP14 when removed, Fig.~4a and Suppl.\ Fig.~9.}
 \end{frame}
 
 % ---------------------------------------------------------------------------------------------
@@ -790,6 +776,61 @@
   \end{tabular}
   \par\vspace{2mm}
   \say{Every line is $\mathbf h_u=\phi(\mathbf x_u,\bigoplus_v\psi)$ on nodes or on edges. Information moves in lines 1, 4, 5, 6, 8 and 11.}
+\end{frame}
+
+% Draft (Ben, 14 October): the network in the message-passing formalism of geometric deep
+% learning (Bronstein, Bruna, Cohen, Veličković 2021; notation of Veličković's EEML 2026 tutorial).
+\begin{frame}[t]{Backup: message passing on a geometric graph}
+  \vspace{-3mm}
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.66\textwidth}
+      {$\displaystyle \mathbf h_u=\phi\Big(\mathbf x_u,\ \bigoplus_{v\in\mathcal N_u}\psi(\mathbf x_u,\mathbf x_v,\mathbf e_{uv})\Big)$\par}
+      \vspace{1mm}
+      {\footnotesize\color{ETHGray} message $\psi$, aggregation $\bigoplus$, update $\phi$ (Bronstein et al.\ 2021). Nodes: residues, $\mathbf s_u$ and frame $T_u$. Edges: $\mathbf z_{uv}$.\par}
+    \end{column}
+    \begin{column}{0.3\textwidth}
+      \centering
+      \begin{tikzpicture}[x=0.6mm, y=0.6mm]
+        \foreach \n/\pos/\ang in {u/{(0,0)}/60, v/{(20,5)}/-20, w/{(11,-12)}/110} {
+          \draw[ETHRed, line width=1.1pt, -{Latex[length=3.5pt]}] \pos -- ++(\ang:4.5);
+          \draw[ETHRed, line width=1.1pt, -{Latex[length=3.5pt]}] \pos -- ++(\ang+90:4.5);
+          \fill[ETHBlue] \pos circle (2.2pt);
+        }
+        \node[text=ETHBlue, anchor=east] at (-2,0) {$u$};
+        \node[text=ETHBlue, anchor=west] at (22,5) {$v$};
+        \node[text=ETHBlue, anchor=north] at (11,-14.5) {$w$};
+        \draw[black!50, line width=0.8pt, -{Latex[length=3.5pt]}] (2.5,0.6) -- (17.5,4.4) node[midway, above, sloped, font=\scriptsize, text=black!60] {$\mathbf z_{uv}$};
+        \draw[black!50, line width=0.8pt, -{Latex[length=3.5pt]}] (1.5,-1.8) -- (9.5,-10.3);
+        \draw[black!50, line width=0.8pt, -{Latex[length=3.5pt]}] (12.5,-10) -- (18.5,3);
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+  \vspace{1mm}
+  {\scriptsize
+  \renewcommand{\arraystretch}{1.0}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Block & message $\psi$ & into \\
+    \midrule
+    MSA row attention & $\psi(\mathbf m_{su},\mathbf m_{sv},\mathbf z_{uv})$, the edge biases the weight & node $u$ \\
+    outer product mean & $\psi(\mathbf m_{\cdot u},\mathbf m_{\cdot v})$, averaged over the sequences & edge $uv$ \\
+    triangle updates & $\psi(\mathbf z_{uw},\mathbf z_{wv})$ over every third node $w$ & edge $uv$ \\
+    IPA & $\psi(\mathbf s_u,\mathbf s_v,\mathbf z_{uv},\|T_u\circ\vec{\mathbf q}_u-T_v\circ\vec{\mathbf k}_v\|)$, values moved by $T_u^{-1}\!\circ T_v$ & node $u$ \\
+    backbone update & none, $\phi$ alone & frame $T_u$ \\
+    \bottomrule
+  \end{tabular}\par}
+  \vspace{0.5mm}
+  \say{Triangles are two-hop messages. They make the edges consistent with one structure.}
+  \key{Geometry enters only through distances. A frame is a gauge fixed by its atoms.}
+\end{frame}
+
+\begin{frame}[t]{Backup: MSA row attention with pair bias}
+  \vspace{-2mm}
+  \begin{markedSI}[0.97\linewidth]{16}{60 600 40 60}
+    \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
+  \end{markedSI}
+  \par\vspace{2mm}
+  \key{Supplementary Fig.~2. Every sequence of the MSA attends along itself, the pair representation biases the weights}
 \end{frame}
 
 \end{document}

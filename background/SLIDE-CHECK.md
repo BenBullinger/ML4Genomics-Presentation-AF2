@@ -13,6 +13,24 @@ How sources are cited here:
 
 History: the version of this file from 2026-10-04 listed nine statements on the slides that contradicted the paper or were stronger than it, and figure crops that cut off content. All of them were corrected in the slide source, which is `main.tex` since 2026-10-05 and was `presentation.tex` before. On 2026-10-05 three slides were added (5, 10 and 17), which moved the numbers of the later slides, and the highlighted line of slide 15 was reworded because it claimed more than its source. Later on 2026-10-05 the deck was reworked after a visual review by four independent evaluators. Section 4 lists what was drawn, redrawn or marked and where each of these comes from.
 
+## 0. Revision of 2026-10-14
+
+The deck was revised on 14 October around four facts about proteins, each answered by one design choice (slide 6). The slide numbers in sections 2 and 4 below are those of 5 October. Mapping: old 2 to 4 are unchanged, old 5 (MSA) is now 7, old 6 (pipeline) is now 5, old 7 to 11 (Evoformer to FAPE) are now 8 to 12, old 12 to 18 are now 13 to 19. New slide 6 sits between the pipeline and the MSA.
+
+Sources of the new statements:
+
+| Where | Statement | Source |
+|---|---|---|
+| Slide 2 | Each amino acid has the same backbone and its own side chain. The sequence shown is T1049, PDB 6Y4F. | General biochemistry. The letters SIFSYITESTGTPS match chain A of PDB 6Y4F (RCSB FASTA, checked 14 October). Fig. 1b caption names T1049 as PDB 6Y4F. |
+| Slide 6, fact 1 | The sequences in an MSA are a set, the residues are a chain. Attention over the sequences themselves, along rows and columns. | MSA rows are clustered and randomly sampled (SI 1.2.7). Residue order enters through the relative position encoding (SI Alg. 4). Row and column attention are SI Alg. 7 and 8. The ablation "No raw MSA (use MSA pairwise frequencies)" replaces attention over sequences by statistics (SI 1.13.1). |
+| Slide 6, fact 2 | Distances in 3D must close triangles. The pair representation is updated through triangles. | p. 585: "many constraints must be satisfied including the triangle inequality on distances", Fig. 3b and 3c, SI 1.6.5 and 1.6.6. Ablation "No triangles, biasing, or gating" (SI 1.13.1). |
+| Slide 6, fact 3 | A structure is the same after any rotation or translation. One frame per residue, attention sees only distances between points in the frames. | SI 1.8.2 with the invariance proof, eqs. 3 to 6, p. 587. Ablation "No invariant point attention (use direct projection)" (SI 1.13.1). |
+| Slide 6, fact 4 | A protein and its mirror image are different molecules. The loss compares atoms in local frames, a mirror image is penalised. | SI 1.9.2 and 1.9.3, eqs. 16 and 17, p. 587 "the main source of chirality for AlphaFold". |
+| Slide 14, line 4 | With a mirror-blind loss instead of FAPE, the model often builds the mirror image. | SI 1.9.3 and Suppl. Fig. 9: trained with dRMSD, GDT is bimodal and the low mode matches the reflected target. "AlphaFold trained with a dRMSD loss frequently produces mirror structures." |
+| Slide 19 | GDT lost on CASP14 when a choice is removed: 2.2, 4.6, 2.3. | Fig. 4a, the rows No raw MSA, No triangles biasing or gating, No IPA, as measured for slide 13 of 5 October (section 2 below). |
+
+The numbering in `SCRIPT.md` is also that of 5 October. The script is to be rewritten by each presenter for their half.
+
 ## 1. Open points
 
 **Course guidelines.** The deck has not been checked against the course's instructions for the presentation, because I do not have them.
@@ -243,7 +261,7 @@ Four independent evaluators judged the deck for this venue: a lecturer who grade
 
 | Slide | What is new | Source and result of the check |
 |---|---|---|
-| 2 | Picture of a structure next to the letters. | Fig. 1b (target T1049: prediction blue, experiment green). The letters MTYKLILNGK are not from the paper. The footnote says that sequence and structure are examples from two different proteins. |
+| 2 | Picture of a structure next to the letters. | Fig. 1b (target T1049: prediction blue, experiment green). Since 13 October the letters are the start of T1049's own sequence, PDB 6Y4F, checked against the RCSB entry on 14 October. |
 | 3 | Bar chart redrawn. | Fig. 1a. The 15 bar heights and the 30 ends of the confidence intervals were measured on the vector graphics. The checker measured them again and found agreement within 0.001 Å. AlphaFold 0.956 (0.846 to 1.163) and next best 2.836 (2.656 to 4.017) agree with the printed 0.96 (0.85–1.16) and 2.8 (2.7–4.0) on p. 584. "Median backbone error": the paper says "median backbone accuracy" (p. 584). The metric, Cα r.m.s.d.95, is in the footnote. The highlighted line says "median backbone error" because the all-atom value is 1.5 Å (p. 584). |
 | 4 | Captions under the panels, colour legend, new highlighted line. | Fig. 1 legend: prediction blue, experiment green. Panel c "AlphaFold has accurate side chains". |
 | 5 | Charged letters coloured in the two columns. | K and R positively charged, D and E negatively: textbook knowledge, not in the paper. The alignment is made up. The footnote says so. |
