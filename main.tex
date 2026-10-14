@@ -104,6 +104,7 @@
 \definecolor{PaperCurveBlue}{RGB}{25,45,130}
 \definecolor{PaperCurveOrange}{RGB}{190,75,25}
 \definecolor{PaperCurveGreen}{RGB}{60,140,80}
+\definecolor{Gold}{RGB}{204,166,61}
 
 % The thread of the talk at the top right of a slide: the four properties of slide 6 as four
 % numbered discs, the ones the slide is about in red. Argument: a comma-separated list of 1 to 4.
@@ -867,6 +868,11 @@
     }
     \foreach \y/\year in {0/2021, -3/2022, -4/2024, -6/2025}
       \node[anchor=mid east, inner sep=0pt] at (-0.4,\y) {\year};
+    % the Nobel row gets a medal in place of its dot: a gold disc on a short ribbon
+    \fill[ETHBlue] (-0.12,-4.72) -- (0.12,-4.72) -- (0.06,-4.95) -- (-0.06,-4.95) -- cycle;
+    \fill[Gold] (0,-5) circle (2.6mm);
+    \draw[Gold!60!black, line width=0.5pt] (0,-5) circle (2.6mm);
+    \draw[Gold!60!black, line width=0.5pt] (0,-5) circle (2.0mm);
     \draw[callout, rounded corners=0pt] (11.1,-1.7) -- (11.3,-1.7) -- (11.3,-4.3) -- (11.1,-4.3);
     \node[callout text, font=\footnotesize, anchor=west, align=left, text height=, text depth=] at (11.33,-3) {address\\ the limits};
   \end{tikzpicture}
