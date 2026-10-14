@@ -13,6 +13,12 @@
 % two colours only. Blue marks the one highlighted statement of a slide,
 % red marks what to look at in a figure.
 \usetheme{eth}
+% Serif text (XCharter, close to Nature's Harding) with matching math. Labels drawn on
+% figures stay sans, as in the paper's figures.
+\usepackage{XCharter}
+\usepackage[xcharter,vvarbb]{newtxmath}
+\usefonttheme{serif}
+\setbeamerfont{frametitle}{family=\rmfamily,size=\Large,series=\bfseries}
 \colorlet{accentcolor}{ETHBlue} 
 \setbeamerfont{frametitle}{size=\Large}
 \setbeamerfont{normal text}{size=\normalsize}
@@ -74,6 +80,7 @@
     \begin{scope}[x={(fig.south east)}, y={(fig.north west)}]}%
   {\end{scope}\end{tikzpicture}}
 \tikzset{
+  every node/.append style={execute at begin node=\sffamily},
   callout/.style={draw=ETHRed, line width=1.2pt, rounded corners=1.5pt},  % a red outline or line
   callout text/.style={text=ETHRed, font=\small, inner sep=1.5pt, text height=1.6ex, text depth=0.4ex},
   cover/.style={fill=white},   % hides a panel letter or a small label of the paper
@@ -170,14 +177,17 @@
 \end{frame}}
 \fi
 
-\def\titlefigure{elements/title-page-image}
-% The banner is as wide as its longest line, with a margin of 10 mm at its right.
-% The longest line is the longer title line or the course line.
-\settowidth{\titleboxwidth}{\usebeamerfont{title}Highly accurate protein structure}
-\settowidth{\dimen0}{\usebeamerfont{date}\insertdate}
-\ifdim\dimen0>\titleboxwidth \setlength{\titleboxwidth}{\dimen0}\fi
-\addtolength{\titleboxwidth}{5mm}
-\titleframe
+{\setbeamertemplate{footline}{}
+\begin{frame}[noframenumbering]
+  \vspace{14mm}
+  {\fontsize{24}{28}\selectfont\bfseries Highly accurate protein structure\\prediction with AlphaFold\par}
+  \vspace{4mm}
+  {\large Paper by Jumper et al., \textit{Nature} 596 (2021)\par}
+  \vspace{12mm}
+  {Evita Bosch Pokunevich \quad Ben Bullinger\par}
+  \vspace{2mm}
+  {\color{ETHGray}Machine Learning for Genomics (263-5351-00L), ETH Z\"urich, Fall 2026\par}
+\end{frame}}
 
 \tocframe
 
