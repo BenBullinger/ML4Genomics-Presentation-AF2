@@ -28,7 +28,7 @@ Open: the index `<i>` and whose name the file carries when two people present. A
 
 | | |
 |---|---|
-| `main.tex` | The deck. Build with `latexmk -pdf main.tex`. Slides 20 and 21 (exam question, questions for the audience) and the first backup slide are placeholders. |
+| `main.tex` | The deck. Build with `latexmk -pdf main.tex`. The exam question and the questions for the audience are placeholders. Ten backup slides after `\appendix`, one question per slide with the source as subtitle, at most three lines of derivation, the answer in blue. |
 | `SCRIPT.md`, `SCREENPLAY.txt` | Speaker notes and the rehearsal text, `python3 make_screenplay.py` makes the second from the first. Written for 30 minutes, to be cut to 25. |
 | `WORK-SPLIT.md` | Who presents which slides. |
 | `SYMMETRY.tex` | Two pages on invariance, equivariance and chirality in the structure module and the loss, with the SI's equations. Blue headings are Evita's slides, red Ben's. |

@@ -207,11 +207,11 @@
   \fill[black] (N) circle (2.4pt) node[below, font=\small] {N};
   \fill[black] (C) circle (2.4pt) node[below, font=\small] {C};
   \draw[ETHRed, line width=1.2pt, -{Latex[length=4pt]}] (CA) -- (-24.8:1.0) node[right, font=\small, text=ETHRed] {$\bm e_1$};
-  \draw[ETHRed, line width=1.2pt, -{Latex[length=4pt]}] (CA) -- (245.2:1.0) node[left, font=\small, text=ETHRed] {$\bm e_2$};
+  \draw[ETHRed, line width=1.2pt, -{Latex[length=4pt]}] (CA) -- (245.2:1.0) node[below right, font=\small, text=ETHRed, inner sep=1pt] {$\bm e_2$};
   \fill[ETHRed] (CA) circle (2.4pt);
   \node[font=\small, text=ETHRed, anchor=south west] at (0.08,0.08) {C$\alpha$};
-  \draw[line width=0.9pt] (0.8,0.45) circle (3pt); \draw[line width=0.9pt] (0.8-0.07,0.45-0.07) -- (0.8+0.07,0.45+0.07) (0.8-0.07,0.45+0.07) -- (0.8+0.07,0.45-0.07);
-  \node[font=\small, text=ETHRed, anchor=west] at (0.95,0.45) {$\bm e_3$ into the page};
+  \draw[line width=0.9pt] (1.05,0.7) circle (3pt); \draw[line width=0.9pt] (1.05-0.08,0.7-0.08) -- (1.05+0.08,0.7+0.08) (1.05-0.08,0.7+0.08) -- (1.05+0.08,0.7-0.08);
+  \node[font=\small, text=ETHRed, anchor=west] at (1.22,0.7) {$\bm e_3$ into the page};
 \end{tikzpicture}}
 \newcommand{\pictomirrorpage}{\begin{tikzpicture}[x=7mm, y=7mm]
   \foreach \dx/\lab in {0/{$z>0$}, 3.6/{$z<0$}} {
@@ -888,7 +888,6 @@
       {\color{ETHGray} the output points are read back in frame $i$, and $\Tg$ meets its inverse. Exact, not learned.\par}
     \end{column}
   \end{columns}
-  \vspace{1mm}
   \key{Weights and outputs do not depend on where the structure sits}
 \end{frame}
 
@@ -968,7 +967,7 @@
       \say{Non-negative, symmetric, triangle inequality: a pseudometric on structures (eqs.\ 23 to 30)}
     \end{column}
   \end{columns}
-  \key{Local geometry in every frame: blind to where the structure sits, sensitive to its hand}
+  \key{Local geometry in every frame: blind to placement, sensitive to the hand}
 \end{frame}
 
 \begin{frame}[t]{Is AlphaFold 2 a graph neural network?}{Formalism of Bronstein, Bruna, Cohen and Veli\v{c}kovi\'c, 2021}
@@ -1047,7 +1046,7 @@
   \vspace{-1mm}
   \footnotesize
   \renewcommand{\arraystretch}{1.05}
-  \begin{tabular}{@{}p{0.3\textwidth}p{0.66\textwidth}@{}}
+  \begin{tabular}{@{}p{0.33\textwidth}p{0.63\textwidth}@{}}
     \toprule
     Row of Fig.~4a & What the model has instead \\
     \midrule
@@ -1061,15 +1060,15 @@
   \end{tabular}
   \par\vspace{1.5mm}
   \normalsize
-  \say{Baseline: the full model without self-distillation. Three or four seeds per ablation, hyperparameters not re-tuned}
-  \key{The bars are not additive. No IPA costs 2.3, no recycling 4.5, both together 16.3 GDT.}
+  \say{Baseline: the full model without self-distillation. Three or four seeds, not re-tuned}
+  \key{Not additive: no IPA costs 2.3, no recycling 4.5, both together 16.3 GDT}
 \end{frame}
 
 \begin{frame}[t]{How does the network predict its own accuracy?}{SI 1.9.6 and 1.9.7, Algorithm 29}
   \say{pLDDT: a small network on the final single representation predicts, per residue, a distribution over 50 bins of lDDT-C$\alpha$. It is trained with cross-entropy against the lDDT-C$\alpha$ of the prediction itself, on structures resolved between 0.1 and 3\,\AA}
   \say{The reported pLDDT is the expected value of that distribution. The pLDDT of a chain is the mean over its residues}
   \say{pTM: a pairwise head predicts the distribution of the aligned error of every residue pair. The predicted TM-score follows from these distributions}
-  \key{Confidence is predicted from the same representation as the structure, trained on the model's own errors}
+  \key{Confidence is a prediction, trained on the model's own errors}
 \end{frame}
 
 \begin{frame}[t]{How was it trained?}{Methods, ``Training regimen'', SI 1.3 and 1.11.1, Table 4}
@@ -1077,7 +1076,7 @@
   \say{Stage 1: crops of 256 residues, about 10 million samples, about seven days on 128 TPU v3 cores}
   \say{Stage 2: crops of 384 residues, the structural violation loss switched on, about 1.5 million samples, about four days}
   \say{Losses: FAPE, torsion angles, distogram, masked MSA, pLDDT, experimentally resolved, violations}
-  \key{About eleven days on 128 TPU cores per model. Inference takes GPU minutes to hours, depending on length.}
+  \key{Eleven days on 128 TPU cores per model. Inference takes GPU minutes to hours.}
 \end{frame}
 
 \begin{frame}[t]{MSA row attention with pair bias}{Supplementary Fig.~2, Algorithm 7}

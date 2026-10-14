@@ -46,10 +46,10 @@ The deck follows four facts about proteins, each answered by one design choice (
 | 19 | Summary, the four facts with their ablation cost | Conclusion | Ben |
 | 20 | Exam question | Questions | open |
 | 21 | Questions for the audience | Questions | open |
-| backup 1 | Backup, placeholder | | both |
-| backup 2 | The whole network as residual updates | | Ben |
-| backup 3 | Message passing on a geometric graph | | Ben |
-| backup 4 | MSA row attention with pair bias, Suppl. Fig. 2 | | Evita, moved from the main deck on 14 October |
+| backup 1 to 4 | Why is the attention invariant. Why is the structure module equivariant. Where does the handedness come from. What does FAPE measure. | geometry, one question per slide | Evita 1 and 2, Ben 3 and 4 |
+| backup 5, 6 | Is AlphaFold 2 a graph neural network. What does each block compute. | | both |
+| backup 7 to 9 | What exactly did each ablation remove. How does the network predict its own accuracy. How was it trained. | | Ben |
+| backup 10 | MSA row attention with pair bias, Suppl. Fig. 2 | | Evita, moved from the main deck on 14 October |
 
 Changed on Evita's slides on 14 October, each a one-line change: slide 2 explains backbone and side chain in one clause and names PDB 6Y4F, slides 8 to 12 carry the fact as a subtitle, slide 8 names attention along rows and columns, slide 6 is new, her Suppl. Fig. 2 slide moved to the backup. `git diff` shows all of it.
 
