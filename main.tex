@@ -159,6 +159,17 @@
 
 \begin{document}
 
+% Working notes for us, taken during slide meetings. Set \worknotesfalse before the upload.
+\newif\ifworknotes \worknotestrue
+\ifworknotes
+{\setbeamertemplate{footline}{}
+\begin{frame}[t,noframenumbering]{Notes from Ben, not part of the talk}
+  \begin{itemize}
+    \item Side chain. Explain backbone and side chain once, on slide 2 or 4, before they are named (Fig.~1c, Fig.~2b, slide 10).
+  \end{itemize}
+\end{frame}}
+\fi
+
 \def\titlefigure{elements/title-page-image}
 % The banner is as wide as its longest line, with a margin of 10 mm at its right.
 % The longest line is the longer title line or the course line.
