@@ -79,6 +79,12 @@
     \node[anchor=south west, inner sep=0pt] (fig) at (0,0) {\paperfig[#1]{#2}{#3}};
     \begin{scope}[x={(fig.south east)}, y={(fig.north west)}]}%
   {\end{scope}\end{tikzpicture}}
+\newenvironment{markedAFthree}[3][\linewidth]{%
+  \begin{tikzpicture}
+    \node[anchor=south west, inner sep=0pt] (fig) at (0,0)
+      {\includegraphics[page=#2,trim=#3,clip,width=#1]{AF3.pdf}};
+    \begin{scope}[x={(fig.south east)}, y={(fig.north west)}]}%
+  {\end{scope}\end{tikzpicture}}
 \newenvironment{markedSI}[3][\linewidth]{%
   \begin{tikzpicture}
     \node[anchor=south west, inner sep=0pt] (fig) at (0,0)
@@ -135,8 +141,8 @@
   }
   \frameaxes{(0,0)}{20}
   \frameaxes{(3.6,0.1)}{-15}
-  \node[font=\small, text=ETHRed] at (-0.45,0.4) {$i$};
-  \node[font=\small, text=ETHRed] at (4.05,0.55) {$j$};
+  \node[font=\small, text=ETHRed] at (-0.8,0.15) {$i$};
+  \node[font=\small, text=ETHRed] at (4.35,0.1) {$j$};
 }
 % The chain drawn on the FAPE slide: one frame k (red) and one atom i.
 \newcommand{\fapechain}[4]{% colour, atom i-1, atom i, label of atom i
@@ -210,8 +216,8 @@
   \draw[ETHRed, line width=1.2pt, -{Latex[length=4pt]}] (CA) -- (245.2:1.0) node[below right, font=\small, text=ETHRed, inner sep=1pt] {$\bm e_2$};
   \fill[ETHRed] (CA) circle (2.4pt);
   \node[font=\small, text=ETHRed, anchor=south west] at (0.08,0.08) {C$\alpha$};
-  \draw[line width=0.9pt] (1.05,0.7) circle (3pt); \draw[line width=0.9pt] (1.05-0.08,0.7-0.08) -- (1.05+0.08,0.7+0.08) (1.05-0.08,0.7+0.08) -- (1.05+0.08,0.7-0.08);
-  \node[font=\small, text=ETHRed, anchor=west] at (1.22,0.7) {$\bm e_3$ into the page};
+  \draw[line width=0.9pt] (1.35,0.9) circle (3pt); \draw[line width=0.9pt] (1.35-0.08,0.9-0.08) -- (1.35+0.08,0.9+0.08) (1.35-0.08,0.9+0.08) -- (1.35+0.08,0.9-0.08);
+  \node[font=\small, text=ETHRed, anchor=west] at (1.52,0.9) {$\bm e_3$ into the page};
 \end{tikzpicture}}
 \newcommand{\pictomirrorpage}{\begin{tikzpicture}[x=7mm, y=7mm]
   \foreach \dx/\lab in {0/{$z>0$}, 3.6/{$z<0$}} {
@@ -299,7 +305,7 @@
       {\small\color{ETHGray} Prediction in blue, experiment in green\par}
     \end{column}
   \end{columns}
-  \reffootnote{Sequence and structure are the CASP14 target T1049, PDB 6Y4F. The structure is Fig.~1b.}
+  \reffootnote{Sequence and structure are target T1049 of CASP14, the blind prediction contest, Protein Data Bank (PDB) entry 6Y4F, Fig.~1b.}
 \end{frame}
 
 % ---------------------------------------------------------------------------------------------
@@ -312,7 +318,7 @@
   \say{May-July 2020}
   \say{Blind test - experimental structures are not revealed until the end of experiment.}
   \say{Å (angstrom): a unit of length equal to $10^{-10}$ meters.}
-  \say{Smaller RMSD means a closer structural match.}
+  \say{Smaller RMSD (root mean square deviation of the atom positions) means a closer structural match.}
   \say{\textbf{Show the average prediction \textrightarrow{} hist from the paper}}
   
   % \begin{tikzpicture}[x=5.1mm, y=8.2mm]
@@ -370,7 +376,7 @@
     \draw[callout] (0.528,0.25) rectangle (0.612,0.975);
     \draw[callout] (0.758,0.25) rectangle (0.842,0.975);
     \draw[callout] (0.413,0.0) rectangle (0.942,0.092);
-    \node[callout text, anchor=south] at (0.295,1.02) {MSA};
+    \node[callout text, anchor=south, align=center] at (0.295,1.02) {multiple sequence\\alignment (MSA)};
     \node[callout text, anchor=north] at (0.295,0.11) {Templates};
     \node[callout text, anchor=south] at (0.57,1.02) {Evoformer};
     \node[callout text, anchor=south] at (0.80,1.02) {Structure module};
@@ -407,8 +413,39 @@
 
 % ---------------------------------------------------------------------------------------------
 \subsection{The data}
-\begin{frame}[t]{The input}
-    \say{}
+% Draft (Ben, 14 October) for Evita's placeholder: the two representations the network works on.
+\begin{frame}[t]{The input}{Two tables of numbers, one per MSA cell and one per residue pair}
+  \vspace{-2mm}
+  \begin{center}
+  \begin{tikzpicture}[x=0.8mm, y=0.8mm]
+    % MSA: rows are sequences, columns are residues
+    \foreach \r in {1,...,5} \foreach \c in {0,...,11}
+      \fill[ETHBlue!18] (\c*4.2, -\r*4.2) rectangle ++(3.8,-3.8);
+    \foreach \c in {0,...,11}
+      \fill[ETHBlue!55] (\c*4.2, 0) rectangle ++(3.8,-3.8);
+    \fill[ETHBlue!70] (5*4.2, -2*4.2) rectangle ++(3.8,-3.8);
+    \node[font=\scriptsize, anchor=south west] at (0,1.5) {MSA representation $\mathbf m_{si}$, 256 numbers per cell};
+    \node[font=\scriptsize, text=ETHGray, anchor=east] at (-1.5,-1.9) {query};
+    \node[font=\scriptsize, text=ETHGray, anchor=east, align=right] at (-1.5,-14.5) {related\\sequences};
+    \node[font=\scriptsize, text=ETHGray, anchor=north] at (25,-26) {$N_{\text{res}}$ residues};
+    \node[font=\scriptsize, text=ETHGray, rotate=90, anchor=south] at (55.5,-12) {$N_{\text{seq}}$ sequences};
+    % pair: residues by residues
+    \begin{scope}[shift={(75,0)}]
+      \foreach \r in {0,...,11} \foreach \c in {0,...,11}
+        \fill[black!12] (\c*2.1, -\r*2.1) rectangle ++(1.9,-1.9);
+      \foreach \r in {0,...,11}
+        \fill[black!35] (\r*2.1, -\r*2.1) rectangle ++(1.9,-1.9);
+      \fill[black!80] (8*2.1, -2*2.1) rectangle ++(1.9,-1.9);
+      \node[font=\scriptsize, anchor=south west] at (0,1.5) {Pair representation $\mathbf z_{ij}$, 128 numbers per pair};
+      \node[font=\scriptsize, text=ETHGray, anchor=north] at (12.6,-26) {$N_{\text{res}}$ residues};
+      \node[font=\scriptsize, text=ETHGray, rotate=90, anchor=south] at (30.5,-12.6) {$N_{\text{res}}$ residues};
+    \end{scope}
+  \end{tikzpicture}
+  \end{center}
+  \vspace{-1mm}
+  \say{One vector per cell of the alignment, and one per ordered pair of residues}
+  \key{Everything the network learns is written into these two tables}
+  \reffootnote{Supplementary Information (SI) 1.5, Algorithms 3 and 4. Sizes in training: 128 sequences, crops of 256 residues (SI Table 4).}
 \end{frame}
 
 \begin{frame}[t]{The input: MSA representation}
@@ -449,8 +486,24 @@
   \reffootnote{D.~S.~Marks et al., \textit{PLoS ONE} 6, 2011. The alignment is an illustration, not data.}
 \end{frame}
 
-\begin{frame}[t]{The input: Pair representation}
-    \say{}
+% Draft (Ben, 14 October) for Evita's placeholder.
+\begin{frame}[t]{The input: Pair representation}{What $\mathbf z_{ij}$ holds and where it comes from}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.4\textwidth}
+      \vspace{2mm}
+      \begin{marked}[0.95\linewidth]{4}{48 516 374 204}
+        \fill[cover] (0,0.9) rectangle (0.06,1.01);
+      \end{marked}
+      {\small\color{ETHGray} Fig.~3b, the pairs as directed edges\par}
+    \end{column}
+    \begin{column}{0.58\textwidth}
+      \say{128 numbers for every ordered pair of residues, the edge $i\to j$ of the graph}
+      \say{Started from the two amino acids and their distance along the chain, clipped at 32. Templates and the previous cycle enter as distances.}
+      \say{At the end, the distogram reads a distance distribution for every pair from it}
+    \end{column}
+  \end{columns}
+  \key{Where the structure is held before there are coordinates}
+  \reffootnote{SI 1.5, Algorithm 4 (relative position), 1.7.1 (templates), 1.10 (recycling), 1.9.8 (distogram).}
 \end{frame}
 
 % ---------------------------------------------------------------------------------------------
@@ -465,7 +518,7 @@
     \draw[ETHRed, line width=1.6pt] (0.3945,0.735) -- (0.3945,0.578);
     \draw[ETHRed, line width=1.6pt, -{Latex[length=5pt]}] (0.3945,0.375) -- (0.3945,0.245);
     \draw[callout] (0.367,0.375) rectangle (0.422,0.578);
-    \node[callout text, anchor=west] at (0.43,0.55) {MSA to pair};
+    \node[callout text, anchor=west] at (0.43,0.63) {MSA to pair};
     \draw[callout, rounded corners=0pt] (0.432,-0.01) -- (0.432,-0.05) -- (0.752,-0.05) -- (0.752,-0.01);
     \node[callout text, anchor=north] at (0.592,-0.06) {triangle layers};
     \node[figure label, font=\small, anchor=south west] at (0.028,0.84) {MSA};
@@ -476,22 +529,28 @@
   \key{The paper calls this graph inference. The edges are residues in proximity.}
 \end{frame}
 
-\begin{frame}[t]{Evoformer: MSA representation, row col}
+% Evita's placeholder "row col", filled by Ben on 14 October: Suppl. Fig. 2 with the right key line.
+\begin{frame}[t]{Evoformer: attention along the rows}{Supplementary Fig.~2, Algorithm 7}
   \vspace{-2mm}
   \begin{markedSI}[0.97\linewidth]{16}{60 600 40 60}
     \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
   \end{markedSI}
   \par\vspace{2mm}
-  \key{Coordinates come out of the network itself}
+  \say{One sequence at a time: residue $i$ attends to every residue $j$ of the same sequence}
+  \key{The pair representation is added to the logits. The pairs steer the MSA.}
 \end{frame}
 
-\begin{frame}[t]{Evoformer: MSA representation, trans out}
+% Evita's placeholder "trans out", filled by Ben on 14 October: Suppl. Fig. 3 and the outer product mean.
+\begin{frame}[t]{Evoformer: columns, transition, outer product}{Supplementary Figs.~3 to 5, Algorithms 8 to 10}
   \vspace{-2mm}
-  \begin{markedSI}[0.97\linewidth]{16}{60 600 40 60}
-    \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
+  \begin{center}
+  \begin{markedSI}[0.8\linewidth]{17}{55 684 50 45}
   \end{markedSI}
-  \par\vspace{2mm}
-  \key{Coordinates come out of the network itself}
+  \end{center}
+  \vspace{-1mm}
+  \say{One residue at a time: the sequences attend to each other at position $i$, then a two-layer perceptron per cell}
+  \say{Outer product mean: the outer product of columns $i$ and $j$, averaged over the sequences, is added to $\mathbf z_{ij}$}
+  \key{Here the alignment writes into the pairs, in every one of the 48 blocks}
 \end{frame}
 
 \begin{frame}[t]{Evoformer: Pair representation}{2. Distances in 3D must close triangles.}
@@ -534,7 +593,7 @@
       \begin{marked}{4}{40 358 302 295}
         \fill[cover] (0.03,0.64) rectangle (0.07,0.73);
         \draw[callout] (0.337,0.325) rectangle (0.443,0.578);
-        \node[callout text, anchor=north] at (0.39,0.31) {IPA};
+        \node[callout text, anchor=north east] at (0.36,0.30) {IPA};
         \draw[callout] (0.635,0.125) rectangle (0.815,0.275);
         \node[callout text, anchor=south] at (0.725,0.285) {frames};
       \end{marked}
@@ -549,7 +608,7 @@
   \end{columns}
   \vspace{2mm}
   \say{A frame is one rotation and one translation per residue}
-  \say{All frames are updated at once}
+  \say{Invariant point attention (IPA) updates the residues, then all frames move at once}
   \key{Nothing forces neighbouring residues to stay connected}
 \end{frame}
 
@@ -573,7 +632,7 @@
   \reffootnote{The formula is Algorithm 22 of the supplement for one head, without scaling constants.}
 \end{frame}
 
-\begin{frame}[t]{FAPE: a loss over local frames}{4. A protein and its mirror image are different molecules.}
+\begin{frame}[t]{Frame aligned point error (FAPE), a loss over local frames}{4. A protein and its mirror image are different molecules.}
   % An illustration, not real data. The prediction is the experimental chain,
   % rotated as a whole, with the last two atoms displaced.
   \begin{tikzpicture}[x=9.5mm, y=9.5mm]
@@ -655,7 +714,7 @@
   % Redrawn from Fig. 4a. The numbers are means over the training runs of a row, measured on
   % the figure (background/SLIDE-CHECK.md). Left: GDT on the CASP14 domains, 1 unit = 1 point.
   % Right: lDDT-Ca on PDB chains, drawn 2.5 times wider per point.
-  \begin{tikzpicture}[x=1.93mm, y=3.3mm]
+  \begin{tikzpicture}[x=1.93mm, y=3.0mm]
     \foreach \x in {-15,-10,-5} {
       \draw[ETHGray!35, line width=0.5pt] (\x,-10.6) -- (\x,-0.4);
       \node[font=\scriptsize, anchor=north] at (\x,-10.7) {\signed{\x}};
@@ -697,7 +756,7 @@
   \par\vspace{0.5mm}
   \say{{\color{ETHRed}\bfseries 4}\enspace With a mirror-blind loss instead of FAPE, the model often builds the mirror image}
   \key{Each of the four choices costs accuracy on CASP14 when it is removed}
-  \reffootnote{Redrawn from Fig.~4a, the mean change against the baseline over the training runs of a row. Line 4: Suppl.\ Fig.~9.}
+  \reffootnote{Redrawn from Fig.~4a, the mean change against the baseline over the training runs of a row. GDT is the global distance test, lDDT the local distance difference test, both 0 to 100. Line 4: Suppl.\ Fig.~9.}
 \end{frame}
 
 \begin{frame}[t]{The structure forms inside the trunk}
@@ -785,26 +844,87 @@
 \section{Conclusion}
 
 \begin{frame}[t]{What followed}
-  \begin{tikzpicture}[x=10mm, y=7mm]
-    \draw[ETHGray, line width=1pt] (0,0.35) -- (0,-5.35);
+  \begin{tikzpicture}[x=10mm, y=6.3mm]
+    \draw[ETHGray, line width=1pt] (0,0.35) -- (0,-6.35);
     \foreach \y/\text in {
         0/{RoseTTAFold appears online the same day},
         -1/{98.5\% of human proteins are predicted},
         -2/{AlphaFold-Multimer predicts complexes},
         -3/{ESMFold uses a language model and no MSA},
         -4/{AlphaFold~3 is one model for proteins, DNA, RNA and ligands},
-        -5/{Baker, Hassabis and Jumper receive the Nobel Prize in Chemistry}} {
+        -5/{Baker, Hassabis and Jumper receive the Nobel Prize in Chemistry},
+        -6/{AlphaGenome predicts regulatory activity from a million bases of DNA}} {
       \fill[ETHBlue] (0,\y) circle (2.4pt);
       \node[anchor=mid west, inner sep=0pt] at (0.5,\y) {\text};
     }
-    \foreach \y/\year in {0/2021, -3/2022, -4/2024}
+    \foreach \y/\year in {0/2021, -3/2022, -4/2024, -6/2025}
       \node[anchor=mid east, inner sep=0pt] at (-0.4,\y) {\year};
     \draw[callout, rounded corners=0pt] (11.1,-1.7) -- (11.3,-1.7) -- (11.3,-4.3) -- (11.1,-4.3);
     \node[callout text, font=\footnotesize, anchor=west, align=left, text height=, text depth=] at (11.33,-3) {address\\ the limits};
   \end{tikzpicture}
   \par\vspace{3mm}
   \key{AlphaFold~3 is more accurate than specialised tools, with one exception}
-  \reffootnote{The first authors are Baek 2021, Tunyasuvunakool 2021, Evans 2021, Lin 2022 and Abramson 2024.}
+  \reffootnote{The first authors are Baek 2021, Tunyasuvunakool 2021, Evans 2021, Lin 2022, Abramson 2024 and Avsec 2025.}
+\end{frame}
+
+% The follow-up paper's own verdict on each of the four design choices.
+\begin{frame}[t]{What AlphaFold 3 kept of the four choices}{Abramson et al., \textit{Nature} 630 (2024), pages 493 to 497}
+  \vspace{-3mm}
+  \small
+  \renewcommand{\arraystretch}{1.0}
+  \begin{tabular}{@{}p{4mm}>{\raggedright\arraybackslash}p{0.3\textwidth}>{\raggedright\arraybackslash}p{0.62\textwidth}@{}}
+    & {\color{ETHGray} AlphaFold 2} & {\color{ETHGray} AlphaFold 3} \\[0.5mm]
+    {\color{ETHRed}\bfseries 1} & attention over sequences & a small MSA block, and the MSA ``is not retained''. ESMFold replaces the MSA by a language model. \\
+    {\color{ETHRed}\bfseries 2} & triangles on the pairs & kept. The pairformer keeps the pair processing and the 48 blocks. \\
+    {\color{ETHRed}\bfseries 3} & frames, IPA, equivariance & dropped. Diffusion on raw atom coordinates ``without rotational frames or any equivariant processing''. Random rotations of the training targets instead. \\
+    {\color{ETHRed}\bfseries 4} & FAPE in local frames & dropped with the frames. Outputs ``do not always respect chirality'', 4.4\,\% violations after a ranking penalty. \\
+  \end{tabular}
+  \par\vspace{1mm}
+  \normalsize
+  \key{The bitter lesson, with two footnotes. The graph survived, and the hand came back as a problem.}
+  \reffootnote{Richard Sutton, \textit{The Bitter Lesson}, 2019: ``building in how we think we think does not work in the long run''.}
+\end{frame}
+
+% AlphaFold 3's own overview figure, Fig. 1d of Abramson et al. 2024, cut from AF3.pdf.
+\begin{frame}[t]{AlphaFold 3 in one picture}{Abramson et al., \textit{Nature} 630 (2024), Fig.~1d and pages 494 to 497}
+  \vspace{-3mm}
+  \begin{center}
+  \begin{markedAFthree}[0.93\linewidth]{2}{44 344 30 329}
+    \fill[cover] (0,0.88) rectangle (0.025,1.01);
+    \draw[callout] (0.395,0.22) rectangle (0.49,0.8);
+    \draw[callout] (0.5,0.2) rectangle (0.63,0.8);
+    \draw[callout] (0.72,0.2) rectangle (0.86,0.8);
+    \node[callout text, anchor=south] at (0.4425,1.02) {MSA};
+    \node[callout text, anchor=south] at (0.565,1.02) {pairformer};
+    \node[callout text, anchor=south] at (0.79,1.02) {diffusion};
+  \end{markedAFthree}
+  \end{center}
+  \vspace{-1mm}
+  \say{Tokens for proteins, nucleic acids, ligands and ions. The MSA module has 4 blocks, the pairformer 48.}
+  \say{Diffusion denoises random atom coordinates into the structure, 25 samples ranked by confidence}
+  \key{Less structure in the network, more in the data and in the sampling}
+\end{frame}
+
+% The cost side of the bitter lesson, in the AlphaFold 3 paper's own words and numbers.
+\begin{frame}[t]{What the removal cost, in the paper's own numbers}{Abramson et al., \textit{Nature} 630 (2024), pages 495 to 498}
+  \vspace{-3mm}
+  \footnotesize
+  \renewcommand{\arraystretch}{1.1}
+  \setlength{\tabcolsep}{1.5mm}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.27\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.31\textwidth}@{}}
+    \toprule
+    AlphaFold 2 had & AlphaFold 3 reports & The patch \\
+    \midrule
+    the hand in the loss, FAPE & outputs that ``do not always respect chirality'', 4.4\,\% on PoseBusters, p.~497 & a chirality penalty in the ranking, and more seeds \\
+    a tuned violation loss, p.~495 & clashing atoms, whole chains overlapping in homomers, p.~497 & a clash penalty in the ranking \\
+    low-confidence loops where there is no structure & ``plausible-looking structure even in unstructured regions'', p.~496 & cross-distillation on AlphaFold-Multimer predictions \\
+    attention over the MSA in 48 blocks & ``a very similar dependence on MSA depth'', p.~497 & none \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{1.5mm}
+  \normalsize
+  \say{No ablation of the removed parts is reported, only one sentence of observation, p.~495}
+  \key{It wins everywhere but one RNA entry. The costs were paid in patches, one of them the old model's outputs.}
 \end{frame}
 
 \begin{frame}[t]{Summary}
@@ -821,7 +941,7 @@
         \node[callout text, anchor=south] at (0.295,1.03) {1};
         \node[callout text, anchor=south] at (0.57,1.03) {2};
         \node[callout text, anchor=south] at (0.80,1.03) {3};
-        \node[callout text, anchor=south] at (0.936,0.77) {4};
+        \node[callout text, anchor=west] at (1.005,0.55) {4};
       \end{marked}
     \end{column}
     \begin{column}{0.48\textwidth}
@@ -852,9 +972,12 @@
 \end{frame}
 
 \begin{frame}[t]{Questions for the audience}
-  \say{\textcolor{ETHGray}{Placeholder. At least two questions, then a moderated discussion.}}
-  \say{1.\ \textcolor{ETHGray}{First question.}}
-  \say{2.\ \textcolor{ETHGray}{Second question.}}
+  % Part 2, about five minutes. Ask 1, take two answers, then give AlphaFold 3's own data from
+  % slide 23: no equivariance was needed, but the hand came back as a problem. Ask 2, take two
+  % answers, then Fig. 5a and ESMFold. Question 3 only if there is time.
+  \say{{\color{ETHRed}\bfseries 1}\enspace AlphaFold 2 built rotation equivariance and the hand into the network and the loss. AlphaFold 3 dropped both and learns them from data. When is it worth building a symmetry into a model, and when is it better learned?}
+  \say{{\color{ETHRed}\bfseries 2}\enspace Accuracy falls below about 30 related sequences. Has the network learned how proteins fold, or how evolution has varied them? What result would settle it?}
+  \say{{\color{ETHRed}\bfseries 3}\enspace pLDDT is trained on the model's own errors. On which proteins would you distrust it, and what should a genomics pipeline do with a low-confidence region?}
 \end{frame}
 
 % ---------------------------------------------------------------------------------------------
@@ -900,9 +1023,9 @@
         \chainframes{0}
         \begin{scope}[shift={(7.0,0)}] \chainframes{40} \end{scope}
         \begin{scope}[shift={(0.4,-3.0)}, rotate=-30] \chainframes{0} \end{scope}
-        \begin{scope}[shift={(7.4,-3.0)}, rotate=-30] \chainframes{40} \end{scope}
+        \begin{scope}[shift={(7.8,-3.0)}, rotate=-30] \chainframes{40} \end{scope}
         \draw[black!60, line width=0.8pt, -{Latex[length=4pt]}] (4.3,0.45) -- (6.4,0.45) node[midway, above=1pt, font=\scriptsize] {one block};
-        \draw[black!60, line width=0.8pt, -{Latex[length=4pt]}] (4.5,-3.7) -- (6.7,-3.7) node[midway, below=1pt, font=\scriptsize] {same update};
+        \draw[black!60, line width=0.8pt, -{Latex[length=4pt]}] (5.0,-3.9) -- (7.1,-3.9) node[midway, below=1pt, font=\scriptsize] {same update};
         \draw[ETHBlue, line width=0.8pt, -{Latex[length=4pt]}] (1.8,-0.5) -- (1.8,-2.3) node[midway, left, font=\scriptsize, text=ETHBlue] {$\Tg$};
         \draw[ETHBlue, line width=0.8pt, -{Latex[length=4pt]}] (8.8,-0.5) -- (8.8,-2.3) node[midway, right, font=\scriptsize, text=ETHBlue] {$\Tg$};
       \end{tikzpicture}
@@ -916,7 +1039,7 @@
       \say{``Rigid motion'' in the supplement means proper rotation and translation, not reflection. In group language: SE(3).}
     \end{column}
   \end{columns}
-  \say{All frames start as the identity, so the global frame of the output is arbitrary, and the loss has to be invariant to it}
+  \say{All frames start as the identity, so the output's global frame is arbitrary and the loss must be invariant to it}
   \key{Exact SE(3) equivariance. Reflections are excluded on purpose.}
 \end{frame}
 
@@ -938,7 +1061,7 @@
       {$\mathrm{FAPE}(X,X_{\text{mirror}})=2\sum_{ij}\big|(T_i^{-1}\circ\bm x_j)_z\big|$\par}
       {\color{ETHGray} large unless the structure is flat\par}
       \vspace{2mm}
-      \say{Trained with dRMSD, a loss blind to reflection, the model builds the mirror image in a large share of cases (Suppl.\ Fig.~9)}
+      \say{Trained with dRMSD, the error of the distance matrix, which is blind to reflection, the model builds the mirror image in a large share of cases (Suppl.\ Fig.~9)}
     \end{column}
   \end{columns}
   \key{The loss sees the hand, the data teach it. Side chains are always built L.}
@@ -956,7 +1079,7 @@
         \fill[ETHBlue] (2.4,0.3) circle (2.8pt);
         \frameaxes{(0,0)}{100}
         \node[callout text, anchor=west] at (2.45,0.85) {$d_{ki}$};
-        \node[font=\small, text=ETHRed] at (0.15,-0.5) {$k$};
+        \node[font=\small, text=ETHRed] at (-0.4,-0.45) {$k$};
         \node[font=\small, anchor=north] at (1.2,-0.9) {seen from frame $k$};
       \end{tikzpicture}
     \end{column}
@@ -1068,7 +1191,7 @@
 \begin{frame}[t]{How does the network predict its own accuracy?}{SI 1.9.6 and 1.9.7, Algorithm 29}
   \say{pLDDT: a small network on the final single representation predicts, per residue, a distribution over 50 bins of lDDT-C$\alpha$. It is trained with cross-entropy against the lDDT-C$\alpha$ of the prediction itself, on structures resolved between 0.1 and 3\,\AA}
   \say{The reported pLDDT is the expected value of that distribution. The pLDDT of a chain is the mean over its residues}
-  \say{pTM: a pairwise head predicts the distribution of the aligned error of every residue pair. The predicted TM-score follows from these distributions}
+  \say{pTM, the predicted template modelling score: a pairwise head predicts the distribution of the aligned error of every residue pair, and the TM-score follows from these distributions}
   \key{Confidence is a prediction, trained on the model's own errors}
 \end{frame}
 
@@ -1078,6 +1201,25 @@
   \say{Stage 2: crops of 384 residues, the structural violation loss switched on, about 1.5 million samples, about four days}
   \say{Losses: FAPE, torsion angles, distogram, masked MSA, pLDDT, experimentally resolved, violations}
   \key{Eleven days on 128 TPU cores per model. Inference takes GPU minutes to hours.}
+\end{frame}
+
+\begin{frame}[t]{What else AlphaFold 3 changed, and where it says so}{Abramson et al., \textit{Nature} 630 (2024), pages 493 to 497, and its supplement}
+  \vspace{-1mm}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.1}
+  \setlength{\tabcolsep}{1.2mm}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.15\textwidth}>{\raggedright\arraybackslash}p{0.64\textwidth}>{\raggedright\arraybackslash}p{0.15\textwidth}@{}}
+    \toprule
+    Input & one model for proteins, nucleic acids, ligands, ions and modifications, as tokens: one per residue, one per ligand atom & p.~493, Fig.~1 \\
+    Trunk & the pairformer, 48 blocks on the pair and single representations. The MSA block is cut to four blocks and the MSA is not kept & p.~494 \\
+    Output & a diffusion module denoises raw atom coordinates, 24 attention blocks over tokens and 3 over atoms. No frames, no torsion angles, no equivariance. The training targets are randomly rotated and translated instead & p.~495, Fig.~2b, SI Alg.~19 \\
+    Confidence and sampling & confidence heads trained on 20-step mini rollouts of the diffusion. At inference 5 seeds with 5 samples each, ranked by confidence with penalties for clashes and chirality & p.~494, 495, 497 \\
+    Limits & 4.4\,\% chirality violations, overlapping chains in homomers, hallucinated structure in disordered regions, countered by cross-distillation on AlphaFold-Multimer predictions, no dynamics & p.~496, 497 \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{2mm}
+  \normalsize
+  \key{Less structure in the network, more in the data and in the sampling}
 \end{frame}
 
 \begin{frame}[t]{MSA row attention with pair bias}{Supplementary Fig.~2, Algorithm 7}
