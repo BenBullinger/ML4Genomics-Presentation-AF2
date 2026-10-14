@@ -391,7 +391,7 @@
   \begin{tabular}{@{}p{4mm}p{18.6mm}>{\raggedright\arraybackslash}p{0.335\textwidth}>{\raggedright\arraybackslash}p{0.44\textwidth}@{}}
     & & {\color{ETHGray} Fact} & {\color{ETHGray} Design choice in AlphaFold 2} \\[1mm]
     {\color{ETHRed}\bfseries 1} & \pictoset & An MSA is a set of sequences. A protein is a chain of residues. & Attention over the sequences themselves, along the rows and the columns. \\[1.5mm]
-    {\color{ETHRed}\bfseries 2} & \pictotriangle & Distances in 3D must close triangles. & The pair representation is updated through triangles. \\[1.5mm]
+    {\color{ETHRed}\bfseries 2} & \pictotriangle & Distances in 3D must close triangles. & The pairs are the edges of a residue graph, updated through triangles. \\[1.5mm]
     {\color{ETHRed}\bfseries 3} & \pictorotate & A structure is the same after any rotation or translation. & One frame per residue. Attention uses only distances in the frames. \\[1.5mm]
     {\color{ETHRed}\bfseries 4} & \pictomirror & A protein and its mirror image are different molecules. & The loss compares atoms in local frames. A mirror image is penalised. \\
   \end{tabular}
@@ -472,8 +472,8 @@
     \node[figure label, font=\small, anchor=north west] at (0.028,0.085) {pairs};
   \end{marked}
   \par\vspace{2mm}
-  \say{Attention along the rows and the columns. The 48 blocks do not share weights}
-  \key{MSA and pair representation exchange information}
+  \say{Attention along the rows and the columns. MSA and pair representation exchange information}
+  \key{The paper calls this graph inference. The edges are residues in proximity.}
 \end{frame}
 
 \begin{frame}[t]{Evoformer: MSA representation, row col}
@@ -509,13 +509,14 @@
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.62\textwidth}
-      \vspace{4mm}
+      \vspace{1mm}
+      \say{The pair representation is the edge set of the graph (Fig.~3b)}
       \say{Edge $ij$ is updated from the edges $ik$ and $jk$}
       \key{The triangle inequality acts as an inductive bias}
     \end{column}
   \end{columns}
-  \vspace{3mm}
-  \begin{marked}[0.86\linewidth]{4}{247 519.7 25 219}
+  \vspace{1mm}
+  \begin{marked}[0.82\linewidth]{4}{247 519.7 25 219}
     \node[figure label, font=\small] at (0.225,1.19) {Multiplication};
     \node[figure label] at (0.115,1.03) {outgoing edges};
     \node[figure label] at (0.345,1.03) {incoming edges};
