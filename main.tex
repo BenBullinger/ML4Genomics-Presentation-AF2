@@ -155,6 +155,31 @@
   {M,S,D,V,L,I,N,G,R,V,A,F}}
 % A formula term with its name underneath
 \newcommand{\term}[2]{\underbrace{#1}_{\mbox{\footnotesize #2}}}
+% The four drawings on slide 6, one per fact. Illustrations, 18 mm wide.
+\newcommand{\pictoset}{\begin{tikzpicture}[x=1mm, y=1mm, baseline=-1mm]
+  \foreach \y in {-2.4,0,2.4} \draw[ETHGray, line width=1.5pt, line cap=round] (0,\y) -- (5.5,\y);
+  \draw[ETHGray, line width=0.6pt, {Latex[length=2pt]}-{Latex[length=2pt]}] (6.8,-2.1) -- (6.8,2.1);
+  \draw[ETHBlue, line width=0.9pt] (10,0) -- (16.4,0);
+  \draw[ETHBlue, line width=0.9pt, -{Latex[length=2.5pt]}] (16.4,0) -- (18,0);
+  \foreach \x in {10,12.1,14.2,16.3} \fill[ETHBlue] (\x,0) circle (0.75);
+\end{tikzpicture}}
+\newcommand{\pictotriangle}{\begin{tikzpicture}[x=1mm, y=1mm, baseline=-1mm]
+  \draw[ETHBlue, line width=0.9pt] (4,-2.6) -- (9,3) -- (14,-2.6);
+  \draw[ETHRed, line width=1.3pt] (4,-2.6) -- (14,-2.6);
+  \foreach \p in {(4,-2.6),(9,3),(14,-2.6)} \fill[black] \p circle (0.75);
+\end{tikzpicture}}
+\newcommand{\pictorotate}{\begin{tikzpicture}[x=1mm, y=1mm, baseline=-1mm]
+  \draw[ETHBlue, line width=1pt, line join=round] (0,-2) -- (1.6,1.2) -- (3.4,-1.2) -- (5,2.2) -- (6.6,-0.4);
+  \node[font=\footnotesize, text=ETHGray] at (9,0) {=};
+  \begin{scope}[shift={(13.6,-2.4)}, rotate=55]
+    \draw[ETHBlue, line width=1pt, line join=round] (0,-2) -- (1.6,1.2) -- (3.4,-1.2) -- (5,2.2) -- (6.6,-0.4);
+  \end{scope}
+\end{tikzpicture}}
+\newcommand{\pictomirror}{\begin{tikzpicture}[x=1mm, y=1mm, baseline=-1mm]
+  \foreach \x in {0,2.3,4.6} \draw[ETHBlue, line width=1.3pt, line cap=round] (\x,-2.4) -- (\x+2,2.4);
+  \draw[ETHGray, line width=0.5pt, densely dashed] (9,-3.2) -- (9,3.2);
+  \foreach \x in {11.4,13.7,16} \draw[ETHBlue, line width=1.3pt, line cap=round] (\x+2,-2.4) -- (\x,2.4);
+\end{tikzpicture}}
 % A signed number in the text font: -2.3 gets a real minus sign, 2.2 becomes +2.2
 \newcommand{\signed}[1]{\expandafter\signedaux#1\relax}
 \def\signedaux#1#2\relax{\ifx-#1\textminus#2\else+#1#2\fi}
@@ -303,15 +328,18 @@
 % come back to the four numbers.
 \begin{frame}[t]{Four facts about proteins, four design choices}
   \vspace{-3mm}
-  \renewcommand{\arraystretch}{1.15}
-  \begin{tabular}{@{}p{5mm}p{0.40\textwidth}p{0.50\textwidth}@{}}
-    & {\small\color{ETHGray} Fact} & {\small\color{ETHGray} Design choice in AlphaFold 2} \\[1mm]
-    {\color{ETHRed}\bfseries 1} & The sequences in an MSA are a set. The residues are a chain. & Attention over the sequences themselves, along the rows and the columns. \\
-    {\color{ETHRed}\bfseries 2} & Distances in 3D must close triangles. & The pair representation is updated through triangles. \\
-    {\color{ETHRed}\bfseries 3} & A structure is the same after any rotation or translation. & One frame per residue. Attention sees only distances between points in the frames. \\
-    {\color{ETHRed}\bfseries 4} & A protein and its mirror image are different molecules. & The loss compares atoms in local frames. A mirror image is penalised. \\
+  \small
+  \renewcommand{\arraystretch}{1.1}
+  \setlength{\tabcolsep}{1.2mm}
+  \begin{tabular}{@{}p{4mm}p{18.6mm}>{\raggedright\arraybackslash}p{0.335\textwidth}>{\raggedright\arraybackslash}p{0.44\textwidth}@{}}
+    & & {\color{ETHGray} Fact} & {\color{ETHGray} Design choice in AlphaFold 2} \\[1mm]
+    {\color{ETHRed}\bfseries 1} & \pictoset & An MSA is a set of sequences. A protein is a chain of residues. & Attention over the sequences themselves, along the rows and the columns. \\[1.5mm]
+    {\color{ETHRed}\bfseries 2} & \pictotriangle & Distances in 3D must close triangles. & The pair representation is updated through triangles. \\[1.5mm]
+    {\color{ETHRed}\bfseries 3} & \pictorotate & A structure is the same after any rotation or translation. & One frame per residue. Attention uses only distances in the frames. \\[1.5mm]
+    {\color{ETHRed}\bfseries 4} & \pictomirror & A protein and its mirror image are different molecules. & The loss compares atoms in local frames. A mirror image is penalised. \\
   \end{tabular}
-  \par\vspace{2mm}
+  \par\vspace{2.5mm}
+  \normalsize
   \key{Removing any one of the four costs accuracy. The ablations measure how much.}
 \end{frame}
 
