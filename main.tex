@@ -869,24 +869,23 @@
 
 % The follow-up paper's own verdict on each of the four design choices.
 \begin{frame}[t]{What AlphaFold 3 kept of the four choices}{Abramson et al., \textit{Nature} 630 (2024), pages 493 to 497}
-  \vspace{-3mm}
-  \small
-  \renewcommand{\arraystretch}{1.0}
-  \begin{tabular}{@{}p{4mm}>{\raggedright\arraybackslash}p{0.3\textwidth}>{\raggedright\arraybackslash}p{0.62\textwidth}@{}}
-    & {\color{ETHGray} AlphaFold 2} & {\color{ETHGray} AlphaFold 3} \\[0.5mm]
-    {\color{ETHRed}\bfseries 1} & attention over sequences & a small MSA block, and the MSA ``is not retained''. ESMFold replaces the MSA by a language model. \\
-    {\color{ETHRed}\bfseries 2} & triangles on the pairs & kept. The pairformer keeps the pair processing and the 48 blocks. \\
-    {\color{ETHRed}\bfseries 3} & frames, IPA, equivariance & dropped. Diffusion on raw atom coordinates ``without rotational frames or any equivariant processing''. Random rotations of the training targets instead. \\
-    {\color{ETHRed}\bfseries 4} & FAPE in local frames & dropped with the frames. Outputs ``do not always respect chirality'', 4.4\,\% violations after a ranking penalty. \\
+  \vspace{-1mm}
+  \renewcommand{\arraystretch}{1.3}
+  \setlength{\tabcolsep}{1.5mm}
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.3\textwidth}>{\raggedright\arraybackslash}p{0.58\textwidth}@{}}
+    & {\color{ETHGray} AlphaFold 2} & {\color{ETHGray} AlphaFold 3} \\
+    {\color{ETHRed}\bfseries 1} & attention over sequences & a small MSA block, and the MSA is not kept \\
+    {\color{ETHRed}\bfseries 2} & triangles on the pairs & kept, 48 blocks \\
+    {\color{ETHRed}\bfseries 3} & frames, IPA, equivariance & dropped for diffusion and random rotations \\
+    {\color{ETHRed}\bfseries 4} & FAPE in local frames & dropped, 4.4\,\% chirality violations remain \\
   \end{tabular}
-  \par\vspace{1mm}
-  \normalsize
-  \key{The bitter lesson, with two footnotes. The graph survived, and the hand came back as a problem.}
+  \par\vspace{4mm}
+  \key{The bitter lesson, with two footnotes. The graph survived. The hand came back.}
   \reffootnote{Richard Sutton, \textit{The Bitter Lesson}, 2019: ``building in how we think we think does not work in the long run''.}
 \end{frame}
 
 % AlphaFold 3's own overview figure, Fig. 1d of Abramson et al. 2024, cut from AF3.pdf.
-\begin{frame}[t]{AlphaFold 3 in one picture}{Abramson et al., \textit{Nature} 630 (2024), Fig.~1d and pages 494 to 497}
+\begin{frame}[t]{AlphaFold 3 in one picture}{Abramson et al., \textit{Nature} 630 (2024), Fig.~1d}
   \vspace{-3mm}
   \begin{center}
   \begin{markedAFthree}[0.93\linewidth]{2}{44 344 30 329}
@@ -900,31 +899,26 @@
   \end{markedAFthree}
   \end{center}
   \vspace{-1mm}
-  \say{Tokens for proteins, nucleic acids, ligands and ions. The MSA module has 4 blocks, the pairformer 48.}
-  \say{Diffusion denoises random atom coordinates into the structure, 25 samples ranked by confidence}
+  \say{Tokens for proteins, nucleic acids, ligands and ions}
+  \say{Diffusion denoises random atom coordinates, 25 samples ranked by confidence}
   \key{Less structure in the network, more in the data and in the sampling}
 \end{frame}
 
 % The cost side of the bitter lesson, in the AlphaFold 3 paper's own words and numbers.
-\begin{frame}[t]{What the removal cost, in the paper's own numbers}{Abramson et al., \textit{Nature} 630 (2024), pages 495 to 498}
-  \vspace{-3mm}
-  \footnotesize
-  \renewcommand{\arraystretch}{1.1}
+\begin{frame}[t]{What the removal cost}{Abramson et al., \textit{Nature} 630 (2024), pages 495 to 498}
+  \vspace{-1mm}
+  \renewcommand{\arraystretch}{1.3}
   \setlength{\tabcolsep}{1.5mm}
-  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.27\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.31\textwidth}@{}}
-    \toprule
-    AlphaFold 2 had & AlphaFold 3 reports & The patch \\
-    \midrule
-    the hand in the loss, FAPE & outputs that ``do not always respect chirality'', 4.4\,\% on PoseBusters, p.~497 & a chirality penalty in the ranking, and more seeds \\
-    a tuned violation loss, p.~495 & clashing atoms, whole chains overlapping in homomers, p.~497 & a clash penalty in the ranking \\
-    low-confidence loops where there is no structure & ``plausible-looking structure even in unstructured regions'', p.~496 & cross-distillation on AlphaFold-Multimer predictions \\
-    attention over the MSA in 48 blocks & ``a very similar dependence on MSA depth'', p.~497 & none \\
-    \bottomrule
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.23\textwidth}>{\raggedright\arraybackslash}p{0.33\textwidth}>{\raggedright\arraybackslash}p{0.39\textwidth}@{}}
+    {\color{ETHGray} AlphaFold 2 had} & {\color{ETHGray} AlphaFold 3 reports} & {\color{ETHGray} The patch} \\
+    the hand in the loss & 4.4\,\% chirality violations & ranking, more seeds \\
+    a violation loss & clashes, overlapping chains & ranking \\
+    loops for disorder & hallucinated structure & AlphaFold-Multimer distillation \\
+    MSA attention & same MSA dependence & none \\
   \end{tabular}
-  \par\vspace{1.5mm}
-  \normalsize
-  \say{No ablation of the removed parts is reported, only one sentence of observation, p.~495}
-  \key{It wins everywhere but one RNA entry. The costs were paid in patches, one of them the old model's outputs.}
+  \par\vspace{3mm}
+  \say{No ablation of the removed parts is reported}
+  \key{It wins everywhere but one RNA entry. The costs were paid in patches.}
 \end{frame}
 
 \begin{frame}[t]{Summary}
@@ -1203,21 +1197,22 @@
   \key{Eleven days on 128 TPU cores per model. Inference takes GPU minutes to hours.}
 \end{frame}
 
-\begin{frame}[t]{What else AlphaFold 3 changed, and where it says so}{Abramson et al., \textit{Nature} 630 (2024), pages 493 to 497, and its supplement}
+\begin{frame}[t]{What else AlphaFold 3 changed, and where it says so}{Abramson et al., \textit{Nature} 630 (2024)}
   \vspace{-1mm}
-  \scriptsize
-  \renewcommand{\arraystretch}{1.1}
-  \setlength{\tabcolsep}{1.2mm}
-  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.15\textwidth}>{\raggedright\arraybackslash}p{0.64\textwidth}>{\raggedright\arraybackslash}p{0.15\textwidth}@{}}
+  \small
+  \renewcommand{\arraystretch}{1.2}
+  \setlength{\tabcolsep}{1.5mm}
+  \begin{tabular}{@{}p{0.2\textwidth}>{\raggedright\arraybackslash}p{0.56\textwidth}p{0.18\textwidth}@{}}
     \toprule
-    Input & one model for proteins, nucleic acids, ligands, ions and modifications, as tokens: one per residue, one per ligand atom & p.~493, Fig.~1 \\
-    Trunk & the pairformer, 48 blocks on the pair and single representations. The MSA block is cut to four blocks and the MSA is not kept & p.~494 \\
-    Output & a diffusion module denoises raw atom coordinates, 24 attention blocks over tokens and 3 over atoms. No frames, no torsion angles, no equivariance. The training targets are randomly rotated and translated instead & p.~495, Fig.~2b, SI Alg.~19 \\
-    Confidence and sampling & confidence heads trained on 20-step mini rollouts of the diffusion. At inference 5 seeds with 5 samples each, ranked by confidence with penalties for clashes and chirality & p.~494, 495, 497 \\
-    Limits & 4.4\,\% chirality violations, overlapping chains in homomers, hallucinated structure in disordered regions, countered by cross-distillation on AlphaFold-Multimer predictions, no dynamics & p.~496, 497 \\
+    Input & tokens, one per residue or per ligand atom & p.~493 \\
+    Trunk & pairformer, 48 blocks. MSA block of 4, MSA not kept & p.~494 \\
+    Output & diffusion over raw atoms, no frames, random rotations instead & p.~495, SI Alg.~19 \\
+    Confidence & trained on 20-step mini rollouts & p.~495 \\
+    Sampling & 5 seeds, 5 samples each, ranked with clash and chirality penalties & p.~494, 497 \\
+    Limits & chirality 4.4\,\%, clashes, hallucination, no dynamics & p.~496, 497 \\
     \bottomrule
   \end{tabular}
-  \par\vspace{2mm}
+  \par\vspace{3mm}
   \normalsize
   \key{Less structure in the network, more in the data and in the sampling}
 \end{frame}
