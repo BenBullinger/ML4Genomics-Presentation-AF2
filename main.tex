@@ -281,7 +281,7 @@
 % ---------------------------------------------------------------------------------------------
 \section{The problem}
 
-\begin{frame}[t]{Sequence in, structure out}
+\begin{frame}[t]{The problem: sequence to structure}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.56\textwidth}
       \vspace{3mm}
@@ -295,7 +295,7 @@
       \key{The problem is more than 50 years old}
     \end{column}
     \begin{column}{0.42\textwidth}
-      \vspace{-15mm}
+      \vspace{-8mm}
       \begin{marked}[0.8\linewidth]{2}{176 634 310 51}
         \fill[cover] (0.002,0.87) rectangle (0.07,1.01);
       \end{marked}\par
@@ -311,7 +311,7 @@
 % ---------------------------------------------------------------------------------------------
 \section{The benchmark}
 
-\begin{frame}[t]{The Benchmark: CASP14}
+\begin{frame}[t]{The benchmark: CASP14}
   % Redrawn from Fig. 1a. Height of each bar and its 95% interval are measured on the figure.
   % For AlphaFold and the next best group they agree with the numbers printed in the paper.
   \say{CASP14:  Critical Assessment of protein Structure Prediction}
@@ -348,7 +348,8 @@
   \reffootnote{Redrawn from Fig.~1a. The error is the C$\alpha$ r.m.s.d.$_{95}$ on 87 domains, with 95\% confidence intervals.}
 \end{frame}
 
-\begin{frame}[t]{Predictions on top of experiment -- delete?}
+% Evita, 14 October, in the title: "delete?"
+\begin{frame}[t]{Prediction and experiment superposed}
   \vspace{-1mm}
   \begin{marked}[0.97\linewidth]{2}{176 634 25 51}
     \fill[cover] (0.002,0.87) rectangle (0.022,1.01);
@@ -367,7 +368,7 @@
 
 % ---------------------------------------------------------------------------------------------
 \section{The network}
-\begin{frame}[t]{One pipeline, end to end}
+\begin{frame}[t]{The pipeline: MSA in, coordinates out}
   \vspace{-2mm}
   \begin{marked}[0.97\linewidth]{2}{40 419 25 214}
     \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
@@ -389,7 +390,7 @@
 % The frame of the talk: each design choice answers a fact about proteins. The architecture
 % slides repeat the fact they answer as a grey subtitle, the ablation slide and the summary
 % come back to the four numbers.
-\begin{frame}[t]{Four facts about proteins, four design choices}
+\begin{frame}[t]{Four properties, four design choices}
   \vspace{-3mm}
   \small
   \renewcommand{\arraystretch}{1.1}
@@ -414,7 +415,7 @@
 % ---------------------------------------------------------------------------------------------
 \subsection{The data}
 % Draft (Ben, 14 October) for Evita's placeholder: the two representations the network works on.
-\begin{frame}[t]{The input}{Two tables of numbers, one per MSA cell and one per residue pair}
+\begin{frame}[t]{The two representations}{Two tables of numbers, one per MSA cell and one per residue pair}
   \vspace{-2mm}
   \begin{center}
   \begin{tikzpicture}[x=0.8mm, y=0.8mm]
@@ -509,7 +510,7 @@
 % ---------------------------------------------------------------------------------------------
 \subsection{The network, in detail}
 
-\begin{frame}[t]{Evoformer block}{1. The sequences in an MSA are a set. The residues are a chain.}
+\begin{frame}[t]{The Evoformer block}{1. The sequences in an MSA are a set. The residues are a chain.}
   \locator{0.528}{0.25}{0.612}{0.975}
   \begin{marked}[0.86\linewidth]{4}{40 616 25 52}
     \fill[cover] (0.015,0.93) rectangle (0.04,1.01);
@@ -530,7 +531,7 @@
 \end{frame}
 
 % Evita's placeholder "row col", filled by Ben on 14 October: Suppl. Fig. 2 with the right key line.
-\begin{frame}[t]{Evoformer: attention along the rows}{Supplementary Fig.~2, Algorithm 7}
+\begin{frame}[t]{Evoformer: row attention with pair bias}{Supplementary Fig.~2, Algorithm 7}
   \vspace{-2mm}
   \begin{markedSI}[0.97\linewidth]{16}{60 600 40 60}
     \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
@@ -541,7 +542,7 @@
 \end{frame}
 
 % Evita's placeholder "trans out", filled by Ben on 14 October: Suppl. Fig. 3 and the outer product mean.
-\begin{frame}[t]{Evoformer: columns, transition, outer product}{Supplementary Figs.~3 to 5, Algorithms 8 to 10}
+\begin{frame}[t]{Evoformer: columns and outer product mean}{Supplementary Figs.~3 to 5, Algorithms 8 to 10}
   \vspace{-2mm}
   \begin{center}
   \begin{markedSI}[0.8\linewidth]{17}{55 684 50 45}
@@ -553,7 +554,7 @@
   \key{Here the alignment writes into the pairs, in every one of the 48 blocks}
 \end{frame}
 
-\begin{frame}[t]{Evoformer: Pair representation}{2. Distances in 3D must close triangles.}
+\begin{frame}[t]{Evoformer: triangle updates}{2. Distances in 3D must close triangles.}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.34\textwidth}
       \locator{0.528}{0.25}{0.612}{0.975}%
@@ -632,7 +633,7 @@
   \reffootnote{The formula is Algorithm 22 of the supplement for one head, without scaling constants.}
 \end{frame}
 
-\begin{frame}[t]{Frame aligned point error (FAPE), a loss over local frames}{4. A protein and its mirror image are different molecules.}
+\begin{frame}[t]{Frame aligned point error (FAPE)}{4. A protein and its mirror image are different molecules.}
   % An illustration, not real data. The prediction is the experimental chain,
   % rotated as a whole, with the last two atoms displaced.
   \begin{tikzpicture}[x=9.5mm, y=9.5mm]
@@ -668,7 +669,7 @@
 % ---------------------------------------------------------------------------------------------
 \section{Training}
 
-\begin{frame}[t]{Trained beyond the PDB}
+\begin{frame}[t]{Training data: PDB and self-distillation}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.58\textwidth}
       \say{Self-distillation adds 350{,}000 structures}
@@ -710,7 +711,7 @@
 % ---------------------------------------------------------------------------------------------
 \section{What makes it work}
 
-\begin{frame}[t]{Which pieces earn their accuracy}
+\begin{frame}[t]{Ablations: the cost of each component}
   % Redrawn from Fig. 4a. The numbers are means over the training runs of a row, measured on
   % the figure (background/SLIDE-CHECK.md). Left: GDT on the CASP14 domains, 1 unit = 1 point.
   % Right: lDDT-Ca on PDB chains, drawn 2.5 times wider per point.
@@ -759,7 +760,7 @@
   \reffootnote{Redrawn from Fig.~4a, the mean change against the baseline over the training runs of a row. GDT is the global distance test, lDDT the local distance difference test, both 0 to 100. Line 4: Suppl.\ Fig.~9.}
 \end{frame}
 
-\begin{frame}[t]{The structure forms inside the trunk}
+\begin{frame}[t]{Intermediate structures in the trunk}
   \begin{marked}[0.76\linewidth]{5}{309 415 25 272}
     \fill[cover] (0.002,0.9) rectangle (0.05,1.01);
     \fill[cover] (0.78,0.235) rectangle (0.965,0.44);
@@ -785,7 +786,7 @@
   \key{Some proteins are solved early and others late}
 \end{frame}
 
-\begin{frame}[t]{The model knows when it is right}
+\begin{frame}[t]{Confidence: pLDDT against measured lDDT}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.61\textwidth}
       \begin{marked}{3}{40 483 302 180.5}
@@ -806,7 +807,7 @@
   \reffootnote{K.~Tunyasuvunakool et al., \textit{Nature} 596, 2021.}
 \end{frame}
 
-\begin{frame}[t]{Where it still fails}
+\begin{frame}[t]{Limitations: MSA depth and complexes}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.49\textwidth}
       \begin{marked}{6}{64 585 352 61}
@@ -843,7 +844,7 @@
 % ---------------------------------------------------------------------------------------------
 \section{Conclusion}
 
-\begin{frame}[t]{What followed}
+\begin{frame}[t]{After AlphaFold 2: 2021 to 2025}
   \begin{tikzpicture}[x=10mm, y=6.3mm]
     \draw[ETHGray, line width=1pt] (0,0.35) -- (0,-6.35);
     \foreach \y/\text in {
@@ -868,7 +869,7 @@
 \end{frame}
 
 % The follow-up paper's own verdict on each of the four design choices.
-\begin{frame}[t]{What AlphaFold 3 kept of the four choices}{Abramson et al., \textit{Nature} 630 (2024), pages 493 to 497}
+\begin{frame}[t]{AlphaFold 3: which choices survived}{Abramson et al., \textit{Nature} 630 (2024), pages 493 to 497}
   \vspace{-1mm}
   \renewcommand{\arraystretch}{1.3}
   \setlength{\tabcolsep}{1.5mm}
@@ -885,7 +886,7 @@
 \end{frame}
 
 % AlphaFold 3's own overview figure, Fig. 1d of Abramson et al. 2024, cut from AF3.pdf.
-\begin{frame}[t]{AlphaFold 3 in one picture}{Abramson et al., \textit{Nature} 630 (2024), Fig.~1d}
+\begin{frame}[t]{The AlphaFold 3 architecture}{Abramson et al., \textit{Nature} 630 (2024), Fig.~1d}
   \vspace{-3mm}
   \begin{center}
   \begin{markedAFthree}[0.93\linewidth]{2}{44 344 30 329}
@@ -905,7 +906,7 @@
 \end{frame}
 
 % The cost side of the bitter lesson, in the AlphaFold 3 paper's own words and numbers.
-\begin{frame}[t]{What the removal cost}{Abramson et al., \textit{Nature} 630 (2024), pages 495 to 498}
+\begin{frame}[t]{AlphaFold 3: the cost of the removal}{Abramson et al., \textit{Nature} 630 (2024), pages 495 to 498}
   \vspace{-1mm}
   \renewcommand{\arraystretch}{1.3}
   \setlength{\tabcolsep}{1.5mm}
@@ -921,7 +922,7 @@
   \key{It wins everywhere but one RNA entry. The costs were paid in patches.}
 \end{frame}
 
-\begin{frame}[t]{Summary}
+\begin{frame}[t]{Summary: four design choices, measured}
   \vspace{-2mm}
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.5\textwidth}
@@ -982,7 +983,7 @@
 % title, the source as the subtitle, a picture, at most three lines of derivation with the
 % reason in grey, and the answer in blue. They do not count in the slide total.
 
-\begin{frame}[t]{Why is the attention invariant to a rigid motion?}{SI 1.8.2, Algorithm 22, equations 3 to 6}
+\begin{frame}[t]{Why is IPA invariant to rigid motions?}{SI 1.8.2, Algorithm 22, equations 3 to 6}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.27\textwidth}
       \vspace{4mm}
@@ -1061,7 +1062,7 @@
   \key{The loss sees the hand, the data teach it. Side chains are always built L.}
 \end{frame}
 
-\begin{frame}[t]{What does FAPE measure, and when is it zero?}{SI 1.9.2, 1.9.4 and 1.9.5, Algorithm 28, equations 18 to 30}
+\begin{frame}[t]{What does FAPE measure?}{SI 1.9.2, 1.9.4 and 1.9.5, Algorithm 28, equations 18 to 30}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.3\textwidth}
       \vspace{4mm}
@@ -1182,7 +1183,7 @@
   \key{Not additive: no IPA costs 2.3, no recycling 4.5, both together 16.3 GDT}
 \end{frame}
 
-\begin{frame}[t]{How does the network predict its own accuracy?}{SI 1.9.6 and 1.9.7, Algorithm 29}
+\begin{frame}[t]{How is confidence predicted?}{SI 1.9.6 and 1.9.7, Algorithm 29}
   \say{pLDDT: a small network on the final single representation predicts, per residue, a distribution over 50 bins of lDDT-C$\alpha$. It is trained with cross-entropy against the lDDT-C$\alpha$ of the prediction itself, on structures resolved between 0.1 and 3\,\AA}
   \say{The reported pLDDT is the expected value of that distribution. The pLDDT of a chain is the mean over its residues}
   \say{pTM, the predicted template modelling score: a pairwise head predicts the distribution of the aligned error of every residue pair, and the TM-score follows from these distributions}
@@ -1197,7 +1198,7 @@
   \key{Eleven days on 128 TPU cores per model. Inference takes GPU minutes to hours.}
 \end{frame}
 
-\begin{frame}[t]{What else AlphaFold 3 changed, and where it says so}{Abramson et al., \textit{Nature} 630 (2024)}
+\begin{frame}[t]{AlphaFold 3: further changes}{Abramson et al., \textit{Nature} 630 (2024)}
   \vspace{-1mm}
   \small
   \renewcommand{\arraystretch}{1.2}

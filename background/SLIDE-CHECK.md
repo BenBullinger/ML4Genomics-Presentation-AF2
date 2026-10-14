@@ -40,6 +40,8 @@ Sources of the new statements:
 
 Since the merge with Evita's edit of 14 October the slide numbers in this section are those of `WORK-SPLIT.md` (26 numbered slides). The numbering in `SCRIPT.md` is still that of 5 October. The script is to be rewritten by each presenter for their half.
 
+Titles were made specific on 14 October (Ben: "many of the titles are not adequate for a talk at ETHZ, they are too unclear and conversational"). The titles in sections 2 and 4 below are the old ones. The current titles are listed in `WORK-SPLIT.md`.
+
 ## 1. Open points
 
 **Course guidelines.** The deck has not been checked against the course's instructions for the presentation, because I do not have them.
