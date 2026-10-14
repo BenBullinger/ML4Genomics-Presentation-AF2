@@ -40,7 +40,7 @@
 
 % Foot of a slide: the slide number
 \setbeamertemplate{footline}{%
-  \hfill{\scriptsize\insertframenumber/\inserttotalframenumber}\hspace{1cm}\vspace{3mm}}
+  \hfill{\scriptsize\color{ETHGray}\insertframenumber}\hspace{1cm}\vspace{3mm}}
 
 % Packages
 \usepackage{amsmath,amssymb,amsthm,mathtools,bm}
@@ -105,17 +105,20 @@
 \definecolor{PaperCurveOrange}{RGB}{190,75,25}
 \definecolor{PaperCurveGreen}{RGB}{60,140,80}
 
-% Architecture slides: a small copy of the pipeline (Fig. 1e) at the top right, with the part
-% framed that the slide is about. Arguments: left, bottom, right, top of the frame.
-\newcommand{\locator}[4]{%
+% The thread of the talk at the top right of a slide: the four properties of slide 6 as four
+% numbered discs, the ones the slide is about in red. Argument: a comma-separated list of 1 to 4.
+\newcommand{\props}[1]{%
   \begin{tikzpicture}[remember picture, overlay]
-    \node[anchor=north east, inner sep=0pt] (fig) at ([xshift=-1cm, yshift=-2.5mm]current page.north east)
-      {\paperfig[27mm]{2}{40 419 25 214}};
-    \begin{scope}[shift={(fig.south west)}, x={($(fig.south east)-(fig.south west)$)}, y={($(fig.north west)-(fig.south west)$)}]
-      \fill[white, opacity=0.4] (0,0) rectangle (1,1);
-      \fill[white] (0,0.9) rectangle (0.04,1.01);
-      \draw[ETHRed, line width=1pt] (#1,#2) rectangle (#3,#4);
-    \end{scope}
+    \foreach \n in {1,...,4} {
+      \coordinate (c) at ([xshift=-1cm-4*5.5mm+\n*5.5mm, yshift=-6mm]current page.north east);
+      \draw[ETHGray!50, line width=0.7pt] (c) circle (2.2mm);
+      \node[font=\scriptsize\sffamily, text=ETHGray] at (c) {\n};
+    }
+    \foreach \n in {#1} {
+      \coordinate (c) at ([xshift=-1cm-4*5.5mm+\n*5.5mm, yshift=-6mm]current page.north east);
+      \fill[ETHRed] (c) circle (2.2mm);
+      \node[font=\scriptsize\sffamily\bfseries, text=white] at (c) {\n};
+    }
   \end{tikzpicture}}
 
 % A frame, as drawn on the slides on IPA and FAPE: a 3D triad seen in isometric view, the
@@ -511,7 +514,7 @@
 \subsection{The network, in detail}
 
 \begin{frame}[t]{The Evoformer block}{1. The sequences in an MSA are a set. The residues are a chain.}
-  \locator{0.528}{0.25}{0.612}{0.975}
+  \props{1}
   \begin{marked}[0.86\linewidth]{4}{40 616 25 52}
     \fill[cover] (0.015,0.93) rectangle (0.04,1.01);
     \draw[ETHRed, line width=1.6pt, -{Latex[length=5pt]}] (0.1605,0.225) -- (0.1605,0.585);
@@ -532,6 +535,7 @@
 
 % Evita's placeholder "row col", filled by Ben on 14 October: Suppl. Fig. 2 with the right key line.
 \begin{frame}[t]{Evoformer: row attention with pair bias}{Supplementary Fig.~2, Algorithm 7}
+  \props{1}
   \vspace{-2mm}
   \begin{markedSI}[0.97\linewidth]{16}{60 600 40 60}
     \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
@@ -543,6 +547,7 @@
 
 % Evita's placeholder "trans out", filled by Ben on 14 October: Suppl. Fig. 3 and the outer product mean.
 \begin{frame}[t]{Evoformer: columns and outer product mean}{Supplementary Figs.~3 to 5, Algorithms 8 to 10}
+  \props{1}
   \vspace{-2mm}
   \begin{center}
   \begin{markedSI}[0.8\linewidth]{17}{55 684 50 45}
@@ -557,7 +562,7 @@
 \begin{frame}[t]{Evoformer: triangle updates}{2. Distances in 3D must close triangles.}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.34\textwidth}
-      \locator{0.528}{0.25}{0.612}{0.975}%
+      \props{2}%
       \begin{tikzpicture}[x=10mm, y=10mm,
           res/.style={circle, draw, line width=0.8pt, minimum size=6.5mm, inner sep=0pt, font=\small}]
         \node[res] (i) at (0,1.6) {$i$};
@@ -590,7 +595,7 @@
 \begin{frame}[t]{Structure module: residues as rigid bodies}{3. A structure is the same after any rotation or translation.}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.48\textwidth}
-      \locator{0.758}{0.25}{0.842}{0.975}%
+      \props{3}%
       \begin{marked}{4}{40 358 302 295}
         \fill[cover] (0.03,0.64) rectangle (0.07,0.73);
         \draw[callout] (0.337,0.325) rectangle (0.443,0.578);
@@ -614,7 +619,7 @@
 \end{frame}
 
 \begin{frame}[t]{Invariant point attention}{3. A structure is the same after any rotation or translation.}
-  \locator{0.758}{0.25}{0.842}{0.975}
+  \props{3}
   {$\displaystyle a_{ij} \;=\; \text{softmax}_j \Bigl(\,
     \term{\bm{q}_i^{\top} \bm{k}_j}{usual attention} \;+\; \term{b_{ij}}{pair bias}
     \;-\; \term{\textstyle\sum_{p} \bigl\| T_i \circ \vec{\bm{q}}_{ip} - T_j \circ \vec{\bm{k}}_{jp} \bigr\|^2}{distances between 3D points} \,\Bigr)$\par}
@@ -634,6 +639,7 @@
 \end{frame}
 
 \begin{frame}[t]{Frame aligned point error (FAPE)}{4. A protein and its mirror image are different molecules.}
+  \props{4}
   % An illustration, not real data. The prediction is the experimental chain,
   % rotated as a whole, with the last two atoms displaced.
   \begin{tikzpicture}[x=9.5mm, y=9.5mm]
@@ -712,6 +718,7 @@
 \section{What makes it work}
 
 \begin{frame}[t]{Ablations: the cost of each component}
+  \props{1,2,3,4}
   % Redrawn from Fig. 4a. The numbers are means over the training runs of a row, measured on
   % the figure (background/SLIDE-CHECK.md). Left: GDT on the CASP14 domains, 1 unit = 1 point.
   % Right: lDDT-Ca on PDB chains, drawn 2.5 times wider per point.
@@ -870,6 +877,7 @@
 
 % The follow-up paper's own verdict on each of the four design choices.
 \begin{frame}[t]{AlphaFold 3: which choices survived}{Abramson et al., \textit{Nature} 630 (2024), pages 493 to 497}
+  \props{1,2,3,4}
   \vspace{-1mm}
   \renewcommand{\arraystretch}{1.3}
   \setlength{\tabcolsep}{1.5mm}
@@ -907,6 +915,7 @@
 
 % The cost side of the bitter lesson, in the AlphaFold 3 paper's own words and numbers.
 \begin{frame}[t]{AlphaFold 3: the cost of the removal}{Abramson et al., \textit{Nature} 630 (2024), pages 495 to 498}
+  \props{1,2,3,4}
   \vspace{-1mm}
   \renewcommand{\arraystretch}{1.3}
   \setlength{\tabcolsep}{1.5mm}
@@ -923,6 +932,7 @@
 \end{frame}
 
 \begin{frame}[t]{Summary: four design choices, measured}
+  \props{1,2,3,4}
   \vspace{-2mm}
   \begin{columns}[c,onlytextwidth]
     \begin{column}{0.5\textwidth}
