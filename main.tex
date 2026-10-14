@@ -112,33 +112,38 @@
     \end{scope}
   \end{tikzpicture}}
 
-% A frame, as drawn on the slides on IPA and FAPE: position, angle of its first axis
+% A frame, as drawn on the slides on IPA and FAPE: a 3D triad seen in isometric view, the
+% three axes 120 degrees apart. Arguments: position, rotation of the triad in the plane.
 \newcommand{\frameaxes}[2]{%
-  \draw[ETHRed, line width=1.3pt, -{Latex[length=4.5pt]}] #1 -- ++(#2:0.8);
-  \draw[ETHRed, line width=1.3pt, -{Latex[length=4.5pt]}] #1 -- ++(#2+90:0.8);
+  \foreach \a in {90,210,330}
+    \draw[ETHRed, line width=1.2pt, -{Latex[length=4pt]}] #1 -- ++(#2+\a:0.72);
   \fill[ETHRed] #1 circle (2.4pt);
 }
-% The drawing on the slide on invariant point attention: residues i and j, each with a
-% frame and four points. The dashed lines are the distances in the formula.
+% The drawing on the slide on invariant point attention: a short chain, residues i and j
+% with their frames, four points each placed in the frame. The dashed lines are the
+% distances in the formula. An illustration, not data.
 \newcommand{\ipapair}{%
-  \foreach \q/\k in {{(1.0,0.9)}/{(2.5,1.0)}, {(1.3,0.3)}/{(2.25,0.4)}, {(1.2,-0.3)}/{(2.4,-0.25)}, {(0.85,-0.85)}/{(2.65,-0.8)}} {
+  \draw[ETHGray!40, line width=2.6pt, line join=round, line cap=round]
+    (-1.3,-0.7) -- (0,0) -- (1.4,-1.9) -- (2.9,-1.6) -- (3.6,0.1) -- (4.6,1.0);
+  \foreach \p in {(-1.3,-0.7), (1.4,-1.9), (2.9,-1.6), (4.6,1.0)} \fill[ETHGray!70] \p circle (2pt);
+  \foreach \q/\k in {{(1.0,0.9)}/{(2.5,1.0)}, {(1.3,0.3)}/{(2.25,0.4)}, {(1.2,-0.3)}/{(2.4,-0.25)}, {(0.8,-0.7)}/{(2.65,-0.8)}} {
     \draw[ETHBlue!45, line width=0.6pt] (0,0) -- \q;
     \draw[black!40, line width=0.6pt] (3.6,0.1) -- \k;
     \draw[ETHRed, line width=0.9pt, densely dashed] \q -- \k;
     \fill[ETHBlue] \q circle (2.4pt);
     \fill[black] \k circle (2.4pt);
   }
-  \frameaxes{(0,0)}{115}
-  \frameaxes{(3.6,0.1)}{-25}
-  \node[font=\small, text=ETHRed] at (-0.35,-0.3) {$i$};
-  \node[font=\small, text=ETHRed] at (3.95,-0.35) {$j$};
+  \frameaxes{(0,0)}{20}
+  \frameaxes{(3.6,0.1)}{-15}
+  \node[font=\small, text=ETHRed] at (-0.45,0.4) {$i$};
+  \node[font=\small, text=ETHRed] at (4.05,0.55) {$j$};
 }
 % The chain drawn on the FAPE slide: one frame k (red) and one atom i.
 \newcommand{\fapechain}[4]{% colour, atom i-1, atom i, label of atom i
   \draw[#1!45, line width=1.2pt, line cap=round, line join=round]
     (0,0) -- (0.8,0.5) -- (1.6,0.1) -- (2.3,0.8) -- #2 -- #3;
   \foreach \p in {(0,0), (0.8,0.5), (2.3,0.8), #2} \fill[#1!45] \p circle (2.2pt);
-  \frameaxes{(1.6,0.1)}{45}
+  \frameaxes{(1.6,0.1)}{110}
   \draw[#1, line width=1.3pt, -{Latex[length=5pt]}, shorten >=2.6pt] (1.6,0.1) -- #3;
   \fill[#1] #3 circle (2.8pt);
   \node[font=\small, text=ETHRed] at (1.75,-0.35) {$k$};
@@ -168,11 +173,15 @@
   \draw[ETHRed, line width=1.3pt] (4,-2.6) -- (14,-2.6);
   \foreach \p in {(4,-2.6),(9,3),(14,-2.6)} \fill[black] \p circle (0.75);
 \end{tikzpicture}}
+\newcommand{\pictochain}[1]{% a short chain with one frame, rotated in the plane by #1
+  \draw[ETHGray!45, line width=1.6pt, line join=round, line cap=round] (0,-2) -- (1.6,1.2) -- (3.4,-1.2) -- (5,2.2) -- (6.6,-0.4);
+  \foreach \a in {90,210,330} \draw[ETHRed, line width=0.8pt, -{Latex[length=2pt]}] (3.4,-1.2) -- ++(#1+\a:2.4);
+  \fill[ETHRed] (3.4,-1.2) circle (0.6);}
 \newcommand{\pictorotate}{\begin{tikzpicture}[x=1mm, y=1mm, baseline=-1mm]
-  \draw[ETHBlue, line width=1pt, line join=round] (0,-2) -- (1.6,1.2) -- (3.4,-1.2) -- (5,2.2) -- (6.6,-0.4);
-  \node[font=\footnotesize, text=ETHGray] at (9,0) {=};
-  \begin{scope}[shift={(13.6,-2.4)}, rotate=55]
-    \draw[ETHBlue, line width=1pt, line join=round] (0,-2) -- (1.6,1.2) -- (3.4,-1.2) -- (5,2.2) -- (6.6,-0.4);
+  \pictochain{0}
+  \node[font=\footnotesize, text=ETHGray] at (9.0,0) {=};
+  \begin{scope}[shift={(11.4,0.9)}, rotate=-40]
+    \pictochain{-40}
   \end{scope}
 \end{tikzpicture}}
 \newcommand{\pictomirror}{\begin{tikzpicture}[x=1mm, y=1mm, baseline=-1mm]
@@ -504,18 +513,18 @@
 
 \begin{frame}[t]{Invariant point attention}{3. A structure is the same after any rotation or translation.}
   \locator{0.758}{0.25}{0.842}{0.975}
-  {\large $\displaystyle a_{ij} \;=\; \text{softmax}_j \Bigl(\,
+  {$\displaystyle a_{ij} \;=\; \text{softmax}_j \Bigl(\,
     \term{\bm{q}_i^{\top} \bm{k}_j}{usual attention} \;+\; \term{b_{ij}}{pair bias}
     \;-\; \term{\textstyle\sum_{p} \bigl\| T_i \circ \vec{\bm{q}}_{ip} - T_j \circ \vec{\bm{k}}_{jp} \bigr\|^2}{distances between 3D points} \,\Bigr)$\par}
   \vspace{0mm}
-  \begin{tikzpicture}[x=7.4mm, y=7.4mm]
+  \begin{tikzpicture}[x=6.5mm, y=6.5mm]
     \ipapair
-    \node[font=\small, anchor=north] at (1.8,-1.5) {Points are placed in the frames of $i$ and $j$};
-    \draw[line width=0.9pt, -{Latex[length=5pt]}] (5.0,0.1) -- node[above, font=\small] {rotate everything} (6.9,0.1);
-    \begin{scope}[shift={(8.9,-0.55)}, rotate=28]
+    \node[font=\small, anchor=north] at (1.7,-2.3) {Points are placed in the frames of $i$ and $j$};
+    \draw[line width=0.9pt, -{Latex[length=5pt]}] (5.3,-0.3) -- node[below, font=\small] {rotate everything} (7.2,-0.3);
+    \begin{scope}[shift={(10.3,0.5)}, rotate=-25]
       \ipapair
     \end{scope}
-    \node[font=\small, anchor=north] at (10.5,-1.5) {The distances stay the same};
+    \node[font=\small, anchor=north] at (11.8,-2.3) {The distances stay the same};
   \end{tikzpicture}
   \par\vspace{1mm}
   \key{The weights are invariant to global rotation and translation}
@@ -540,7 +549,7 @@
       \draw[ETHRed, line width=0.9pt, densely dashed] (2.0,1.3) -- (2.4,0.3);
       \fill[black] (2.0,1.3) circle (2.8pt);
       \fill[ETHBlue] (2.4,0.3) circle (2.8pt);
-      \frameaxes{(0,0)}{45}
+      \frameaxes{(0,0)}{100}
       \node[callout text, anchor=west] at (2.45,0.85) {error};
       \node[font=\small, text=ETHRed] at (0.15,-0.45) {$k$};
     \end{scope}

@@ -1,0 +1,10 @@
+\beamer@sectionintoc {1}{The problem}{4}{0}{1}
+\beamer@sectionintoc {2}{The benchmark}{5}{0}{2}
+\beamer@sectionintoc {3}{The network}{7}{0}{3}
+\beamer@subsectionintoc {3}{1}{The data}{9}{0}{3}
+\beamer@subsectionintoc {3}{2}{The network, in detail}{12}{0}{3}
+\beamer@sectionintoc {4}{Training}{19}{0}{4}
+\beamer@sectionintoc {5}{What makes it work}{20}{0}{5}
+\beamer@sectionintoc {6}{Conclusion}{24}{0}{6}
+\beamer@sectionintoc {7}{Questions}{26}{0}{7}
+\beamer@sectionintoc {8}{Backup}{28}{1}{8}

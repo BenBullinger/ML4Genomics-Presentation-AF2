@@ -29,27 +29,42 @@
 \newcommand{\figcap}[1]{\par\vspace{2pt}{\footnotesize\color{black!70}#1\par}}
 % Drawings, in the style of the slides. All figures are illustrations, not data.
 \tikzset{every node/.append style={execute at begin node=\sffamily\small}}
+% A frame: a 3D triad in isometric view, the three axes 120 degrees apart. Position, rotation.
 \newcommand{\frameaxes}[2]{%
-  \draw[ETHRed, line width=1.2pt, -{Latex[length=4pt]}] #1 -- ++(#2:0.75);
-  \draw[ETHRed, line width=1.2pt, -{Latex[length=4pt]}] #1 -- ++(#2+90:0.75);
+  \foreach \a in {90,210,330}
+    \draw[ETHRed, line width=1.1pt, -{Latex[length=3.5pt]}] #1 -- ++(#2+\a:0.68);
   \fill[ETHRed] #1 circle (2.2pt);
 }
+% A short chain, residues i and j with their frames and four points each placed in the frame.
 \newcommand{\ipapair}{%
-  \foreach \q/\k in {{(1.0,0.9)}/{(2.5,1.0)}, {(1.3,0.3)}/{(2.25,0.4)}, {(1.2,-0.3)}/{(2.4,-0.25)}, {(0.85,-0.85)}/{(2.65,-0.8)}} {
+  \draw[ETHGray!40, line width=2.4pt, line join=round, line cap=round]
+    (-1.3,-0.7) -- (0,0) -- (1.4,-1.9) -- (2.9,-1.6) -- (3.6,0.1) -- (4.6,1.0);
+  \foreach \p in {(-1.3,-0.7), (1.4,-1.9), (2.9,-1.6), (4.6,1.0)} \fill[ETHGray!70] \p circle (1.8pt);
+  \foreach \q/\k in {{(1.0,0.9)}/{(2.5,1.0)}, {(1.3,0.3)}/{(2.25,0.4)}, {(1.2,-0.3)}/{(2.4,-0.25)}, {(0.8,-0.7)}/{(2.65,-0.8)}} {
     \draw[ETHBlue!45, line width=0.6pt] (0,0) -- \q;
     \draw[black!40, line width=0.6pt] (3.6,0.1) -- \k;
     \draw[ETHRed, line width=0.9pt, densely dashed] \q -- \k;
     \fill[ETHBlue] \q circle (2.2pt);
     \fill[black] \k circle (2.2pt);
   }
-  \frameaxes{(0,0)}{115}
-  \frameaxes{(3.6,0.1)}{-25}
+  \frameaxes{(0,0)}{20}
+  \frameaxes{(3.6,0.1)}{-15}
+  \node[text=ETHRed] at (-0.45,0.4) {$i$};
+  \node[text=ETHRed] at (4.05,0.55) {$j$};
+}
+% A short chain with a frame on every residue, each frame turned by #1 degrees (the update).
+\newcommand{\chainframes}[1]{%
+  \draw[ETHGray!40, line width=2.2pt, line join=round, line cap=round] (0,0) -- (1.2,0.8) -- (2.4,0.1) -- (3.6,0.9);
+  \foreach \p/\a in {(0,0)/10, (1.2,0.8)/-30, (2.4,0.1)/40, (3.6,0.9)/-10} {
+    \foreach \b in {90,210,330} \draw[ETHRed, line width=0.9pt, -{Latex[length=2.8pt]}] \p -- ++(\a+#1+\b:0.48);
+    \fill[ETHRed] \p circle (1.5pt);
+  }
 }
 \newcommand{\fapechain}[4]{% colour, atom i-1, atom i, label shift
   \draw[#1!45, line width=1.2pt, line cap=round, line join=round]
     (0,0) -- (0.8,0.5) -- (1.6,0.1) -- (2.3,0.8) -- #2 -- #3;
   \foreach \p in {(0,0), (0.8,0.5), (2.3,0.8), #2} \fill[#1!45] \p circle (2pt);
-  \frameaxes{(1.6,0.1)}{45}
+  \frameaxes{(1.6,0.1)}{110}
   \draw[#1, line width=1.2pt, -{Latex[length=4.5pt]}, shorten >=2.4pt] (1.6,0.1) -- #3;
   \fill[#1] #3 circle (2.6pt);
   \node[text=#1] at #3 [shift={#4}] {$i$};
@@ -123,15 +138,14 @@ Apply one rigid motion $\Tg$ to every frame. It cancels in the only geometric te
 =T_i^{-1}\circ\sum_j a_{ij}^h\big(T_j\circ\vpt_j^{hp}\big). \qquad\si{eqs.\ 5, 6}
 \]
 \begin{center}
-\begin{tikzpicture}[x=9mm, y=9mm]
+\begin{tikzpicture}[x=7.5mm, y=7.5mm]
   \ipapair
-  \node[text=ETHRed] at (-0.35,-0.3) {$i$}; \node[text=ETHRed] at (3.95,-0.35) {$j$};
-  \draw[black!60, line width=1pt, -{Latex[length=5pt]}] (4.9,0.1) -- (6.4,0.1) node[midway, above] {$\Tg$};
-  \begin{scope}[shift={(8.6,-0.9)}, rotate=35]
+  \draw[black!60, line width=1pt, -{Latex[length=5pt]}] (5.3,-0.3) -- (7.2,-0.3) node[midway, above] {$\Tg$};
+  \begin{scope}[shift={(10.3,0.5)}, rotate=-25]
     \ipapair
   \end{scope}
-  \node at (1.8,-1.7) {points of $i$ (blue) and $j$ (black), each in its own frame};
-  \node at (10.0,-1.7) {the dashed distances are the same};
+  \node at (1.7,-2.5) {points of $i$ (blue) and $j$ (black), each in its own frame};
+  \node at (11.8,-2.5) {the dashed distances are the same};
 \end{tikzpicture}
 \figcap{The only geometry in IPA is the set of distances between points placed in the frames. A rigid motion of all frames moves the points together and leaves the distances unchanged, so the attention weights and the output are unchanged. Exact, by construction, not learned.}
 \end{center}
@@ -148,17 +162,17 @@ $(\Tg\circ T_i)\circ T_i^{\text{upd}}=\Tg\circ(T_i\circ T_i^{\text{upd}})$ by as
 \end{minipage}\hfill
 \begin{minipage}[c]{0.42\textwidth}
 \centering
-\begin{tikzpicture}[node distance=10mm and 26mm]
-  \node (A) {$\{T_i\}$};
-  \node[right=of A] (B) {$\{T_i\circ T_i^{\text{upd}}\}$};
-  \node[below=of A] (C) {$\{\Tg\circ T_i\}$};
-  \node[below=of B] (D) {$\{\Tg\circ T_i\circ T_i^{\text{upd}}\}$};
-  \draw[-{Latex[length=4pt]}] (A) -- (B) node[midway, above] {IPA, update};
-  \draw[-{Latex[length=4pt]}] (C) -- (D) node[midway, below] {same $T_i^{\text{upd}}$};
-  \draw[-{Latex[length=4pt]}, ETHBlue] (A) -- (C) node[midway, left, text=ETHBlue] {$\Tg$};
-  \draw[-{Latex[length=4pt]}, ETHBlue] (B) -- (D) node[midway, right, text=ETHBlue] {$\Tg$};
+\begin{tikzpicture}[x=6mm, y=6mm]
+  \chainframes{0}
+  \begin{scope}[shift={(7.0,0)}] \chainframes{40} \end{scope}
+  \begin{scope}[shift={(0.4,-3.0)}, rotate=-30] \chainframes{0} \end{scope}
+  \begin{scope}[shift={(7.4,-3.0)}, rotate=-30] \chainframes{40} \end{scope}
+  \draw[black!60, line width=0.8pt, -{Latex[length=4pt]}] (4.3,0.45) -- (6.4,0.45) node[midway, above=1pt, font=\scriptsize] {IPA, update};
+  \draw[black!60, line width=0.8pt, -{Latex[length=4pt]}] (4.5,-3.7) -- (6.7,-3.7) node[midway, below=1pt, font=\scriptsize] {same update};
+  \draw[ETHBlue, line width=0.8pt, -{Latex[length=4pt]}] (1.8,-0.5) -- (1.8,-2.3) node[midway, left, font=\scriptsize, text=ETHBlue] {$\Tg$};
+  \draw[ETHBlue, line width=0.8pt, -{Latex[length=4pt]}] (8.8,-0.5) -- (8.8,-2.3) node[midway, right, font=\scriptsize, text=ETHBlue] {$\Tg$};
 \end{tikzpicture}
-\figcap{Equivariance is this square commuting: moving the frames first or last gives the same result, because the update is computed in local coordinates.}
+\figcap{Equivariance is this square commuting. Top: a chain of frames and the frames after one block, each turned in its own coordinates. Bottom: the same chain moved by $\Tg$ first. Moving first or last gives the same result.}
 \end{minipage}
 
 Two facts that bound the claim. First, all frames start as the identity, the ``black hole initialization'' \si{SI 1.8, Algorithm 20 line 4}, so there is no input geometry at the start. Equivariance says the module never prefers a global frame. The global frame of the output is arbitrary, which is why the loss has to be invariant (section 5). Second, the Evoformer has no geometry at all. Recycling feeds the previous structure back only as binned C$\beta$ distances \si{SI 1.10, Algorithm 32}, which are invariant under all of $\E$, reflection included.
@@ -220,7 +234,7 @@ with $Z=d_{\text{clamp}}=10$\,\AA. Every atom is scored in every frame, $N_{\tex
     \draw[ETHRed, line width=0.9pt, densely dashed] (2.0,1.3) -- (2.4,0.3);
     \fill[black] (2.0,1.3) circle (2.6pt);
     \fill[ETHBlue] (2.4,0.3) circle (2.6pt);
-    \frameaxes{(0,0)}{45}
+    \frameaxes{(0,0)}{100}
     \node[text=ETHRed, anchor=west] at (2.45,0.85) {$d_{ki}$};
     \node[text=ETHRed] at (0.15,-0.45) {$k$};
   \end{scope}
