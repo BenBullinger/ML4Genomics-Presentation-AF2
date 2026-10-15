@@ -19,46 +19,48 @@ Each of us
 - edits the slides of their half and adds slides to it where needed,
 - writes the script for their half.
 
-## Slides on 14 October, after the revision
+## Slides after Review Streamlining (15 October 2026)
 
-The deck follows four facts about proteins, each answered by one design choice (slide 6). The architecture slides repeat the fact they answer as a grey subtitle. The ablation slide and the summary come back to the four.
+The main deck was streamlined to 20 talk slides (~1:15 per slide for a comfortable 25:00 min presentation). Redundant CASP14 panels and SI screenshots were folded into the trunk or moved to backups. The AF3 choices and costs are unified into a single comparative verdict slide.
+
+The handover occurs after Slide 9 (Triangle updates), giving an exact 10 / 11 slide balance:
+- **Evita (first half, ~12.5 min)**: Problem, CASP14 benchmark, macro pipeline, two representations, Evoformer trunk through Triangle updates.
+- **Ben (second half, ~12.5 min)**: Structure module, IPA, FAPE, training, ablations, intermediate structures, confidence, limitations, timeline, AF3 verdict, and summary.
 
 | Slide | Title | Section | Speaker |
 |---|---|---|---|
 | 1 | Outline | | Evita |
 | 2 | The problem: sequence to structure | The problem | Evita |
 | 3 | The benchmark: CASP14 | The benchmark | Evita |
-| 4 | Prediction and experiment superposed | The benchmark | Evita |
-| 5 | The pipeline: MSA in, coordinates out | The network | Evita |
-| 6 | Four properties, four design choices | The network | Evita |
-| 7 | The two representations | The network | Evita, drafted by Ben on 14 October |
-| 8 | The input: MSA representation | The network | Evita |
-| 9 | The input: Pair representation | The network | Evita, drafted by Ben on 14 October |
-| 10 | The Evoformer block | The network | Evita |
-| 11 | Evoformer: row attention with pair bias | The network | Evita, drafted by Ben on 14 October |
-| 12 | Evoformer: columns and outer product mean | The network | Evita, drafted by Ben on 14 October |
-| 13 | Evoformer: triangle updates | The network | Evita |
-| 14 | Structure module: residues as rigid bodies | The network | Evita |
-| 15 | Invariant point attention | The network | Evita |
-| 16 | Frame aligned point error (FAPE) | The network | open |
-| 17 | Training data: PDB and self-distillation | Training | Ben |
-| 18 | Ablations: the cost of each component | What makes it work | Ben |
-| 19 | Intermediate structures in the trunk | What makes it work | Ben |
-| 20 | Confidence: pLDDT against measured lDDT | What makes it work | Ben |
-| 21 | Limitations: MSA depth and complexes | What makes it work | Ben |
-| 22 | After AlphaFold 2: 2021 to 2025 | Conclusion | Ben |
-| 23 | AlphaFold 3: which choices survived | Conclusion | Ben |
-| 24 | The AlphaFold 3 architecture | Conclusion | Ben |
-| 25 | AlphaFold 3: the cost of the removal | Conclusion | Ben |
-| 26 | Summary: four design choices, measured | Conclusion | Ben |
-| 27 | Exam question | Questions | open |
-| 28 | Questions for the audience | Questions | open |
+| 4 | The pipeline: MSA in, coordinates out | The network | Evita |
+| 5 | Four properties, four design choices | The network | Evita |
+| 6 | The two representations | The network | Evita |
+| 7 | The input: MSA representation | The network | Evita |
+| 8 | The input: Pair representation | The network | Evita |
+| 9 | The Evoformer block | The network | Evita |
+| 10 | Evoformer: triangle updates | The network | Evita |
+| 11 | Structure module: residues as rigid bodies | The network | Ben |
+| 12 | Invariant point attention (IPA) | The network | Ben |
+| 13 | Frame aligned point error (FAPE) | The network | Ben |
+| 14 | Training data: PDB and self-distillation | Training | Ben |
+| 15 | Ablations: the cost of each component | What makes it work | Ben |
+| 16 | Intermediate structures in the trunk | What makes it work | Ben |
+| 17 | Confidence: pLDDT against measured lDDT | What makes it work | Ben |
+| 18 | Limitations: MSA depth and complexes | What makes it work | Ben |
+| 19 | After AlphaFold 2: 2021 to 2025 | Conclusion | Ben |
+| 20 | AlphaFold 3: which choices survived | Conclusion | Ben |
+| 21 | Summary: four design choices, measured | Conclusion | Ben |
+| 22 | Exam question | Questions | shared |
+| 23 | Questions for the audience | Questions | shared |
 
-| backup 1 to 4 | Why is IPA invariant to rigid motions. Why is the structure module equivariant. Where does the handedness come from. What does FAPE measure. | geometry, one question per slide | Evita 1 and 2, Ben 3 and 4 |
-| backup 5, 6 | Is AlphaFold 2 a graph neural network. What does each block compute. | | both |
-| backup 7 to 9 | What exactly did each ablation remove. How is confidence predicted. How was it trained. | | Ben |
-| backup 10 | AlphaFold 3: further changes | | Ben |
-| backup 11 | MSA row attention with pair bias, Suppl. Fig. 2 | | Evita, moved from the main deck on 14 October |
+| Backups | Topic |
+|---|---|
+| backup 1 to 4 | Why is IPA invariant. Why is structure module equivariant. Where does handedness come from. What does FAPE measure. |
+| backup 5, 6 | Is AlphaFold 2 a GNN. What does each block compute. |
+| backup 7 to 9 | What each ablation removed. How is confidence predicted. How was it trained. |
+| backup 10, 14 | AlphaFold 3: further changes, and AF3 architecture diagram (Fig.~1d). |
+| backup 11, 13 | MSA row attention with pair bias (Suppl.~Fig.~2) and outer product mean (Suppl.~Fig.~3). |
+| backup 12 | Prediction and experiment superposed (CASP14 3-panel). |
 
 Changed on Evita's slides on 14 October, each a one-line change: slide 2 explains backbone and side chain in one clause and names PDB 6Y4F, slides 8 to 12 carry the fact as a subtitle, slide 8 names attention along rows and columns, slide 6 is new, her Suppl. Fig. 2 slide moved to the backup. `git diff` shows all of it.
 
