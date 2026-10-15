@@ -526,15 +526,15 @@
       \key{Enforces the 3D triangle inequality and metric consistency directly in 2D pair space.}
     \end{column}
   \end{columns}
-  \vspace{1mm}
+  \par\vspace{2mm}
   \begin{center}
-  \begin{marked}[0.76\linewidth]{4}{247 519.7 25 219}
-    \node[figure label, font=\small] at (0.225,1.15) {Multiplicative updates};
-    \node[figure label, font=\scriptsize] at (0.115,1.03) {outgoing edges};
-    \node[figure label, font=\scriptsize] at (0.345,1.03) {incoming edges};
-    \node[figure label, font=\small] at (0.705,1.15) {Self-attention};
-    \node[figure label, font=\scriptsize] at (0.59,1.03) {starting node};
-    \node[figure label, font=\scriptsize] at (0.83,1.03) {ending node};
+  \begin{marked}[0.84\linewidth]{4}{247 519.7 25 219}
+    \node[figure label, font=\footnotesize\bfseries, text=ETHBlue] at (0.23,1.22) {Multiplicative updates};
+    \node[figure label, font=\scriptsize, text=ETHGray!90!black] at (0.115,1.04) {outgoing edges};
+    \node[figure label, font=\scriptsize, text=ETHGray!90!black] at (0.345,1.04) {incoming edges};
+    \node[figure label, font=\footnotesize\bfseries, text=ETHBlue] at (0.71,1.22) {Triangle self-attention};
+    \node[figure label, font=\scriptsize, text=ETHGray!90!black] at (0.58,1.04) {starting node $i$};
+    \node[figure label, font=\scriptsize, text=ETHGray!90!black] at (0.84,1.04) {ending node $j$};
   \end{marked}
   \end{center}
   \reffootnote{SI 1.6.4--1.6.6, Algorithms 11--14. Triangle multiplicative updates and axial attention.}
@@ -542,18 +542,22 @@
 
 \begin{frame}[t]{Structure module: residues as rigid bodies}{3. A structure is the same after any rotation or translation.}
   \props{3}%
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.48\textwidth}
-      \begin{marked}[0.62\linewidth]{4}{40 358 302 295}
+  \vspace{-3mm}
+  \begin{columns}[c,onlytextwidth]
+    \begin{column}{0.55\textwidth}
+      \centering
+      \begin{marked}[0.86\linewidth]{4}{40 358 302 295}
         \fill[cover] (0.03,0.64) rectangle (0.07,0.73);
       \end{marked}
     \end{column}%
-    \begin{column}{0.48\textwidth}
-      \begin{marked}[0.62\linewidth]{4}{322 358 138 332}
+    \begin{column}{0.43\textwidth}
+      \centering
+      \begin{marked}[0.74\linewidth]{4}{322 358 138 332}
         \fill[cover] (0.02,0.85) rectangle (0.09,0.97);
       \end{marked}
     \end{column}%
   \end{columns}
+  \par\vspace{1mm}
   \say{Residues are independent $\mathrm{SE}(3)$ rigid bodies $T_i = (R_i, \vec{\mathbf{t}}_i)$; dihedral angles $\chi$ place sidechains.}
   \key{Simultaneous updates as an unconstrained residue gas; covalent chain geometry is learned, not hardcoded.}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~3c,d (8 iterations, SI Algorithms 20--23).}
@@ -966,7 +970,7 @@
 % reason in grey, and the answer in blue. They do not count in the slide total.
 
 \begin{frame}[t]{Backup (1/5): Exact $\mathrm{SE}(3)$ invariance of IPA}{SI 1.8.2, Algorithm 22, equations 3 to 6}
-  \vspace{-4.5mm}
+  \vspace{-7.5mm}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.25\textwidth}
       \vspace{0.5mm}
@@ -1008,18 +1012,16 @@
     \end{column}
     \begin{column}{0.73\textwidth}
       \footnotesize
-      \setlength{\abovedisplayskip}{0.5pt}\setlength{\belowdisplayskip}{0.5pt}\setlength{\jot}{0pt}
+      \setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}\setlength{\jot}{1.5pt}
       {\raggedright \textbf{1. Attention Affinities}: invariant under global rigid motion $\textcolor{ETHRed}{\Tg \in \mathrm{SE}(3)}$:\par}
-      \vspace{-1mm}
       \begin{equation*}
-        \big\|(\textcolor{ETHRed}{\Tg}\circ T_i)\circ\textcolor{ETHBlue}{\vec{\bm q}_i} - (\textcolor{ETHRed}{\Tg}\circ T_j)\circ\vec{\bm k}_j\big\|^2
-        = \big\|\textcolor{ETHRed}{\Tg}\circ(T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i}-T_j\circ\vec{\bm k}_j)\big\|^2
-        = \big\|T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i}-T_j\circ\vec{\bm k}_j\big\|^2
+        \big\|\textcolor{ETHRed}{\Tg}\circ T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i} \;-\; \textcolor{ETHRed}{\Tg}\circ T_j\circ\vec{\bm k}_j\big\|^2
+        \;=\; \big\|\textcolor{ETHRed}{\Tg}\circ(T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i} - T_j\circ\vec{\bm k}_j)\big\|^2
+        \;=\; \big\|T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i} - T_j\circ\vec{\bm k}_j\big\|^2
       \end{equation*}
       {\color{ETHGray}\scriptsize Rigid motion $\textcolor{ETHRed}{\Tg}$ is an isometry: preserves Euclidean norm identically $\implies a_{ij}$ is $\mathrm{SE}(3)$-invariant.\par}
-      \vspace{1mm}
+      \vspace{1.5mm}
       {\raggedright \textbf{2. Local Frame Projection}: value aggregation mapped back to residue $i$ frame:\par}
-      \vspace{-1mm}
       \begin{gather*}
         (\textcolor{ETHRed}{\Tg}\circ T_i)^{-1}\circ\sum_j a_{ij}\,(\textcolor{ETHRed}{\Tg}\circ T_j)\circ\textcolor{PaperCurveGreen}{\vec{\bm v}_j}\\
         =\; T_i^{-1}\circ\underbrace{\textcolor{ETHRed}{\Tg^{-1}\Tg}}_{=\,\mathbf{I}}\circ\sum_j a_{ij}\,T_j\circ\textcolor{PaperCurveGreen}{\vec{\bm v}_j}
