@@ -482,7 +482,7 @@
     \begin{column}{0.58\textwidth}
       \vspace{2mm}
       \say{Edge features $\mathbf{z}_{ij} \in \mathbb{R}^{128}$ form a complete directed graph over all residue pairs.}
-      \say{Initialized from sequence separation $|i - j|$ (clipped one-hot) and homologous PDB templates.}
+      \say{Initialized from sequence separation $|i - j|$ (clipped one-hot) and PDB templates.}
     \end{column}
   \end{columns}
   \par\vspace{3mm}
@@ -502,7 +502,7 @@
   \end{marked}
   \end{center}
   \vspace{1mm}
-  \say{Axial attention alternates over sequence positions (rows) and homologous species (columns).}
+  \say{Axial attention alternates over sequence positions (rows) and species (columns).}
   \key{Bidirectional cross-talk: pairs bias MSA attention; outer product mean writes covariance into pairs.}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~3a (48 blocks, SI Algorithms 7--10).}
 \end{frame}
@@ -760,8 +760,8 @@
     \end{column}%
     \begin{column}{0.44\textwidth}
       \vspace{2mm}
-      \say{pLDDT faithfully predicts local lDDT-C$\alpha$ ($r = 0.76$, slope $0.997$ vs measured truth).}
-      \say{Scores below 50 reliably identify intrinsically disordered regions (IDRs).}
+      \say{pLDDT predicts local lDDT-C$\alpha$ ($r = 0.76$, slope $0.997$ vs experiment).}
+      \say{Scores below 50 identify intrinsically disordered regions (IDRs).}
       \key{Calibrated uncertainty: reliable residue-level error estimation without experimental ground truth.}
     \end{column}%
   \end{columns}
@@ -797,7 +797,7 @@
       \vspace{2mm}
       \say{Accuracy drops sharply below $N_{\mathrm{eff}} \approx 30$ unless rescued by homologous templates.}
       \say{Monomer models fail on obligate multimers stabilized by quaternary interfaces.}
-      \key{Predicts static, isolated ground states, omitting allosteric conformational ensembles.}
+      \key{Predicts static ground states, omitting allosteric conformational ensembles.}
     \end{column}
   \end{columns}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~5a.}
@@ -903,7 +903,7 @@
       \begin{tikzpicture}
         \node[draw=ETHGray!50, fill=ETHGray!6, rounded corners=3pt, line width=0.8pt, inner sep=7pt, text width=0.84\linewidth, minimum height=35mm, anchor=north] at (0,0) {
           {\bfseries\small Assigned Problem}\par\vspace{3mm}
-          {\footnotesize\textsl{Analyze architectural inductive biases, loss mechanics, and biological failure modes under shallow MSA alignments ($N_{\mathrm{eff}} < 30$).}\par}
+          {\footnotesize\textsl{Analyze architectural inductive biases, loss mechanics, and failure modes under shallow MSAs ($N_{\mathrm{eff}} < 30$).}\par}
         };
       \end{tikzpicture}
     \end{column}
@@ -923,7 +923,7 @@
     \end{column}
   \end{columns}
   \par\vspace{4.5mm}
-  \key{First-principles theoretical analysis and empirical validation against CASP14 ablations.}
+  \key{Theoretical analysis and empirical validation against CASP14 ablations.}
 \end{frame}
 
 \begin{frame}[t]{Questions for the audience}
@@ -1005,7 +1005,7 @@
       \renewcommand{\arraystretch}{0.92}
       \begin{tabular}{@{}ll@{}}
         \textcolor{ETHRed}{$\bm\to$} \textbf{Frames} & $T_i, T_j \in \mathrm{SE}(3)$ \\
-        \textcolor{ETHBlue}{$\bullet$} \textbf{Query} & $\textcolor{ETHBlue}{\vec{\bm q}_i} \in \mathbb{R}^3$ \\
+        \textcolor{ETHBlue}{$\bullet$} \textbf{Query} & $\textcolor{ETHBlue}{\vec{\bm q}_i} \in \mathbb{R}^{3}$ \\
         $\bullet$ \textbf{Key} & $\vec{\bm k}_j \in \mathbb{R}^3$ \\
         \textcolor{PaperCurveGreen}{$\bullet$} \textbf{Val} & $\textcolor{PaperCurveGreen}{\vec{\bm v}_j} \in \mathbb{R}^3$ \\
         \textcolor{ETHRed}{\bf \textendash\,\textendash} \textbf{Dist.} & $d_{ij}$ invariant \\
@@ -1014,22 +1014,24 @@
     \end{column}
     \begin{column}{0.73\textwidth}
       \footnotesize
-      \setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}\setlength{\jot}{1.5pt}
+      \setlength{\abovedisplayskip}{1.5pt}\setlength{\belowdisplayskip}{1.5pt}\setlength{\jot}{1.5pt}
       {\raggedright \textbf{1. Attention Affinities}: invariant under global rigid motion $\textcolor{ETHRed}{\Tg \in \mathrm{SE}(3)}$:\par}
       \begin{equation*}
         \big\|\textcolor{ETHRed}{\Tg}\circ T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i} \;-\; \textcolor{ETHRed}{\Tg}\circ T_j\circ\vec{\bm k}_j\big\|^2
         \;=\; \big\|\textcolor{ETHRed}{\Tg}\circ(T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i} - T_j\circ\vec{\bm k}_j)\big\|^2
         \;=\; \big\|T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i} - T_j\circ\vec{\bm k}_j\big\|^2
       \end{equation*}
-      {\color{ETHGray}\scriptsize Rigid motion $\textcolor{ETHRed}{\Tg}$ is an isometry: preserves Euclidean norm identically $\implies a_{ij}$ is $\mathrm{SE}(3)$-invariant.\par}
-      \vspace{1.5mm}
-      {\raggedright \textbf{2. Local Frame Projection}: value aggregation mapped back to residue $i$ frame:\par}
+      \vspace{2.5mm}
+      {\color{ETHGray}\scriptsize $\textcolor{ETHRed}{\Tg}$ is an isometry (preserves Euclidean norm) $\implies a_{ij}$ is $\mathrm{SE}(3)$-invariant.\par}
+      \vspace{3mm}
+      {\raggedright \textbf{2. Local Frame Projection}: value aggregation in frame $i$:\par}
       \begin{gather*}
         (\textcolor{ETHRed}{\Tg}\circ T_i)^{-1}\circ\sum_j a_{ij}\,(\textcolor{ETHRed}{\Tg}\circ T_j)\circ\textcolor{PaperCurveGreen}{\vec{\bm v}_j}\\
         =\; T_i^{-1}\circ\underbrace{\textcolor{ETHRed}{\Tg^{-1}\Tg}}_{=\,\mathbf{I}}\circ\sum_j a_{ij}\,T_j\circ\textcolor{PaperCurveGreen}{\vec{\bm v}_j}
         \;=\; T_i^{-1}\circ\sum_j a_{ij}\,T_j\circ\textcolor{PaperCurveGreen}{\vec{\bm v}_j}
       \end{gather*}
-      {\color{ETHGray}\scriptsize Group inverse $\textcolor{ETHRed}{\Tg^{-1}\Tg} = \mathbf{I}$ cancels algebraically $\implies$ updated coordinate representation is invariant.\par}
+      \vspace{2.5mm}
+      {\color{ETHGray}\scriptsize $\textcolor{ETHRed}{\Tg^{-1}\Tg} = \mathbf{I}$ cancels identically $\implies$ coordinate updates are invariant.\par}
     \end{column}
   \end{columns}
   \par\vspace{1mm}
@@ -1077,7 +1079,7 @@
     \begin{column}{0.70\textwidth}
       \footnotesize
       \setlength{\abovedisplayskip}{0.5pt}\setlength{\belowdisplayskip}{0.5pt}\setlength{\jot}{1.5pt}
-      {\raggedright Gram--Schmidt local frames break reflection symmetry via $z$-axis inversion:\par}
+      {\raggedright Gram--Schmidt local frames break reflection symmetry ($z$-inversion):\par}
       \vspace{-1mm}
       \begin{alignat*}{2}
         &\text{\textbf{Mirror flip}:} &\quad T_i^{-1} \circ \bm x_j &\;\xrightarrow{\text{mirror}}\; \mathrm{diag}(1,\, 1,\, \textcolor{ETHRed}{-1}) \, (T_i^{-1} \circ \bm x_j)\\[1pt]
@@ -1089,7 +1091,7 @@
     \end{column}
   \end{columns}
   \par\vspace{1mm}
-  \key{Breaks reflection symmetry without Kabsch alignment while bounding optimal RMSD.}
+  \key{Breaks reflection symmetry without Kabsch alignment while bounding RMSD.}
 \end{frame}
 
 \begin{frame}[t]{Backup (3/5): Triangle updates and 2D metric consistency}{SI 1.6.4--1.6.6, Algorithms 11--14}
@@ -1130,10 +1132,10 @@
     \end{column}
   \end{columns}
   \par\vspace{1mm}
-  \key{Enforces geometric consistency and metric embeddability directly in 2D pair space.}
+  \key{Enforces geometric consistency and metric embeddability in 2D pair space.}
 \end{frame}
 
-\begin{frame}[t]{Backup (4/5): Non-linear ablation synergies and recycling}{SI 1.10 and 1.13, Figure 4a}
+\begin{frame}[t]{Backup (4/5): Non-linear component interactions and recycling}{SI 1.10 and 1.13, Figure 4a}
   \vspace{-3.5mm}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.51\textwidth}
@@ -1173,7 +1175,7 @@
         \fill[ETHRed!25] (-48.9,3) rectangle (0,10);
         \draw[ETHRed, line width=1.1pt] (-48.9,3) rectangle (0,10);
         \node[anchor=west, font=\scriptsize\bfseries, text=ETHRed] at (1,6.5) {Joint: $\mathbf{-16.3}$};
-        % Synergy bracket
+        % Interaction bracket
         \draw[ETHRed, line width=0.8pt] (-20.4,12) -- (-48.9,12);
         \draw[ETHRed, line width=0.8pt] (-20.4,10.5) -- (-20.4,13.5);
         \draw[ETHRed, line width=0.8pt] (-48.9,10.5) -- (-48.9,13.5);
@@ -1189,7 +1191,7 @@
     \end{column}
   \end{columns}
   \par\vspace{1mm}
-  \key{Synergy: recycling provides the iterative trunk depth required for IPA to resolve complex topological knots.}
+  \key{Non-linear coupling: recycling provides iterative depth for IPA to resolve complex topological knots.}
 \end{frame}
 
 \begin{frame}[t]{Backup (5/5): AlphaFold 3: Diffusion vs Inductive Bias}{Abramson et al. [AAD+24], \textit{Nature} 630 (2024), Fig.~1d}

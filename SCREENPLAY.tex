@@ -363,7 +363,7 @@ Removing IPA costs $2.3$ GDT.
 Removing recycling costs $4.5$ GDT.
 Without FAPE, reflection-invariant losses produce 50\% inverted chiral mirror images.
 
-Most remarkably, the components exhibit severe non-linear coupling: removing \textit{both IPA and recycling simultaneously} causes a catastrophic $-16.3$ GDT collapse. Without recycling, IPA lacks the iterative depth to untangle complex knotted topologies; without IPA, recycling cannot project invariant coordinates. Structural inductive biases act synergistically.}
+Most remarkably, the components exhibit severe non-linear coupling: removing \textit{both IPA and recycling simultaneously} causes a catastrophic $-16.3$ GDT collapse. Without recycling, IPA lacks the iterative depth to untangle complex knotted topologies; without IPA, recycling cannot project invariant coordinates. The structural inductive biases exhibit strong mutual reinforcement: neither component suffices in isolation.}
 
 % ---------------------------------------------------------------------------------------------
 \slideheader{15}{Trunk intermediate structures}{Ben}{18:45--20:00}
@@ -532,11 +532,11 @@ AlphaFold enforces this graph-geometric consistency by updating edge $(i,j)$ thr
 Two edges of a triangle combine to update the third edge. In parallel, Triangle Self-Attention updates edge $(i,j)$ with multi-head attention over node triplets $(i,k)$ biased by $(j,k)$. This enforces 3D metric embeddability directly within the 2D pair graph prior to coordinate generation.
 
 % ---------------------------------------------------------------------------------------------
-\subsection{Backup (4/5): Non-linear Ablation Synergies and Recycling}
-\textbf{Slide Counterpart}:\enspace \textsl{Backup (4/5): Non-linear ablation synergies and recycling (SI 1.10 and 1.13)}
+\subsection{Backup (4/5): Non-linear Component Interactions and Recycling}
+\textbf{Slide Counterpart}:\enspace \textsl{Backup (4/5): Non-linear component interactions and recycling (SI 1.10 and 1.13)}
 
 \textbf{Ablation Analysis}:
-The ablation study in Figure~4a and Supplementary Section 1.13 reveals critical non-linear synergies:
+The ablation study in Figure~4a and Supplementary Section 1.13 reveals critical non-linear interactions:
 \begin{itemize}\setlength{\itemsep}{1.2mm}
   \item \textbf{No IPA alone} ($-2.3$ GDT): Frames placed via single linear projection; loses iterative coordinate refinement.
   \item \textbf{No recycling alone} ($-4.5$ GDT): Single forward pass; pair representation cannot re-embed intermediate distances.
@@ -544,7 +544,7 @@ The ablation study in Figure~4a and Supplementary Section 1.13 reveals critical 
   \item \textbf{No raw MSA} ($-2.2$ GDT): Replaces raw MSA with summary DCA tables; discards higher-order epistatic mutational couplings.
   \item \textbf{No triangle updates} ($-4.6$ GDT): Pair graph violates 3D metric embeddability.
 \end{itemize}
-The components act synergistically: recycling provides the iterative trunk depth required for IPA to untangle complex knotted topologies, while IPA produces the geometrically grounded coordinate frames that recycling feeds back into the pair graph.
+The two inductive biases are mutually dependent: recycling provides the iterative trunk depth required for IPA to untangle complex knotted topologies, while IPA produces geometrically grounded frames that recycling re-injects into pair space.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (5/5): AlphaFold 3: Diffusion vs Inductive Bias}
