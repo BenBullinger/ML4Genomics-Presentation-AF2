@@ -210,14 +210,15 @@ In the second half of our talk, Ben will show that removing any one of these fou
 
 % ---------------------------------------------------------------------------------------------
 \slideheader{5}{The two representations}{Evita}{5:45--7:00}
-\shadowbox{Left: MSA grid (sequences by residues, 256 channels). Right: Pair matrix (residues by residues, 128 channels). Unrotated horizontal labels: `$N_{\text{seq}}$ sequences', `$N_{\text{res}}$ residues'.}
+\shadowbox{Left: MSA grid (sequences by residues, 256 channels). Right: Pair matrix (residues by residues, 128 channels). Unrotated horizontal labels: `$N_{\text{seq}}$ sequences', `$N_{\text{res}}$ residues'. Takeaway: Dual-track representation preserves raw evolutionary signals.}
 
-\evita{Let us look inside the network's working memory. At every stage of the Evoformer trunk, AlphaFold maintains exactly two arrays:
+\evita{On the pipeline diagram, we saw that the Evoformer operates on two parallel data streams. Before we examine how the network processes them, let us look inside the network's working memory to understand what these two representations actually encode.
+
 First, the MSA representation, $\mathbf{m}_{si} \in \R^{256}$. Here, row index $s$ indexes the sequence in the alignment, column index $i$ indexes the residue position, and each cell holds a 256-dimensional feature vector. The first row ($s=1$) is the query sequence.
 
-Second, the Pair representation, $\mathbf{z}_{ij} \in \R^{128}$. Here, row $i$ and column $j$ index pairs of residues along the protein chain. Each entry $\mathbf{z}_{ij}$ represents the geometric and physical relationship between residue $i$ and residue $j$---such as expected spatial distance, chemical compatibility, or orientation. 
+Second, the Pair representation, $\mathbf{z}_{ij} \in \R^{128}$. Here, row $i$ and column $j$ index pairs of residues along the protein chain. Each entry $\mathbf{z}_{ij}$ represents the geometric and physical relationship between residue $i$ and residue $j$---such as expected spatial distance, chemical compatibility, or orientation.
 
-Every single block of the 48 Evoformer layers reads from and writes to exclusively these two arrays.}
+The fundamental architectural principle here is the dual-track design. Earlier systems collapsed the multiple sequence alignment into static pairwise contact tables before running neural networks, permanently discarding individual sequence details. AlphaFold maintains both representations simultaneously throughout its entire trunk so that raw evolutionary signals are never lost.}
 
 % ---------------------------------------------------------------------------------------------
 \slideheader{6}{The input: MSA representation}{Evita}{7:00--8:15}
@@ -243,7 +244,7 @@ Throughout the network, the pair representation serves as a spatial blackboard w
 \slideheader{8}{The Evoformer block}{Evita}{9:30--10:45}
 \shadowbox{Detailed schematic of one Evoformer block: Row-wise attention with pair bias $\to$ Column-wise attention $\to$ Transition MLP $\to$ Outer product mean $\to$ Triangular multiplicative updates $\to$ Triangular self-attention $\to$ Transition MLP.}
 
-\evita{This brings us to the core engine: the Evoformer block. AlphaFold stacks 48 identical Evoformer blocks in series. 
+\evita{Now that we have examined both representations, how does the network actually process and refine them? This is the core engine: the Evoformer block. AlphaFold stacks 48 identical Evoformer blocks in series.
 
 Notice the dual-track structure. Information flows simultaneously through the MSA track at the top and the Pair track at the bottom. But they do not operate in isolation:
 First, the pair track injects geometric bias into the MSA attention logits.

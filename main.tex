@@ -365,8 +365,8 @@
     \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
   \end{marked}
   \par\vspace{2mm}
-  \key{End-to-end differentiable pipeline: unifies representation learning and coordinate generation without intermediate hand-crafted potentials.}
-  \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~1e (Evoformer: 48 blocks; Structure Module: 8 iterations).}
+  \key{Two-stage end-to-end pipeline: the \textbf{Evoformer} (48 blocks) refines sequence and pair tracks; the \textbf{Structure Module} (8 iterations) builds 3D coordinates.}
+  \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~1e. Coordinates and pair features are recycled for 4 total passes.}
 \end{frame}
 
 % The frame of the talk: each design choice answers a fact about proteins. The architecture
@@ -426,7 +426,7 @@
   \end{center}
   \vspace{-2mm}
   \say{Evolutionary variation in $\mathbf{m}_{si}$; pairwise spatial geometry and orientation in $\mathbf{z}_{ij}$.}
-  \key{48 Evoformer blocks iteratively refine both tracks via bidirectional cross-talk.}
+  \key{Dual-track representation: maintaining both tracks simultaneously avoids premature loss of raw evolutionary signals.}
   \reffootnote{Supplementary Information (SI) 1.5, Algorithms 3 and 4. Sizes in training: 128 sequences, crops of 256 residues (SI Table 4).}
 \end{frame}
 
