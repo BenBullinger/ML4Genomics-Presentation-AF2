@@ -279,13 +279,15 @@
 
 {\setbeamertemplate{footline}{}
 \begin{frame}[noframenumbering]
-  \vspace{14mm}
+  \vspace{12mm}
   {\fontsize{24}{28}\selectfont\bfseries Highly accurate protein structure\\prediction with AlphaFold\par}
   \vspace{4mm}
   {\large Paper by Jumper et al., \textit{Nature} 596 (2021)\par}
-  \vspace{12mm}
+  \vspace{10mm}
   {Evita Bosch Pokunevich \quad Ben Bullinger\par}
   \vspace{2mm}
+  {\scriptsize\color{ETHGray}\texttt{\{ebosch, bbullinger\}@ethz.ch} \quad\textbullet\quad \href{https://github.com/BenBullinger/ML4Genomics-Presentation-AF2}{\color{ETHGray}\texttt{github.com/BenBullinger/ML4Genomics-Presentation-AF2}}\par}
+  \vspace{3mm}
   {\color{ETHGray}Machine Learning for Genomics (263-5351-00L), ETH Z\"urich, Fall 2026\par}
 \end{frame}}
 
@@ -595,7 +597,7 @@
   \key{Residues move as an unconstrained ``residue gas''; peptide bonds are learned}
 \end{frame}
 
-\begin{frame}[t]{Invariant point attention}{3. A structure is the same after any rotation or translation.}
+\begin{frame}[t]{Invariant Point Attention (IPA)}{3. A structure is the same after any rotation or translation.}
   \props{3}
   \vspace{-1mm}
   {$\displaystyle a_{ij} \;=\; \text{softmax}_j \Bigl(\,
@@ -616,7 +618,7 @@
   \reffootnote{The formula is Algorithm 22 of the supplement for one head, without scaling constants.}
 \end{frame}
 
-\begin{frame}[t]{Frame aligned point error (FAPE)}{4. A protein and its mirror image are different molecules.}
+\begin{frame}[t]{Frame Aligned Point Error (FAPE)}{4. A protein and its mirror image are different molecules.}
   \props{4}
   \vspace{-1mm}
   \begin{tikzpicture}[x=9.5mm, y=9.5mm]
@@ -963,6 +965,53 @@
   \say{{\color{ETHRed}\bfseries 1}\enspace AlphaFold 2 hardcoded $\mathrm{SE}(3)$ equivariance and stereochemical chirality into architecture and loss. AlphaFold 3 replaced both with unconstrained diffusion. When is geometric inductive bias indispensable, and when is unconstrained generative modeling preferable?}
   \say{{\color{ETHRed}\bfseries 2}\enspace Accuracy falls below about 30 related sequences. Has the network learned how proteins fold, or how evolution has varied them? What result would settle it?}
   \say{{\color{ETHRed}\bfseries 3}\enspace pLDDT is trained on the model's own errors. On which proteins would you distrust it, and what should a genomics pipeline do with a low-confidence region?}
+  \par\vspace{5mm}
+  \begin{tikzpicture}
+    \node[draw=ETHGray!35, fill=ETHGray!5, rounded corners=3pt, line width=0.6pt, inner sep=4.5pt, text width=0.96\linewidth, align=center] {
+      \footnotesize\textcolor{ETHBlue}{\bfseries AlphaFold Resources \& Discussion:}\enspace
+      \texttt{\{ebosch, bbullinger\}@ethz.ch}\\[1mm]
+      \scriptsize\textcolor{ETHGray}{Code, derivations \& slides:}\enspace
+      \href{https://github.com/BenBullinger/ML4Genomics-Presentation-AF2}{\color{ETHBlue}\texttt{github.com/BenBullinger/ML4Genomics-Presentation-AF2}}
+    };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[t]{Resources: AlphaFold at ETH}{Pipelines, cluster execution, and seminar contacts}
+  \vspace{1mm}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{tikzpicture}
+        \node[draw=ETHGray!50, fill=ETHGray!6, rounded corners=3pt, line width=0.8pt, inner sep=7pt, text width=0.84\linewidth, minimum height=35mm, anchor=north] at (0,0) {
+          {\bfseries\small Tooling \& Deployment}\par\vspace{2mm}
+          {\footnotesize
+          \begin{itemize}\setlength{\itemsep}{1.8mm}
+            \item[\textcolor{ETHBlue}{\textbf{\ding{51}}}] \textbf{ColabFold}: fast MMseqs2 monomer and multimer prediction
+            \item[\textcolor{ETHBlue}{\textbf{\ding{51}}}] \textbf{Euler Cluster}: GPU batch jobs via SLURM (\texttt{--gpus=1})
+            \item[\textcolor{ETHBlue}{\textbf{\ding{51}}}] \textbf{AFDB}: 214M+ structures at \href{https://alphafold.ebi.ac.uk}{\color{ETHBlue}\texttt{alphafold.ebi.ac.uk}}
+          \end{itemize}
+          }\par
+        };
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{tikzpicture}
+        \node[draw=ETHBlue!50, fill=ETHBlue!6, rounded corners=3pt, line width=0.8pt, inner sep=7pt, text width=0.84\linewidth, minimum height=35mm, anchor=north] at (0,0) {
+          {\color{ETHBlue}\bfseries\small Repository \& Contacts}\par\vspace{2mm}
+          {\footnotesize
+          \begin{itemize}\setlength{\itemsep}{1.8mm}
+            \item[\textcolor{ETHBlue}{\textbf{\ding{51}}}] \textbf{Deck \& TikZ Sources}:\par
+            \href{https://github.com/BenBullinger/ML4Genomics-Presentation-AF2}{\color{ETHBlue}\texttt{github.com/BenBullinger/...}}
+            \item[\textcolor{ETHBlue}{\textbf{\ding{51}}}] \textbf{Questions \& Discussion}:\par
+            \texttt{\{ebosch, bbullinger\}@ethz.ch}
+            \item[\textcolor{ETHBlue}{\textbf{\ding{51}}}] \textbf{Seminar}: ML for Genomics (Boeva Lab)
+          \end{itemize}
+          }\par
+        };
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+  \par\vspace{5mm}
+  \key{Open-source code, derivations, and structural biology pipelines available on GitHub}
 \end{frame}
 
 % ---------------------------------------------------------------------------------------------
