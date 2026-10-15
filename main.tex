@@ -48,9 +48,22 @@
   {\vspace{0.5mm}\small\color{ETHGray}\insertframesubtitle\par}\vspace{1.5mm}\fi}
 \makeatother
 
-% Foot of a slide: the slide number
+% True footer: citation flushed left, slide number flushed right
+\gdef\insertslidecitation{}
+\newcommand{\reffootnote}[1]{\gdef\insertslidecitation{#1}}
+\newcommand{\slidecitation}[1]{\gdef\insertslidecitation{#1}}
+
 \setbeamertemplate{footline}{%
-  \hfill{\scriptsize\color{ETHGray}\insertframenumber}\hspace{1cm}\vspace{3mm}}
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.8ex,dp=1.2ex,leftskip=1cm,rightskip=1cm]{footline}%
+      {\fontsize{5.5pt}{6.5pt}\selectfont\color{ETHGray}\insertslidecitation}%
+      \hfill%
+      {\fontsize{6.5pt}{7.5pt}\selectfont\color{ETHGray}\insertframenumber}%
+    \end{beamercolorbox}%
+  }%
+  \gdef\insertslidecitation{}%
+}
 
 % Packages
 \usepackage{graphicx}
@@ -63,18 +76,6 @@
 % Text on a slide: \say{...} is one statement, \key{...} the one highlighted statement
 \newcommand{\say}[1]{{\raggedright #1\par}\vspace{2.5mm}}
 \newcommand{\key}[1]{\vspace{1mm}{\raggedright\alert{#1}\par}}
-
-% A reference in grey at the foot of a slide
-\setbeamertemplate{footnote}{\noindent\raggedright\insertfootnotetext\par\vspace{2mm}}
-\setbeamerfont{footnote}{size=\scriptsize}
-\setbeamercolor{footnote}{fg=ETHGray}
-\renewcommand\footnoterule{}
-\newcommand\reffootnote[1]{%
-\begingroup
-\renewcommand\thefootnote{}\footnote{#1}%
-\addtocounter{footnote}{-1}%
-\endgroup
-}
 
 % A figure cut from the paper: page, trim (l b r t), width
 \newcommand{\paperfig}[3][0.9\linewidth]{\includegraphics[page=#2,trim=#3,clip,width=#1]{_AF2.pdf}}
@@ -286,7 +287,7 @@
   \vspace{10mm}
   {Evita Bosch Pokunevich \quad Ben Bullinger\par}
   \vspace{2mm}
-  {\scriptsize\color{ETHGray}\texttt{\{ebosch, bbullinger\}@ethz.ch} \quad\textbullet\quad \href{https://github.com/BenBullinger/ML4Genomics-Presentation-AF2}{\color{ETHGray}\texttt{github.com/BenBullinger/ML4Genomics-Presentation-AF2}}\par}
+  {\scriptsize\color{ETHGray}\texttt{\{ebosch, bben\}@ethz.ch} \quad\textbullet\quad \href{https://github.com/BenBullinger/ML4Genomics-Presentation-AF2}{\color{ETHGray}\texttt{github.com/BenBullinger/ML4Genomics-Presentation-AF2}}\par}
   \vspace{3mm}
   {\color{ETHGray}Machine Learning for Genomics (263-5351-00L), ETH Z\"urich, Fall 2026\par}
 \end{frame}}
@@ -297,25 +298,23 @@
 \begin{frame}[t]{The problem: sequence to structure}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.56\textwidth}
-      \vspace{3mm}
-      {\LARGE SIFSYITESTGTPS\ldots\hfill
-        \tikz[baseline=-0.6ex]\draw[line width=1.3pt, -{Latex[length=6pt]}] (0,0) -- (16mm,0);\hspace{2mm}\par}
+      \vspace{2mm}
+      {\large\texttt{SIFSYITESTGTPS}\ldots\hfill
+        \tikz[baseline=-0.6ex]\draw[line width=1.3pt, -{Latex[length=6pt]}] (0,0) -- (14mm,0);\hspace{2mm}\par}
       \vspace{1.5mm}
-      {\small\color{ETHGray} sequence of amino acids. Each has the same backbone and its own side chain\par}
-      \vspace{5mm}
-      \say{Structure experiments take months to years}
-      \say{Hundreds of millions of sequences are known}
-      \key{Predict 3D atomic coordinates from the sequence alone}
+      {\small\color{ETHGray} Primary amino acid sequence $\mathbf{s} \in \mathcal{A}^L$\par}
+      \vspace{4mm}
+      \say{Genomic sequencing yields $>2\times 10^8$ known proteins (UniProt); structural experiments cover $<2\times 10^5$ (PDB).}
+      \say{Thermodynamic fold determination (Anfinsen) faces astronomical conformational search ($10^{143}$ states, Levinthal).}
+      \key{Predict all heavy-atom 3D coordinates $\mathbf{x} \in \mathbb{R}^{N_{\text{atoms}} \times 3}$ directly from primary sequence.}
     \end{column}
     \begin{column}{0.42\textwidth}
       \vspace{-8mm}
-      \begin{marked}[0.8\linewidth]{2}{176 634 310 51}
+      \begin{marked}[0.88\linewidth]{2}{176 634 310 51}
         \fill[cover] (0.002,0.87) rectangle (0.07,1.01);
       \end{marked}\par
       \vspace{0.5mm}
-      {\small\color{ETHGray} 3D coordinates of all heavy atoms\par}
-      \vspace{0.5mm}
-      {\small\color{ETHGray} Prediction in blue, experiment in green\par}
+      {\small\color{ETHGray} Ground truth in green (PDB 6Y4F), prediction in blue ($0.8\,\text{\AA}$ RMSD)\par}
     \end{column}
   \end{columns}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~1b. Target T1049 (PDB 6Y4F), CASP14.}
@@ -328,8 +327,8 @@
   \vspace{-4.5mm}
   % Redrawn from Fig. 1a. Height of each bar and its 95% interval are measured on the figure.
   % For AlphaFold and the next best group they agree with the numbers printed in the paper.
-  \say{CASP14 (May to July 2020): blind test, structures withheld until submission}
-  \say{Metric: C$\alpha$ root-mean-square deviation on the 95\% best-model residues}
+  \say{CASP14 (May--July 2020): double-blind evaluation on experimentally determined, unreleased structures.}
+  \say{Evaluation metric: C$\alpha$ root-mean-square deviation on 95\% best-model residues (r.m.s.d.$_{95}$).}
   \vspace{-1.5mm}
 
   \begin{tikzpicture}[x=4.7mm, y=2.8mm]
@@ -355,33 +354,20 @@
     \node[font=\small, anchor=north] at (11,-0.08) {the 14 next best groups};
   \end{tikzpicture}
   \par\vspace{-1.0mm}
-  \key{The median backbone error is 0.96\,\AA---below one carbon atom width}
+  \key{Median backbone error reaches 0.96\,\AA---surpassing typical covalent $\mathrm{C}$--$\mathrm{C}$ bond length ($1.4\,\text{\AA}$).}
   \reffootnote{Redrawn from Fig.~1a. C$\alpha$ r.m.s.d.$_{95}$ on 87 domains (95\% CIs). $1\,\text{\AA} = 10^{-10}\,\text{m}$.}
 \end{frame}
-
-
-
 
 % ---------------------------------------------------------------------------------------------
 \section{The network}
 \begin{frame}[t]{The pipeline: MSA in, coordinates out}
   \vspace{-3.5mm}
-  \begin{marked}[0.88\linewidth]{2}{40 419 25 214}
+  \begin{marked}[0.92\linewidth]{2}{40 419 25 214}
     \fill[cover] (0.002,0.93) rectangle (0.04,1.01);
-    \draw[callout] (0.238,0.70) rectangle (0.352,1.0);
-    \draw[callout] (0.238,0.13) rectangle (0.352,0.425);
-    \draw[callout] (0.528,0.25) rectangle (0.612,0.975);
-    \draw[callout] (0.758,0.25) rectangle (0.842,0.975);
-    \draw[callout] (0.413,0.0) rectangle (0.942,0.092);
-    \node[callout text, anchor=south, align=center] at (0.295,1.02) {multiple sequence\\alignment (MSA)};
-    \node[callout text, anchor=north] at (0.295,0.11) {Templates};
-    \node[callout text, anchor=south] at (0.57,1.02) {Evoformer};
-    \node[callout text, anchor=south] at (0.80,1.02) {Structure module};
-    \node[callout text, anchor=north] at (0.678,-0.02) {Recycled three times};
   \end{marked}
-  \par\vspace{1mm}
-  \key{The network outputs the 3D coordinates directly}
-  \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~1e.}
+  \par\vspace{2mm}
+  \key{End-to-end differentiable pipeline: unifies representation learning and coordinate generation without intermediate hand-crafted potentials.}
+  \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~1e (Evoformer: 48 blocks; Structure Module: 8 iterations).}
 \end{frame}
 
 % The frame of the talk: each design choice answers a fact about proteins. The architecture
@@ -412,7 +398,7 @@
 % ---------------------------------------------------------------------------------------------
 \subsection{The data}
 % Draft (Ben, 14 October) for Evita's placeholder: the two representations the network works on.
-\begin{frame}[t]{The two representations}{Two tables of numbers, one per MSA cell and one per residue pair}
+\begin{frame}[t]{The two representations}{Dual-track representations: MSA tensor $\mathbf{m}_{si}$ and residue pair matrix $\mathbf{z}_{ij}$}
   \vspace{-2mm}
   \begin{center}
   \begin{tikzpicture}[x=0.8mm, y=0.8mm]
@@ -422,9 +408,9 @@
     \foreach \c in {0,...,11}
       \fill[ETHBlue!55] (\c*4.2, 0) rectangle ++(3.8,-3.8);
     \fill[ETHBlue!70] (5*4.2, -2*4.2) rectangle ++(3.8,-3.8);
-    \node[font=\scriptsize, anchor=south west] at (0,1.5) {MSA representation $\mathbf m_{si}$, 256 numbers per cell};
+    \node[font=\scriptsize, anchor=south west] at (0,1.5) {MSA representation $\mathbf m_{si} \in \mathbb{R}^{256}$ per cell};
     \node[font=\scriptsize, text=ETHGray, anchor=east] at (-1.5,-1.9) {query};
-    \node[font=\scriptsize, text=ETHGray, anchor=east, align=right] at (-1.5,-14.5) {related\\sequences};
+    \node[font=\scriptsize, text=ETHGray, anchor=east, align=right] at (-1.5,-14.5) {homologous\\sequences};
     \node[font=\scriptsize, text=ETHGray, anchor=north] at (25,-26) {$N_{\text{res}}$ residues};
     \node[font=\scriptsize, text=ETHGray, anchor=west, align=left] at (52.5,-12) {$N_{\text{seq}}$\\sequences};
     % pair: residues by residues
@@ -434,15 +420,15 @@
       \foreach \r in {0,...,11}
         \fill[black!35] (\r*2.1, -\r*2.1) rectangle ++(1.9,-1.9);
       \fill[black!80] (8*2.1, -2*2.1) rectangle ++(1.9,-1.9);
-      \node[font=\scriptsize, anchor=south west] at (0,1.5) {Pair representation $\mathbf z_{ij}$, 128 numbers per pair};
+      \node[font=\scriptsize, anchor=south west] at (0,1.5) {Pair representation $\mathbf z_{ij} \in \mathbb{R}^{128}$ per pair};
       \node[font=\scriptsize, text=ETHGray, anchor=north] at (12.6,-26) {$N_{\text{res}}$ residues};
       \node[font=\scriptsize, text=ETHGray, anchor=west, align=left] at (27.5,-12.6) {$N_{\text{res}}$\\residues};
     \end{scope}
   \end{tikzpicture}
   \end{center}
   \vspace{-2mm}
-  \say{One vector per cell of the alignment, and one per ordered pair of residues}
-  \key{Each of the 48 Evoformer blocks reads and writes only these two arrays}
+  \say{The MSA tensor maintains sequence-position states ($c_m = 256$); the pair matrix maintains residue-residue relational states ($c_z = 128$).}
+  \key{The 48 Evoformer blocks iteratively refine both representations via bidirectional cross-talk.}
   \reffootnote{Supplementary Information (SI) 1.5, Algorithms 3 and 4. Sizes in training: 128 sequences, crops of 256 residues (SI Table 4).}
 \end{frame}
 
@@ -467,25 +453,24 @@
         }
         \draw[line width=1pt] (3,-0.35) .. controls (3,1.1) and (9,1.1) .. (9,-0.35);
         \node[font=\small] at (6,1.4) {in contact in 3D};
-        \node[font=\small, anchor=east] at (0.3,-1) {target};
-        \node[font=\small, anchor=east, align=right] at (0.3,-4) {related\\sequences};
+        \node[font=\small, anchor=east] at (0.3,-1) {query};
+        \node[font=\small, anchor=east, align=right] at (0.3,-4) {homologous\\sequences};
         \node[font=\small, text=ETHBlue, anchor=west] at (0.6,-7.6) {K and R are positively charged};
         \node[font=\small, text=ETHRed, anchor=west] at (0.6,-8.6) {D and E are negatively charged};
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.40\textwidth}
       \vspace{6mm}
-      \say{A row is a related protein}
-      \say{A column is an aligned position}
-      \say{Correlated mutations reveal contacts in 3D}
-      \key{The network reads the raw alignment, not its summary statistics}
+      \say{Rows index homologous evolutionary sequences; columns index aligned residue positions along the query chain.}
+      \say{Compensatory co-mutations (e.g. salt-bridge charge conservation) reflect direct 3D physical contacts.}
+      \key{AlphaFold processes the raw alignment directly, learning epistatic coupling patterns end-to-end.}
     \end{column}
   \end{columns}
   \reffootnote{[MHC+11] D.~S.~Marks et al., \textit{PLoS ONE} 6, 2011. The alignment is an illustration, not data.}
 \end{frame}
 
 % Draft (Ben, 14 October) for Evita's placeholder.
-\begin{frame}[t]{The input: Pair representation}{What $\mathbf z_{ij}$ holds and where it comes from}
+\begin{frame}[t]{The input: Pair representation}{Relational graph initialization and spatial priors}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.4\textwidth}
       \vspace{1mm}
@@ -496,12 +481,12 @@
       {\small\color{ETHGray} Fig.~3b, the pairs as directed edges\par}
     \end{column}
     \begin{column}{0.58\textwidth}
-      \say{128 numbers for every ordered pair of residues, the edge $i\to j$ of the graph}
-      \say{Started from amino acid pairs and chain distance; templates enter as distances}
-      \say{At the end, the distogram reads a distance distribution for every pair from it}
+      \say{Residue pairs $(i, j)$ form directed edges in a complete residue graph ($\mathbf{z}_{ij} \in \mathbb{R}^{128}$).}
+      \say{Initialized from relative sequence separation $|i - j|$ and homologous structural template distances.}
+      \say{Supervised auxiliary head: a 64-bin distogram predicts $C_\beta$--$C_\beta$ distance distributions directly from $\mathbf{z}_{ij}$.}
     \end{column}
   \end{columns}
-  \key{The pair array stores distances before any coordinates exist}
+  \key{The pair representation maintains spatial relations before 3D coordinates are instantiated.}
   \reffootnote{SI 1.5, Algorithm 4 (relative position), 1.7.1 (templates), 1.10 (recycling), 1.9.8 (distogram).}
 \end{frame}
 
@@ -512,25 +497,14 @@
   \props{1}
   \vspace{-3mm}
   \begin{center}
-  \begin{marked}[0.58\linewidth]{4}{40 616 25 52}
+  \begin{marked}[0.88\linewidth]{4}{40 616 25 52}
     \fill[cover] (0.015,0.93) rectangle (0.04,1.01);
-    \draw[ETHRed, line width=1.6pt, -{Latex[length=5pt]}] (0.1605,0.225) -- (0.1605,0.585);
-    \node[callout text, anchor=west] at (0.172,0.41) {pair to MSA};
-    \draw[ETHRed, line width=1.6pt] (0.3945,0.735) -- (0.3945,0.578);
-    \draw[ETHRed, line width=1.6pt, -{Latex[length=5pt]}] (0.3945,0.375) -- (0.3945,0.245);
-    \draw[callout] (0.367,0.375) rectangle (0.422,0.578);
-    \node[callout text, anchor=west] at (0.43,0.63) {MSA to pair};
-    \draw[callout, rounded corners=0pt] (0.432,-0.01) -- (0.432,-0.05) -- (0.752,-0.05) -- (0.752,-0.01);
-    \node[callout text, anchor=north] at (0.592,-0.06) {triangle layers};
-    \node[figure label, font=\small, anchor=south west] at (0.028,0.84) {MSA};
-    \node[figure label, font=\small, anchor=north west] at (0.028,0.085) {pairs};
   \end{marked}
   \end{center}
-  \vspace{-1mm}
-  \say{Row attention: residues attend to residues, biased by the pair edge $\mathbf z_{ij}$}
-  \say{Column attention across sequences; outer product mean adds coevolution into pairs}
-  \key{The paper calls this graph inference: pairs steer the MSA, MSA updates the pairs}
-  \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~3a, 48 blocks. Algorithms 7 to 10. Detailed figures in backup 11 and 13.}
+  \vspace{1mm}
+  \say{Axial attention alternates over residue positions (rows) and homologous sequences (columns).}
+  \key{Bidirectional coupling: pair edges bias row attention; outer product mean injects evolutionary covariance into edge features.}
+  \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~3a (48 blocks, SI Algorithms 7--10). Full update equations in backup 11--12.}
 \end{frame}
 
 \begin{frame}[t]{Evoformer: triangle updates}{2. Distances in 3D must close triangles.}
@@ -550,57 +524,50 @@
     \end{column}
     \begin{column}{0.62\textwidth}
       \vspace{0mm}
-      \say{The pair representation forms the edge set of a complete residue graph}
-      \say{Edge $(i,j)$ is updated by summing over third nodes $k$: $(i,k)$ and $(j,k)$}
-      \key{Triangle updates enforce metric spatial consistency directly in pair space}
+      \say{Edge $(i,j)$ is updated by aggregating paths through intermediate residues $k$: $\sum_k \mathbf{z}_{ik} \odot \mathbf{z}_{jk}$.}
+      \key{Triangle updates enforce metric spatial constraints and the triangle inequality directly in 2D pair space.}
     \end{column}
   \end{columns}
-  \vspace{-1mm}
+  \vspace{1mm}
   \begin{center}
-  \begin{marked}[0.72\linewidth]{4}{247 519.7 25 219}
-    \node[figure label, font=\small] at (0.225,1.19) {Multiplication};
-    \node[figure label] at (0.115,1.03) {outgoing edges};
-    \node[figure label] at (0.345,1.03) {incoming edges};
-    \node[figure label, font=\small] at (0.705,1.19) {Attention};
-    \node[figure label] at (0.59,1.03) {start node};
-    \node[figure label] at (0.83,1.03) {end node};
+  \begin{marked}[0.76\linewidth]{4}{247 519.7 25 219}
+    \node[figure label, font=\small] at (0.225,1.15) {Multiplicative updates};
+    \node[figure label, font=\scriptsize] at (0.115,1.03) {outgoing edges};
+    \node[figure label, font=\scriptsize] at (0.345,1.03) {incoming edges};
+    \node[figure label, font=\small] at (0.705,1.15) {Self-attention};
+    \node[figure label, font=\scriptsize] at (0.59,1.03) {starting node};
+    \node[figure label, font=\scriptsize] at (0.83,1.03) {ending node};
   \end{marked}
   \end{center}
+  \reffootnote{SI 1.6.4--1.6.6, Algorithms 11--14. Triangle multiplicative updates and axial attention.}
 \end{frame}
 
 % Evita, 14 October, in the title: "-- Edit"
 \begin{frame}[t]{Structure module: residues as rigid bodies}{3. A structure is the same after any rotation or translation.}
+  \props{3}%
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.48\textwidth}
-      \props{3}%
-      \begin{marked}{4}{40 358 302 295}
+      \begin{marked}[0.62\linewidth]{4}{40 358 302 295}
         \fill[cover] (0.03,0.64) rectangle (0.07,0.73);
-        \draw[callout] (0.337,0.325) rectangle (0.443,0.578);
-        \node[callout text, anchor=north east] at (0.36,0.30) {IPA};
-        \draw[callout] (0.635,0.125) rectangle (0.815,0.275);
-        \node[callout text, anchor=south] at (0.725,0.285) {frames};
       \end{marked}
-    \end{column}
-    \begin{column}{0.40\textwidth}
-      \begin{marked}[0.88\linewidth]{4}{322 358 138 332}
+    \end{column}%
+    \begin{column}{0.48\textwidth}
+      \begin{marked}[0.62\linewidth]{4}{322 358 138 332}
         \fill[cover] (0.02,0.85) rectangle (0.09,0.97);
-        \node[figure label, font=\small, anchor=west] at (0.0,0.93) {frames};
-        \node[figure label, font=\small, anchor=west] at (0.0,0.46) {atoms};
       \end{marked}
-    \end{column}
+    \end{column}%
   \end{columns}
-  \vspace{0.5mm}
-  \say{A frame is one rotation and one translation per residue: $\mathrm{SE}(3)$}
-  \say{IPA updates residue states; all frames move simultaneously in local coordinates}
-  \key{Residues move as an unconstrained ``residue gas''; peptide bonds are learned}
+  \say{Each residue is parameterized by an $\mathrm{SE}(3)$ rigid-body frame $T_i = (R_i, \vec{\mathbf{t}}_i)$; torsion angles $\chi$ place sidechains.}
+  \key{Residues update simultaneously in local coordinates as an unconstrained ``residue gas''; peptide bond stereochemistry is learned.}
+  \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~3c,d (8 iterations, SI Algorithms 20--23).}
 \end{frame}
 
 \begin{frame}[t]{Invariant Point Attention (IPA)}{3. A structure is the same after any rotation or translation.}
   \props{3}
   \vspace{-1mm}
   {$\displaystyle a_{ij} \;=\; \text{softmax}_j \Bigl(\,
-    \term{\bm{q}_i^{\top} \bm{k}_j}{usual attention} \;+\; \term{b_{ij}}{pair bias}
-    \;-\; \term{\textstyle\sum_{p} \bigl\| T_i \circ \vec{\bm{q}}_{ip} - T_j \circ \vec{\bm{k}}_{jp} \bigr\|^2}{distances between 3D points} \,\Bigr)$\par}
+    \term{\bm{q}_i^{\top} \bm{k}_j}{scalar sequence attention} \;+\; \term{b_{ij}}{pair bias}
+    \;-\; \term{\textstyle\sum_{p} \bigl\| T_i \circ \vec{\bm{q}}_{ip} - T_j \circ \vec{\bm{k}}_{jp} \bigr\|^2}{\,3\text{D coordinate distance penalty} \,} \,\Bigr)$\par}
   \vspace{-0.5mm}
   \begin{tikzpicture}[x=6.5mm, y=6.5mm]
     \ipapair
@@ -612,8 +579,8 @@
     \node[font=\small, anchor=north] at (11.8,-2.3) {The distances stay the same};
   \end{tikzpicture}
   \par\vspace{0.5mm}
-  \key{Attention weights and scalar updates are strictly $\mathrm{SE}(3)$-invariant}
-  \reffootnote{The formula is Algorithm 22 of the supplement for one head, without scaling constants.}
+  \key{Exact algebraic $\mathrm{SE}(3)$-invariance: attention weights and scalar updates are independent of global frame.}
+  \reffootnote{SI 1.8.2, Algorithm 22 (single-head formulation). Algebraic invariance proof in backup 1.}
 \end{frame}
 
 \begin{frame}[t]{Frame Aligned Point Error (FAPE)}{4. A protein and its mirror image are different molecules.}
@@ -623,7 +590,7 @@
     \begin{scope}[shift={(0,0.1)}]
       \fapechain{black}{(3.1,0.6)}{(3.6,1.4)}{(0.25,0.1)}
     \end{scope}
-    \node[font=\small] at (1.9,-1.45) {experiment};
+    \node[font=\small] at (1.9,-1.45) {ground truth};
     \begin{scope}[shift={(5.6,-1.0)}, rotate=38]
       \fapechain{ETHBlue}{(3.2,0.2)}{(4.0,0.4)}{(0.28,0.05)}
     \end{scope}
@@ -643,8 +610,8 @@
   \par\vspace{1mm}
   {$\displaystyle \text{FAPE} \;=\; \frac{1}{Z}\,\mathop{\text{mean}}_{k,\,i}\; \text{min}\Bigl( d_{\text{clamp}},\; \bigl\| (\bm{R}_k, \bm{t}_k)^{-1} \bm{x}_i \;-\; (\bm{R}_k^{\text{true}}, \bm{t}_k^{\text{true}})^{-1} \bm{x}_i^{\text{true}} \bigr\| \Bigr)$\par}
   \vspace{1mm}
-  \key{A rotation of the prediction changes nothing. A mirror image is penalised.}
-  \reffootnote{Supplementary Information, Algorithm 28, with $Z = d_{\text{clamp}} = 10$\,\AA. The mirror case is on backup 3.}
+  \key{Local-frame point alignment: rigorously $\mathrm{SE}(3)$-invariant, strictly sensitive to chiral enantiomer reflections.}
+  \reffootnote{Supplementary Information, Algorithm 28, with $Z = d_{\text{clamp}} = 10$\,\AA. Pseudometric proof in backup 3--4.}
 \end{frame}
 
 
@@ -655,11 +622,11 @@
 \begin{frame}[t]{Training data: PDB and self-distillation}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.58\textwidth}
-      \say{Self-distillation adds 350{,}000 predicted structures}
+      \say{Self-distillation on 350,000 unlabelled sequences triples data scale (75\% synthetic batches).}
       \vspace{0.5mm}
-      \begin{tikzpicture}[x=9.2mm, y=9.5mm,
+      \begin{tikzpicture}[x=8.6mm, y=8.6mm,
           box/.style={draw=ETHGray, line width=0.8pt, rounded corners=1.5pt, font=\small, align=center,
-                      inner sep=4pt, minimum height=9mm},
+                      inner sep=3.5pt, minimum height=8.5mm},
           flow/.style={line width=0.9pt, -{Latex[length=5pt]}}]
         \node[box] (pdb) at (0,2.6) {PDB\\structures};
         \node[box] (net) at (3.25,2.6) {network};
@@ -672,9 +639,9 @@
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.40\textwidth}
-      \say{Masked-MSA loss trains on unlabelled sequences}
+      \say{Masked-MSA loss (15\% masked amino acids) trains Evoformer representations without structural labels.}
       \vspace{0.5mm}
-      \begin{tikzpicture}[x=4.2mm, y=5.1mm]
+      \begin{tikzpicture}[x=4.0mm, y=4.7mm]
         \foreach \row [count=\r] in \msarows {
           \foreach \aa [count=\c] in \row {
             \node[font=\sffamily, inner sep=0pt] at (\c,-\r) {\aa};
@@ -687,7 +654,7 @@
     \end{column}
   \end{columns}
   \vspace{1mm}
-  \key{Taps into uncharacterised sequence space via self-distillation and masking}
+  \key{Dual self-supervision: leverages uncharacterized sequence databases to generalize beyond PDB coverage.}
   \reffootnote{[XLHL20] Xie et al., CVPR 2020 (self-distillation). [DCLT19] Devlin et al., NAACL 2019 (BERT masking).}
 \end{frame}
 
@@ -740,8 +707,8 @@
     \node[font=\footnotesize, anchor=north] at (17,-11.7) {lDDT-C$\alpha$ on PDB chains};
   \end{tikzpicture}
   \par\vspace{0mm}
-  \say{{\color{ETHRed}\bfseries 4}\enspace Without FAPE, a mirror-blind loss often builds the mirror image (Suppl.\ Fig.~9)}
-  \key{Each of the four choices costs accuracy on CASP14 when removed}
+  \say{{\color{ETHRed}\bfseries 4}\enspace Without FAPE stereochemical grounding, reflection-invariant losses produce 50\% inverted chiral enantiomers (Suppl.~Fig.~9).}
+  \key{Severe non-linear coupling: removing both IPA and recycling causes a catastrophic $-16.3$ GDT collapse.}
   \reffootnote{Redrawn from Fig.~4a, mean change vs baseline over training runs. GDT and lDDT 0--100. Row 3 (No IPA) removes iterative refinement but keeps frames and FAPE (SI 1.13.1). Line 4: Suppl.\ Fig.~9.}
 \end{frame}
 
@@ -771,15 +738,15 @@
   \end{marked}
   \end{center}
   \vspace{-2.5mm}
-  \say{The trunk is frozen and every block gets a structure module}
-  \key{LmrP is correct after about 25 blocks, ORF8 only after about 150}
+  \say{Structures can be probed at intermediate Evoformer blocks by applying a shared Structure Module readout.}
+  \key{Bimodal folding dynamics: compact domains (LmrP) converge in early blocks; complex topologies (ORF8) require full depth.}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~4b. LmrP: transporter (PDB 6T1Z); ORF8: SARS-CoV-2 (T1064).}
 \end{frame}
 
 \begin{frame}[t]{Confidence: pLDDT against measured lDDT}
   \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.61\textwidth}
-      \begin{marked}{3}{40 483 302 180.5}
+    \begin{column}{0.52\textwidth}
+      \begin{marked}[0.93\linewidth]{3}{40 483 302 180.5}
         \fill[cover] (0.002,0.93) rectangle (0.035,1.01);
         \fill[cover] (0.11,0.002) rectangle (0.545,0.068);
         \fill[cover] (0.002,0.47) rectangle (0.04,0.67);
@@ -787,13 +754,13 @@
         \node[figure label, anchor=south west] at (0.02,0.99) {measured lDDT-C$\alpha$};
         \node[callout text, anchor=north west, align=left, text height=, text depth=] at (0.115,0.97) {linear fit\\ slope 0.997\\ \textit{r} = 0.76};
       \end{marked}
-    \end{column}
-    \begin{column}{0.36\textwidth}
-      \vspace{3mm}
-      \say{pLDDT predicts local C$\alpha$ frame accuracy per residue}
-      \say{Low pLDDT ($<50$) flags intrinsically disordered regions}
-      \key{Calibrated confidence enables filtering without ground truth}
-    \end{column}
+    \end{column}%
+    \begin{column}{0.44\textwidth}
+      \vspace{2mm}
+      \say{pLDDT predicts local lDDT-C$\alpha$ accuracy ($r = 0.76$, slope $0.997$ vs measured truth).}
+      \say{Low scores ($\text{pLDDT} < 50$) accurately flag intrinsically disordered regions (IDRs).}
+      \key{Calibrated uncertainty: reliable residue-level error estimation without experimental ground truth.}
+    \end{column}%
   \end{columns}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~2c, $n = 10{,}795$ chains. Following [TAW+21] Tunyasuvunakool et al., \textit{Nature} 2021.}
 \end{frame}
@@ -825,9 +792,9 @@
     \end{column}
     \begin{column}{0.55\textwidth}
       \vspace{2mm}
-      \say{Accuracy drops sharply when $N_{\mathrm{eff}} < 30$}
-      \say{Chains shaped by complexes have higher error}
-      \key{AlphaFold 2 predicts static, isolated monomers}
+      \say{Prediction fidelity degrades sharply below an evolutionary depth threshold of $N_{\mathrm{eff}} \approx 30$ (unless rescued by templates).}
+      \say{Monomer models fail on obligate multimers whose tertiary folds are stabilized exclusively by quaternary interfaces.}
+      \key{AlphaFold 2 predicts static, isolated monomeric ground states, omitting allosteric conformational ensembles.}
     \end{column}
   \end{columns}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~5a.}
@@ -861,7 +828,7 @@
     \node[callout text, font=\footnotesize, anchor=west, align=left, text height=, text depth=] at (14.2,-3) {directly\\ address\\ the limits};
   \end{tikzpicture}
   \par\vspace{2mm}
-  \key{AlphaFold~3 generalizes across biomolecular complexes, outperforming specialized tools}
+  \key{Expansion of structural genomics: from monomeric static predictions to proteome-scale databases and all-atom complexes.}
   \reffootnote{Exception: AIchemy\_RNA2 on CASP15 RNA targets. Complete citations on closing References slides.}
 \end{frame}
 
@@ -881,8 +848,8 @@
   \end{tabular}
   \par\vspace{7mm}
   \normalsize
-  \say{Unlike AlphaFold 2, AlphaFold 3 provides no component ablation study}
-  \key{The bitter lesson, with caveats: the graph survived; chirality required post-hoc ranking}
+  \say{Unlike AlphaFold 2, AlphaFold 3 provides no component ablation study.}
+  \key{Generative paradigm shift: relational pair graphs survived; rigid kinematics yielded to all-atom diffusion.}
   \reffootnote{[Sut19] R.~Sutton, \textit{The Bitter Lesson}, 2019. AF3 reports 4.4\% chirality violations and relies on multi-seed ranking. Architecture: backup 14.}
 \end{frame}
 
@@ -916,8 +883,8 @@
     \end{column}
   \end{columns}
   \vspace{1mm}
-  \say{Trained end to end. One prediction takes about a GPU minute}
-  \key{Four facts became four design choices. Each costs accuracy when removed.}
+  \say{End-to-end gradient supervision: inference executes in $\sim 1$ GPU-minute for standard domains ($L \approx 300$).}
+  \key{Structural biology constraints as deep learning inductive biases: each choice quantitatively drives atomic accuracy.}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021. Figures reproduced under CC BY 4.0. CASP14: 0.96\,\AA\ median backbone error.}
 \end{frame}
 
@@ -968,7 +935,7 @@
   \begin{tikzpicture}
     \node[draw=ETHGray!35, fill=ETHGray!5, rounded corners=3pt, line width=0.6pt, inner sep=4.5pt, text width=0.96\linewidth, align=center] {
       \footnotesize\textcolor{ETHBlue}{\bfseries AlphaFold Resources \& Discussion:}\enspace
-      \texttt{\{ebosch, bbullinger\}@ethz.ch}\\[1mm]
+      \texttt{\{ebosch, bben\}@ethz.ch}\\[1mm]
       \scriptsize\textcolor{ETHGray}{Code, derivations \& slides:}\enspace
       \href{https://github.com/BenBullinger/ML4Genomics-Presentation-AF2}{\color{ETHBlue}\texttt{github.com/BenBullinger/ML4Genomics-Presentation-AF2}}
     };
@@ -1030,7 +997,7 @@
             \item[\textcolor{ETHBlue}{\textbf{\ding{51}}}] \textbf{Deck \& TikZ Sources}:\par
             \href{https://github.com/BenBullinger/ML4Genomics-Presentation-AF2}{\color{ETHBlue}\texttt{github.com/BenBullinger/...}}
             \item[\textcolor{ETHBlue}{\textbf{\ding{51}}}] \textbf{Questions \& Discussion}:\par
-            \texttt{\{ebosch, bbullinger\}@ethz.ch}
+            \texttt{\{ebosch, bben\}@ethz.ch}
             \item[\textcolor{ETHBlue}{\textbf{\ding{51}}}] \textbf{Seminar}: ML for Genomics (Boeva Lab)
           \end{itemize}
           }\par
