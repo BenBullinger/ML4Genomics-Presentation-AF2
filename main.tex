@@ -1,25 +1,43 @@
 %% ============================================================================
 %%  Paper presentation: Highly Accurate Protein Structure Prediction with
 %%  AlphaFold (Jumper et al., Nature 2021), for Machine Learning for Genomics.
-%%  Ben Bullinger. The ETH theme of Saverio Bolognani (beamer*themeeth.sty,
-%%  elements/), which is the LaTeX part of ETH's presentation template.
+%%  Evita Bosch Pokunevich and Ben Bullinger. Self-contained: the default beamer
+%%  theme with three colours and two templates set below.
 %%
 %%  Build:   latexmk -pdf main.tex
-%%  Figures are cropped from the paper itself: _AF2.pdf, by page and trim.
+%%  Figures are cut from the papers: _AF2.pdf, _AF2-SI.pdf, AF3.pdf, by page and trim.
 %% ============================================================================
 \documentclass[11pt,aspectratio=169]{beamer}
 
-% Theme. The settings follow ETH's corporate design: headlines black and regular,
-% two colours only. Blue marks the one highlighted statement of a slide,
-% red marks what to look at in a figure.
-\usetheme{eth}
+% Theme: beamer's default, stripped. Black headlines, two colours: blue marks the one
+% highlighted statement of a slide, red marks what to look at in a figure.
+\usetheme{default}
+\usefonttheme{professionalfonts}   % beamer leaves the maths fonts to newtxmath
+\setbeamertemplate{navigation symbols}{}
+\usepackage[T1]{fontenc}
+\usepackage{tgheros}   % the sans of the labels drawn on figures
+\usepackage{tikz,xcolor}
+\usepackage{amsmath,amssymb,amsthm,mathtools}   % before newtxmath, which redefines the symbols
+\definecolor{ETHBlue}{RGB}{33,92,175}
+\definecolor{ETHRed}{RGB}{183,53,45}
+\definecolor{ETHGray}{RGB}{111,111,111}
+\setbeamercolor*{frametitle}{fg=black}
+\setbeamercolor*{item}{fg=black}
+\setbeamercolor*{section in toc}{fg=black}
+\setbeamerfont{alerted text}{series=\bfseries}
+\setbeamertemplate{items}[circle]
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamerfont{section in toc}{size=\normalsize}
+\newcommand{\tocframe}{\begin{frame}\frametitle{Outline}\tableofcontents\end{frame}}
 % Serif text (XCharter, close to Nature's Harding) with matching math. Labels drawn on
 % figures stay sans, as in the paper's figures.
 \usepackage{XCharter}
 \usepackage[xcharter,vvarbb]{newtxmath}
 \usefonttheme{serif}
+\usepackage{bm}   % after newtxmath, or it runs out of math alphabets
 \setbeamerfont{frametitle}{family=\rmfamily,size=\Large,series=\bfseries}
-\colorlet{accentcolor}{ETHBlue} 
+\colorlet{accentcolor}{ETHBlue}
+\setbeamercolor{alerted text}{fg=accentcolor}
 \setbeamerfont{frametitle}{size=\Large}
 \setbeamerfont{normal text}{size=\normalsize}
 % Frame title, with the subtitle in grey below it when a frame has one. The architecture
@@ -29,21 +47,12 @@
   \ifx\insertframesubtitle\@empty\vspace{4mm}\else
   {\vspace{0.5mm}\small\color{ETHGray}\insertframesubtitle\par}\vspace{1.5mm}\fi}
 \makeatother
-\useinnertheme[rounded,shaded=false]{tcolorbox}
-\setbeamercolor{block body}{fg=black,bg=white}
-\makeatletter
-\tcbset{
-  	boxrule=1pt,
-  	borderline={1pt}{0pt}{beamer@tcb@titlebg},
-}
-\makeatother
 
 % Foot of a slide: the slide number
 \setbeamertemplate{footline}{%
   \hfill{\scriptsize\color{ETHGray}\insertframenumber}\hspace{1cm}\vspace{3mm}}
 
 % Packages
-\usepackage{amsmath,amssymb,amsthm,mathtools,bm}
 \usepackage{graphicx}
 \usetikzlibrary{arrows.meta,calc}
 \usepackage{booktabs,array}

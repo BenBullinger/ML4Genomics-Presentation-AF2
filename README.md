@@ -1,38 +1,19 @@
-# AlphaFold 2 paper presentation
+# Highly accurate protein structure prediction with AlphaFold
 
-Jumper et al., Nature 596 (2021), presented by Evita Bosch Pokunevich and Ben Bullinger in Machine Learning for Genomics (263-5351-00L), fall 2026. Guidelines: `guidelines.pdf`.
-
-## Format, from the guidelines
+Slides for a paper presentation of Jumper et al., *Nature* 596, 583–589 (2021), given by Evita Bosch Pokunevich and Ben Bullinger in Machine Learning for Genomics (263-5351-00L), ETH Zürich, fall 2026.
 
 | | |
 |---|---|
-| Part 1 | 25 minutes. A reminder one minute before the end, cut off at 25. |
-| Part 2 | 10 minutes. Our answer to the exam question, then at least two questions for the audience and a moderated discussion. |
-| Exam question | Sent to us about seven days before the talk. A TA may be asked once about the answer. |
-| Upload | Slides as `PP<i>.<name>.<family name>.pdf` to https://cloud.inf.ethz.ch/s/tBRxHGbXZeQ3Jzr by the day before the talk. |
-| Backup slides | Recommended for follow-up questions. In the deck after `\appendix`, not counted in the slide total. |
+| `main.tex`, `main.pdf` | The deck, self-contained. Build with `latexmk -pdf main.tex`. |
+| `SYMMETRY.tex`, `SYMMETRY.pdf` | A three-page note on invariance, equivariance and chirality in the structure module and the loss, with the equations of the supplement. |
+| `_AF2.pdf`, `_AF2-SI.pdf` | Jumper et al. 2021 and its Supplementary Information. The slides cut their figures from these files. |
+| `AF3.pdf` | Abramson et al., *Nature* 630, 493–500 (2024). Fig. 1d is cut from it. |
+| `_DEV/` | Working material, not part of the release. |
 
-## Schedule
+## Sources and acknowledgements
 
-| When | What | Done |
-|---|---|---|
-| TODO date | Presentation | |
-| the day before, TODO date | Upload `PP<i>.TODO.pdf` | |
-| about seven days before, TODO date | Exam question arrives. Fill slide "Exam question". | |
-| end of the week of 12 October | Dry run | |
-| 13 October | Work split agreed, see `WORK-SPLIT.md` | x |
+The figures on the slides are cut from the two articles above, both published under a Creative Commons Attribution 4.0 licence, and are credited on the slide where they appear. All drawings are our own. The geometric view of the structure module follows Bronstein, Bruna, Cohen and Veličković, *Geometric Deep Learning* (2021). The drawing of frames along the backbone follows a tutorial by Petar Veličković (EEML 2026). The bitter lesson is Richard Sutton's (2019).
 
-Open: the index `<i>` and whose name the file carries when two people present. Ask the head TA, Lovro Rabuzin.
+## Licence
 
-## Files
-
-| | |
-|---|---|
-| `main.tex` | The deck. Build with `latexmk -pdf main.tex`. The exam question and the questions for the audience are placeholders. Ten backup slides after `\appendix`, one question per slide with the source as subtitle, at most three lines of derivation, the answer in blue. |
-| `SCRIPT.md`, `SCREENPLAY.txt` | Speaker notes and the rehearsal text, `python3 make_screenplay.py` makes the second from the first. Written for 30 minutes, to be cut to 25. |
-| `WORK-SPLIT.md` | Who presents which slides. |
-| `SYMMETRY.tex` | Two pages on invariance, equivariance and chirality in the structure module and the loss, with the SI's equations. Blue headings are Evita's slides, red Ben's. |
-| `background/` | The sources, `README.md` lists them, `SLIDE-CHECK.md` gives the source of each slide statement and the questions to expect. |
-| `_AF2.pdf`, `_AF2-SI.pdf` | The article and its supplement. The slides cut their figures from them. |
-
-Upload copy: `cp main.pdf PP<i>.<name>.<family name>.pdf`.
+To be set before the release.
