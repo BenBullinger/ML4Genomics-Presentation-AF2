@@ -33,7 +33,6 @@
 \newcommand{\Tg}{T_{\text{global}}}
 
 % --- SCREENPLAY FORMATTING MACROS ---
-\newcommand{\stage}[1]{\par\vspace{1.5mm}\noindent\textit{\textcolor{ETHGray}{[#1]}}\par\vspace{1mm}}
 \newcommand{\evita}[1]{\par\vspace{2mm}\noindent\textbf{\color{ETHBlue}EVITA:}\enspace #1\par}
 \newcommand{\ben}[1]{\par\vspace{2mm}\noindent\textbf{\color{ETHRed}BEN:}\enspace #1\par}
 \newcommand{\joint}[1]{\par\vspace{2mm}\noindent\textbf{\color{ETHGray}EVITA \& BEN:}\enspace #1\par}
@@ -51,7 +50,7 @@
   \par\vspace{1.5mm}
   \noindent\tikz{%
     \node[fill=black!3, draw=black!25, line width=0.5pt, rounded corners=2pt, inner sep=5pt, text width=\linewidth-12pt] {
-      \footnotesize\textbf{\color{black!75}THE SLIDE (THE SHADOW):}\enspace #1
+      \footnotesize\textbf{\color{black!75}SLIDE CONTENT:}\enspace #1
     };
   }\par\vspace{2mm}
 }
@@ -66,28 +65,28 @@
   }\par\vspace{2mm}
 }
 
-\newcommand{\defensebox}[1]{%
+\newcommand{\technicalnote}[2]{%
   \par\vspace{1.5mm}
   \noindent\tikz{%
-    \node[fill=Gold!8, draw=Gold!60!black, line width=0.6pt, rounded corners=2pt, inner sep=5pt, text width=\linewidth-12pt] {
-      \footnotesize\textbf{\color{Gold!60!black}SEMINAR DEFENSE \& EXAM ANTICIPATION:}\par\vspace{1mm}
-      \small #1
+    \node[fill=ETHBlue!4, draw=ETHBlue!30, line width=0.6pt, rounded corners=2pt, inner sep=5pt, text width=\linewidth-12pt] {
+      \footnotesize\textbf{\color{ETHBlue}#1:}\par\vspace{1mm}
+      \small #2
     };
   }\par\vspace{2mm}
 }
 
-\title{\vspace{-8mm}\bfseries\LARGE The AlphaFold 2 Master Screenplay \& Mathematical Monograph\\[2mm]
-\large A First-Principles Mathematical Script and Stage Performance Protocol for Pair Presenting}
-\author{\textbf{Evita Bosch Pokunevich} (\texttt{ebosch@ethz.ch}) \quad\&\quad \textbf{Ben Bullinger} (\texttt{bben@ethz.ch})\\[1mm]
+\title{\vspace{-8mm}\bfseries\LARGE AlphaFold 2: Architecture, Geometry, and Mathematics\\[2mm]
+\large Mathematical Foundations and Presentation Companion Notes}
+\author{\textbf{Evita Bosch Pokunevich} \quad\&\quad \textbf{Ben Bullinger}\\[1mm]
 \small Machine Learning for Genomics (263-5351-00L), ETH Z\"urich \quad\textbullet\quad Prof.~Dr.~Valentina Boeva}
-\date{Fall Semester 2026 \quad\textbullet\quad Target Duration: 25:00 min talk + 10:00 min Q\&A}
+\date{Fall Semester 2026}
 
 \begin{document}
 \maketitle
 
 \vspace{-2mm}
 \begin{abstract}
-\noindent This document constitutes the definitive mathematical foundation, pedagogical script, and stage screenplay for the pair presentation of Jumper et al., \textit{Nature} 596 (2021) (\textit{AlphaFold 2}). The presentation is designed as an architectural duality: the slide deck (\texttt{main.tex}) is the visual shadow, while this screenplay is the canonical mathematical source of truth. Every transition, spoken sentence, blackboard derivation, and physical gesture is choreographed to adhere strictly to the 25-minute talk limit (130 words per minute, 12.5 minutes per speaker) followed by a 10-minute moderated seminar discussion and examination defense.
+\noindent This document provides the mathematical foundations, architectural derivations, and presentation notes for Jumper et al., \textit{Nature} 596 (2021) (\textit{AlphaFold 2}). It details the dual-track Evoformer architecture, $\mathrm{SE}(3)$-invariant geometry in the Structure Module, Frame Aligned Point Error (FAPE), and the physical and evolutionary constraints governing protein structure prediction.
 \end{abstract}
 
 \tableofcontents
@@ -96,26 +95,17 @@
 \vspace{4mm}
 
 % =============================================================================================
-\section{Stage Architecture, Protocol, and Timing}
+\section{Presentation Structure and Timing Budget}
 % =============================================================================================
 
-\subsection{Physical Choreography and Equipment Setup}
-\begin{itemize}\setlength{\itemsep}{1mm}
-  \item \textbf{Stage Layout}: Evita stands at stage-left (near the projection podium); Ben stands at stage-right. Both maintain an open posture toward the audience and the seminar panel (Prof.~Boeva and course instructors).
-  \item \textbf{Clicker Protocol}: Evita holds the wireless presenter during Part I (Slides 1--10). At the end of Slide 10, Evita executes the physical handover, passing the clicker smoothly to Ben. Ben presents Part II (Slides 11--20). During Part III (Exam Question and Q\&A), both speakers step forward together.
-  \item \textbf{Pacing Benchmark}: Average comfortable speaking rate is $125$--$130$ words per minute. Slides average $75$ seconds ($1\text{m }15\text{s}$) each. Pauses for visual absorption are explicitly noted with \textit{[Pause 2s]}.
-  \item \textbf{Laser Pointer Discipline}: Never circle frantically. Point steadily at the exact coordinate, axis tick, or mathematical term for $1.5$ seconds, then turn the laser off.
-\end{itemize}
-
-\subsection{Timing Budget Table}
 \begin{center}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
-\begin{tabular}{@{}r p{4.0cm} l p{6.2cm} r r@{}}
+\begin{tabular}{@{}r >{\raggedright\arraybackslash}p{4.5cm} l >{\raggedright\arraybackslash}p{5.9cm} r r@{}}
 \toprule
 Slide & Title & Speaker & Key Concept / Focus & Slide Time & Cumulative \\
 \midrule
-\multicolumn{6}{@{}l}{\textbf{Act I: The Biology, Benchmark, and Evoformer Trunk (Evita Bosch Pokunevich)}} \\
+\multicolumn{6}{@{}l}{\textbf{Part I: Problem Formulation, CASP Benchmark, and the Evoformer Trunk (Evita Bosch Pokunevich)}} \\
 Title & Title Slide & Evita & Context, PDB 6Y4F rendering, paper citation & 0:30 & 0:30 \\
 1 & The problem: sequence to structure & Evita & Levinthal's paradox, heavy atoms, 50-yr challenge & 1:15 & 1:45 \\
 2 & The benchmark: CASP14 & Evita & Blind test, 0.96\,\AA\ median error vs 1.4\,\AA\ bond length & 1:15 & 3:00 \\
@@ -126,9 +116,9 @@ Title & Title Slide & Evita & Context, PDB 6Y4F rendering, paper citation & 0:30
 7 & The input: Pair representation & Evita & Graph edges, spatial distance prior, relative pos & 1:15 & 9:30 \\
 8 & The Evoformer block & Evita & Dual-track architecture, 48 blocks, axial attention & 1:15 & 10:45 \\
 9 & MSA row attention with pair bias & Evita & Pair bias injection $b_{ij}$, gating mechanism & 1:15 & 12:00 \\
-10 & The pair representation: triangle updates & Evita & Triangle inequality, outer product mean, handover & 1:30 & 13:30 \\
+10 & The pair representation: triangle updates & Evita & Triangle inequality, outer product mean & 1:30 & 13:30 \\
 \midrule
-\multicolumn{6}{@{}l}{\textbf{Act II: Geometry, Structure Module, Training, and Frontiers (Ben Bullinger)}} \\
+\multicolumn{6}{@{}l}{\textbf{Part II: Geometric Invariance, Structure Module, Training, and Frontiers (Ben Bullinger)}} \\
 11 & Invariant Point Attention (IPA) & Ben & $\mathrm{SE}(3)$ invariance proof, local coordinate frames & 1:30 & 15:00 \\
 12 & Frame Aligned Point Error (FAPE) & Ben & Loss formulation, chirality sensitivity, metric proof & 1:30 & 16:30 \\
 13 & Recycling: four iterations & Ben & Dynamic refinement, convergence without backprop & 1:00 & 17:30 \\
@@ -140,38 +130,32 @@ Title & Title Slide & Evita & Context, PDB 6Y4F rendering, paper citation & 0:30
 19 & AlphaFold 3: which choices survived & Ben & The Bitter Lesson: graph survived, diffusion replaced IPA & 1:15 & 24:45 \\
 20 & Summary: four design choices, measured & Ben & Quantitative ablation scorecard, final synthesis & 0:45 & 25:30 \\
 \midrule
-\multicolumn{6}{@{}l}{\textbf{Act III: Moderated Discussion, Exam Question, and Defense (Shared)}} \\
-21 & Exam question & Evita/Ben & Course assignment breakdown & 2:00 & 27:30 \\
-22 & Questions for the audience & Evita/Ben & Moderated interactive peer debate & 4:30 & 32:00 \\
-23--24 & References & Evita/Ben & Formal literature grounding & 1:00 & 33:00 \\
-25 & Resources: AlphaFold at ETH & Evita/Ben & Euler cluster, ColabFold, code repo, calling card & 2:00 & 35:00 \\
+\multicolumn{6}{@{}l}{\textbf{Part III: Seminar Discussion and References (Shared)}} \\
+21 & Questions for the audience & Evita/Ben & Moderated interactive peer debate & 4:30 & 30:00 \\
+22--23 & References & Evita/Ben & Primary literature & 1:00 & 31:00 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \newpage
 % =============================================================================================
-\section{Act I: The Biology, Benchmark, and Evoformer Trunk}
+\section{Part I: Problem Formulation, CASP Benchmark, and the Evoformer Trunk}
 % =============================================================================================
 
 \slideheader{Title}{Highly Accurate Protein Structure Prediction with AlphaFold}{Evita}{0:00--0:30}
-\shadowbox{Minimalist title slide: paper citation (Jumper et al., \textit{Nature} 2021), authors, ETH institutional affiliation, presenter names and contact links.}
+\shadowbox{Minimalist title slide: paper citation (Jumper et al., \textit{Nature} 2021), authors, ETH institutional affiliation, presenter names and repository link.}
 
-\stage{Evita stands tall, makes direct eye contact with Prof.~Boeva and the audience. Speaks with quiet confidence.}
-
-\evita{Good morning everyone, Prof.~Boeva, and fellow researchers. Today, Ben and I have the pleasure of presenting one of the true milestones of contemporary computational biology: \textit{``Highly accurate protein structure prediction with AlphaFold''}, published in Nature in 2021 by John Jumper and the team at DeepMind. When we say AlphaFold today, we mean AlphaFold~2. Our goal today is not merely to summarize what the network does, but to unpack the rigorous mathematical and physical inductive biases that enabled deep learning to solve a 50-year-old grand challenge in molecular biology.}
+\evita{Good morning everyone, Prof.~Boeva, and fellow researchers. Today, Ben and I present one of the true milestones of contemporary computational biology: \textit{``Highly accurate protein structure prediction with AlphaFold''}, published in Nature in 2021 by John Jumper and the team at DeepMind. When we say AlphaFold today, we mean AlphaFold~2. Our goal is to unpack the rigorous mathematical and physical inductive biases that enabled deep learning to solve a 50-year-old grand challenge in molecular biology.}
 
 % ---------------------------------------------------------------------------------------------
 \slideheader{1}{The problem: sequence to structure}{Evita}{0:30--1:45}
 \shadowbox{Left: amino acid string `SIFSYITESTGTPS\dots', arrows pointing right, bullet points on experimental timescale vs sequence database explosion. Right: CASP14 Target T1049 (PDB 6Y4F), blue prediction overlaid on green experiment.}
 
-\stage{Evita points to the amino acid string on the left, then gestures toward the ribbon structure on the right.}
-
 \evita{Let us begin from first principles. A protein begins life as a one-dimensional polymer: an unbranched sequence of amino acids selected from an alphabet of 20 canonical residues. Every residue shares an identical chemical backbone---Nitrogen, Carbon-alpha, and Carbon---and is distinguished only by its sidechain. 
 
 In the thermodynamic hypothesis formulated by Christian Anfinsen in 1973, native protein structures reside at the global free energy minimum. Yet according to Levinthal's paradox, an unbiased random conformational search of a 100-residue chain across its torsional angles would require $10^{77}$ years---longer than the age of the universe. In nature, proteins fold spontaneously in milliseconds.
 
-For structural biologists, determining one structure experimentally via X-ray crystallography or cryo-EM requires months to years of arduous wet-lab labor, costing tens of thousands of Swiss francs. As high-throughput sequencing exploded, the UniProt database grew past hundreds of millions of known sequences, while the Protein Data Bank (PDB) remained constrained to around 180,000 resolved structures. The challenge: can machine learning map directly from the 1D primary sequence to the 3D atomic coordinates of all heavy atoms?}
+For structural biologists, determining one structure experimentally via X-ray crystallography or cryo-EM requires months to years of arduous wet-lab labor. As high-throughput sequencing exploded, the UniProt database grew past hundreds of millions of known sequences, while the Protein Data Bank (PDB) remained constrained to around 180,000 resolved structures. The challenge: can machine learning map directly from the 1D primary sequence to the 3D atomic coordinates of all heavy atoms?}
 
 \mathnote{
 Let $\mathcal{A}$ denote the alphabet of 20 amino acids. The primary sequence is $\bm{s} = (s_1, \dots, s_N) \in \mathcal{A}^N$. The target output is the set of Cartesian coordinates for all $M$ heavy (non-hydrogen) atoms:
@@ -185,24 +169,19 @@ Each residue $i \in \{1, \dots, N\}$ has backbone atoms $(\mathrm{N}_i, \mathrm{
 \slideheader{2}{The benchmark: CASP14}{Evita}{1:45--3:00}
 \shadowbox{CASP14 bar plot: AlphaFold in blue (0.96\,\AA), 14 next best groups in gray (2.8\,\AA). Dashed red line at 1.4\,\AA\ marked `Atomic bond length $\approx 1.4$\,\AA\ (C--C)'. Horizontal y-axis label atop ticks: `Median backbone error (\AA)'.}
 
-\stage{Evita points laser pointer steadily at the blue bar, then sweeps across the dashed red line.}
-
 \evita{To evaluate whether computational models truly generalize rather than overfit to known structures, the community established CASP: the Critical Assessment of protein Structure Prediction. In CASP, targets are blind: experimental structures solved by crystallography or cryo-EM are withheld from the public until predictions are formally submitted.
 
 Here are the official results from CASP14 in summer 2020. The metric is root-mean-square deviation of backbone $C\alpha$ atoms on the 95\% best-fitting residues. The gray bars show the fourteen next-best computational teams in the world, hovering with median backbone errors around 2.8\,\AA. 
 
-The blue bar is AlphaFold: its median error is 0.96\,\AA. Notice the horizontal dashed line at 1.4\,\AA. That is the length of a single carbon-carbon covalent bond. AlphaFold did not merely edge out competitors by a standard incremental margin; it crossed the fundamental physical threshold of atomic resolution without human intervention.}
+The blue bar is AlphaFold: its median error is 0.96\,\AA. Notice the horizontal dashed line at 1.4\,\AA. That is the length of a single carbon-carbon covalent bond. AlphaFold crossed the fundamental physical threshold of atomic resolution without human intervention.}
 
-\defensebox{
-\textbf{Possible Examiner Question}: \textit{Why is $C\alpha\text{-RMSD}_{95}$ used rather than standard all-atom RMSD?}\\
-\textbf{Mathematical Defense}: All-atom global RMSD is notoriously brittle to a single flexible loop or unstructured terminal tail swinging in solvent. A 10\,\AA\ displacement of a 5-residue tail would inflate the global RMSD of an otherwise atomically flawless 500-residue core. $\text{RMSD}_{95}$ fits the rigid core by discarding the 5\% worst outliers, reflecting the true structural accuracy of the catalytic domain.
-}
+\technicalnote{Benchmark Metric Note}{%
+\textit{Why is $\mathrm{C}\alpha\text{-RMSD}_{95}$ evaluated rather than raw all-atom RMSD?}\par\vspace{1mm}
+All-atom global RMSD is notoriously sensitive to a single flexible terminal tail swinging in solvent: a 10\,\AA\ displacement of a 5-residue tail inflates the global RMSD of an otherwise atomically accurate 500-residue domain. $\text{RMSD}_{95}$ measures the rigid structural core by trimming the 5\% worst outlier residues, reflecting the true coordinate accuracy of the folded fold.}
 
 % ---------------------------------------------------------------------------------------------
 \slideheader{3}{The pipeline: MSA in, coordinates out}{Evita}{3:00--4:15}
 \shadowbox{Macro architecture schematic: MSA \& Templates $\to$ 48 Evoformer blocks $\to$ 8 Structure Module iterations $\to$ All-atom relaxation. Recycling loop shown with dashed arrow cycling 4 times.}
-
-\stage{Evita sweeps hand from the left inputs across the central trunk to the coordinate output.}
 
 \evita{How does AlphaFold accomplish this? Look at the overall macro-architecture. AlphaFold abandons legacy two-stage pipelines that first predicted 2D contact distance maps and then handed them off to separate physical simulation software like Rosetta. 
 
@@ -213,8 +192,6 @@ These two arrays pass through 48 blocks of the Evoformer trunk, which perform de
 % ---------------------------------------------------------------------------------------------
 \slideheader{4}{Four facts, four design choices}{Evita}{4:15--5:45}
 \shadowbox{Clean single-line table matching the 4 biological facts to the 4 architectural design choices in AlphaFold 2. Bottom takeaway in blue alert.}
-
-\stage{Evita slows down, lowering pitch for emphasis. This is the intellectual thesis of the presentation.}
 
 \evita{Here is the central conceptual thesis of our talk. AlphaFold's breakthrough does not stem from throwing raw, unconstrained compute at generic transformers. It succeeds because every structural inductive bias is a direct answer to a concrete physical or biological fact about proteins.
 
@@ -231,8 +208,6 @@ In the second half of our talk, Ben will show that removing any one of these fou
 \slideheader{5}{The two representations}{Evita}{5:45--7:00}
 \shadowbox{Left: MSA grid (sequences by residues, 256 channels). Right: Pair matrix (residues by residues, 128 channels). Unrotated horizontal labels: `$N_{\text{seq}}$ sequences', `$N_{\text{res}}$ residues'.}
 
-\stage{Evita points to the blue MSA grid, then to the gray pair matrix.}
-
 \evita{Let us look inside the network's working memory. At every stage of the Evoformer trunk, AlphaFold maintains exactly two arrays:
 First, the MSA representation, $\mathbf{m}_{si} \in \R^{256}$. Here, row index $s$ indexes the sequence in the alignment, column index $i$ indexes the residue position, and each cell holds a 256-dimensional feature vector. The first row ($s=1$) is the query sequence.
 
@@ -244,8 +219,6 @@ Every single block of the 48 Evoformer layers reads from and writes to exclusive
 \slideheader{6}{The input: MSA representation}{Evita}{7:00--8:15}
 \shadowbox{Left: alignment matrix with correlated mutations highlighted in blue/red across columns 3 and 9. Right: Covariance intuition and DCA background.}
 
-\stage{Evita points to columns 3 and 9 of the alignment.}
-
 \evita{Why does the MSA contain 3D spatial information? The answer lies in evolutionary co-variation. When a protein folds in a living cell, residues that are distant along the primary 1D chain may sit in direct physical contact in 3D space to stabilize a hydrophobic core or form a salt bridge.
 
 If residue $i$ mutates from a small hydrophobe to a bulky residue, the adjacent residue $j$ in 3D space experiences intense selective pressure to mutate compensatorily to avoid steric clash. In 2011, Marks, Colwell, and colleagues demonstrated that analyzing correlated mutations across evolutionary history can reconstruct protein folds.
@@ -256,8 +229,6 @@ Prior models, including AlphaFold~1, compressed the MSA down to summary statisti
 \slideheader{7}{The input: Pair representation}{Evita}{8:15--9:30}
 \shadowbox{Graph representation of pairs: residues as nodes, pair vectors $\mathbf{z}_{ij}$ as directed edges. Linear bias with relative position encoding.}
 
-\stage{Evita gestures to the pair graph.}
-
 \evita{Now consider the pair representation. Mathematically, $\mathbf{z}$ represents the edge features of a complete graph whose nodes are the residues.
 
 At initialization, what do we know about residue pairs before seeing 3D structure? We know their primary sequence separation: $|i - j|$. We know whether residue $i$ precedes residue $j$. AlphaFold encodes this relative sequence distance through a one-hot clipped positional embedding. Furthermore, if homologous experimental structures exist in the PDB, their $C\beta$--$C\beta$ distance maps and backbone dihedral angles are projected into the pair channels as template information.
@@ -267,8 +238,6 @@ Throughout the network, the pair representation serves as a spatial blackboard w
 % ---------------------------------------------------------------------------------------------
 \slideheader{8}{The Evoformer block}{Evita}{9:30--10:45}
 \shadowbox{Detailed schematic of one Evoformer block: Row-wise attention with pair bias $\to$ Column-wise attention $\to$ Transition MLP $\to$ Outer product mean $\to$ Triangular multiplicative updates $\to$ Triangular self-attention $\to$ Transition MLP.}
-
-\stage{Evita points to the two parallel tracks and the communication bridges between them.}
 
 \evita{This brings us to the core engine: the Evoformer block. AlphaFold stacks 48 identical Evoformer blocks in series. 
 
@@ -282,8 +251,6 @@ Let us examine the exact mathematical operations executing inside these blocks.}
 \slideheader{9}{MSA row attention with pair bias}{Evita}{10:45--12:00}
 \shadowbox{Formula for row attention: $a_{ij}^s = \mathrm{softmax}_j\left(\frac{1}{\sqrt{c}}\mathbf{q}_{si}^\top \mathbf{k}_{sj} + b_{ij}\right)$, where $b_{ij} = \mathbf{w}^\top \mathbf{z}_{ij}$. Elementwise output gating.}
 
-\stage{Evita walks through the attention formula term by term.}
-
 \evita{Within the MSA track, the first operation is Row-wise Attention. In standard Transformers, attention queries and keys compute affinity purely from node embeddings: $\mathbf{q}_i^\top \mathbf{k}_j / \sqrt{c}$. 
 
 AlphaFold adds a crucial pair bias term:
@@ -296,15 +263,13 @@ Think about what this means physically: if the pair track believes residue $i$ a
 
 % ---------------------------------------------------------------------------------------------
 \slideheader{10}{The pair representation: triangle updates}{Evita}{12:00--13:30}
-\shadowbox{Left: Outer product mean formula. Right: Triangle graph diagrams showing incoming and outgoing edge updates over third node $k$. Bottom: Transition cue to Ben.}
-
-\stage{Evita points to the triangle diagram, emphasizing the third node $k$.}
+\shadowbox{Left: Outer product mean formula. Right: Triangle graph diagrams showing incoming and outgoing edge updates over third node $k$. Bottom: Transition to Structure Module.}
 
 \evita{How does information flow back from the MSA into the pairs? Through the Outer Product Mean. For every pair of columns $i$ and $j$, the network computes the outer product of their features and averages across all aligned sequences:
 \begin{equation}
 \mathbf{z}_{ij} \leftarrow \mathbf{z}_{ij} + \frac{1}{N_{\text{seq}}} \sum_{s=1}^{N_{\text{seq}}} \mathbf{m}_{si} \otimes \mathbf{m}_{sj}.
 \end{equation}
-Next comes one of the most brilliant mathematical innovations in AlphaFold: the Triangular Updates. 
+Next comes one of the central mathematical formulations in AlphaFold: the Triangular Updates. 
 
 A matrix of pairwise distances in 3D Euclidean space cannot have arbitrary independent entries; it must strictly obey the triangle inequality: the distance between residue $i$ and residue $j$ is bounded by the path through any third residue $k$: $d_{ij} \le d_{ik} + d_{jk}$.
 
@@ -314,25 +279,19 @@ AlphaFold enforces this graph-geometric consistency by updating edge $(i,j)$ by 
 \end{equation}
 Two edges of a triangle combine via Hadamard product to update the third edge. 
 
-\textit{[Evita pauses, turns toward Ben, and gestures.]}
-
-At this point, after 48 Evoformer blocks, the network has assembled a highly refined 2D spatial graph. But how does AlphaFold convert this abstract graph into physical, 3D atomic coordinates in space while respecting the continuous symmetries of physics? For that, I hand over to Ben.}
-
-\stage{Handover: Evita smoothly passes the presenter remote to Ben. Ben steps forward to stage center; Evita steps gracefully back to stage-left. Clear vocal and eye contact transition.}
+At this point, after 48 Evoformer blocks, the network has assembled a highly refined 2D spatial graph. The next step is converting this abstract relational graph into physical 3D atomic coordinates in space while respecting continuous physical symmetries.}
 
 \newpage
 % =============================================================================================
-\section{Act II: Geometry, Structure Module, Training, and Frontiers}
+\section{Part II: Geometric Invariance, Structure Module, Training, and Frontiers}
 % =============================================================================================
 
 \slideheader{11}{Invariant Point Attention (IPA)}{Ben}{13:30--15:00}
 \shadowbox{Left: Isometric 3D triad of residue frames $i$ and $j$ with 4 projected points each. Right: Attention formula with Euclidean distance squared in exponent, local coordinate transformation $T_i^{-1} \circ T_j$. Bottom: Takeaway in blue alert.}
 
-\stage{Ben accepts the remote, clicks to Slide 11, and speaks with authoritative mathematical clarity.}
+\ben{We now arrive at the generative heart of AlphaFold: the Structure Module. 
 
-\ben{Thank you, Evita. We now arrive at the generative heart of AlphaFold: the Structure Module. 
-
-To predict 3D coordinates, machine learning faces a fundamental geometric hurdle: physical molecules are invariant to rigid motions. If you rotate or translate an entire protein in 3D space, its internal free energy and biological identity are strictly unchanged: the symmetry group is the special Euclidean group, $\SE = \SO \ltimes \R^3$. 
+To predict 3D coordinates, machine learning faces a fundamental geometric requirement: physical molecules are invariant to rigid motions. If you rotate or translate an entire protein in 3D space, its internal free energy and biological identity are strictly unchanged: the symmetry group is the special Euclidean group, $\SE = \SO \ltimes \R^3$. 
 
 AlphaFold does not represent atoms as arbitrary point clouds. It models every residue along the backbone as an independent rigid body frame:
 \begin{equation}
@@ -369,8 +328,6 @@ In the update step, $\Delta T_i = (\Delta R_i, \Delta \bm{t}_i)$ is predicted fr
 \slideheader{12}{Frame Aligned Point Error (FAPE)}{Ben}{15:00--16:30}
 \shadowbox{Diagram: Frame $k$ in red, predicted atom in blue, true atom in black, dashed red distance line $d_{ki}$. FAPE loss formula. Clamping boundary at 10\,\AA.}
 
-\stage{Ben points to the triad $k$ and the two atom coordinates.}
-
 \ben{Once the network outputs 3D coordinates, how do we train it? 
 
 One might naively propose standard RMSD. But RMSD is fatal for training neural networks: computing RMSD requires performing a global Kabsch alignment (via singular value decomposition) at every training step. SVD alignment is numerically fragile, computationally slow, and worst of all, global alignment gradients allow an error in one distant flexible loop to perturb gradients across the entire stable core.
@@ -387,16 +344,13 @@ Notice three profound mathematical properties of FAPE:
   \item \textbf{Chirality Sensitivity}: Standard distance matrices are invariant to mirror reflections. But frames in AlphaFold are constructed via Gram--Schmidt: $\bm{e}_1$ along $\mathrm{C}\alpha \to \mathrm{C}$, $\bm{e}_2$ in the peptide plane, and $\bm{e}_3 = \bm{e}_1 \times \bm{e}_2$. The cross product forces every frame to be right-handed. Under a reflection, the atoms flip but the frames remain right-handed, causing the local $z$-coordinate to negate and producing a massive FAPE penalty. FAPE enforces true L-amino acid stereochemical chirality.
 \end{enumerate}}
 
-\defensebox{
-\textbf{Possible Examiner Question}: \textit{Is FAPE a true mathematical distance metric?}\\
-\textbf{Mathematical Defense}: Strictly speaking, FAPE is a \textit{pseudometric}. It satisfies non-negativity ($\mathcal{L} \ge 0$), symmetry ($\mathcal{L}(X, Y) = \mathcal{L}(Y, X)$), and the triangle inequality ($\mathcal{L}(X, Z) \le \mathcal{L}(X, Y) + \mathcal{L}(Y, Z)$). However, $\mathcal{L}(X, Y) = 0$ does not imply $X = Y$ in absolute coordinates, but rather that $X$ and $Y$ are identical up to a global rigid motion in $\SE$. Hence, on the quotient space $\R^{3M} / \SE$, FAPE is a genuine metric.
-}
+\technicalnote{Mathematical Foundation Note}{%
+\textit{Is FAPE a genuine distance metric?}\par\vspace{1mm}
+In Euclidean coordinate space $\R^{3M}$, FAPE is a \textit{pseudometric}: it satisfies non-negativity ($\mathcal{L} \ge 0$), symmetry ($\mathcal{L}(X, Y) = \mathcal{L}(Y, X)$), and the triangle inequality ($\mathcal{L}(X, Z) \le \mathcal{L}(X, Y) + \mathcal{L}(Y, Z)$). However, $\mathcal{L}(X, Y) = 0$ implies $X$ and $Y$ coincide up to a proper rigid transformation in $\SE$. Therefore, on the quotient manifold $\R^{3M} / \SE$, FAPE constitutes a genuine metric.}
 
 % ---------------------------------------------------------------------------------------------
 \slideheader{13}{Recycling: four iterations through the network}{Ben}{16:30--17:30}
 \shadowbox{Diagram of unrolled recycling passes: $m^{(0)}, z^{(0)} \to \text{Block} \to m^{(1)}, z^{(1)} \to \dots \to m^{(3)}, z^{(3)}$. Gradients stopped until final pass.}
-
-\stage{Ben traces the recycling feedback loop.}
 
 \ben{To squeeze maximum structural convergence out of the representations, AlphaFold introduces structural Recycling. 
 
@@ -407,8 +361,6 @@ The network executes 4 recycling iterations during training. Crucially, backprop
 % ---------------------------------------------------------------------------------------------
 \slideheader{14}{Loss functions: seven terms}{Ben}{17:30--18:45}
 \shadowbox{Loss decomposition formula with 7 terms: Backbone FAPE, Sidechain FAPE, Distogram, Masked MSA, Torsion angles, pLDDT, and Structural violations.}
-
-\stage{Ben gestures to the multi-task loss terms.}
 
 \ben{Training a system this complex from scratch requires auxiliary supervision. The total loss $\mathcal{L}$ is a linear combination of seven objectives:
 \begin{equation}
@@ -423,8 +375,6 @@ Finally, the Structural Violation loss imposes strict physical penalties for pep
 \slideheader{15}{Trunk intermediate structures}{Ben}{18:45--20:00}
 \shadowbox{Fig.~4b redrawn: GDT accuracy plotted over 192 Evoformer blocks across 4 runs. Green curve ORF8, Blue/Orange LmrP. Horizontal y-axis label atop axis: `GDT'.}
 
-\stage{Ben points to the two curves: fast-saturating LmrP vs slow-climbing ORF8.}
-
 \ben{What is actually happening inside the Evoformer trunk during inference? In Figure~4b of the paper, DeepMind froze the trunk and attached a readout structure module after every single block across four recycling passes (192 blocks total).
 
 Look at the trajectories:
@@ -435,8 +385,6 @@ Now look at target ORF8 (in green), an elusive SARS-CoV-2 protein. At block 48, 
 % ---------------------------------------------------------------------------------------------
 \slideheader{16}{Confidence: pLDDT against measured lDDT}{Ben}{20:00--21:15}
 \shadowbox{Scatter plot: Predicted mean pLDDT vs Measured lDDT-C$\alpha$ ($n=10,795$ chains). Linear fit line (slope 0.997, $r=0.76$). Horizontal y-axis label atop axis: `measured lDDT-C$\alpha$'.}
-
-\stage{Ben highlights the linear fit line and the high-confidence cluster.}
 
 \ben{In real biological research, knowing \textit{when} to trust a model is as important as the prediction itself. 
 
@@ -450,8 +398,6 @@ When pLDDT $> 90$, sidechain packing is reliable for computational drug design. 
 \slideheader{17}{Limitations: MSA depth and complexes}{Ben}{21:15--22:30}
 \shadowbox{Accuracy vs MSA depth curve ($N_{\text{eff}}$). Vertical red dashed line at 30. Steep drop below 30. Horizontal y-axis label atop axis: `lDDT-C$\alpha$'.}
 
-\stage{Ben points to the vertical red dashed line at $N_{\text{eff}} = 30$.}
-
 \ben{Where does AlphaFold 2 break down? 
 
 First: Multiple Sequence Alignment depth. Look at the curve of accuracy against $N_{\text{eff}}$, the number of non-redundant effective sequences in the alignment. Above 30 related sequences, accuracy is high and plateaued. But as soon as $N_{\text{eff}}$ drops below 30, accuracy plummets off a cliff. For orphan proteins, de novo designed proteins, or rapidly evolving antibody loops without an evolutionary family, AlphaFold 2 struggles.
@@ -461,8 +407,6 @@ Second: AlphaFold 2 was trained exclusively on isolated, static monomeric chains
 % ---------------------------------------------------------------------------------------------
 \slideheader{18}{After AlphaFold 2: 2021 to 2025}{Ben}{22:30--23:30}
 \shadowbox{Timeline from 2021 to 2025: RoseTTAFold, 98.5\% Human Proteome (AFDB), AlphaFold-Multimer, ESMFold, AlphaFold 3, Nobel Prize in Chemistry (2024), AlphaGenome (2025).}
-
-\stage{Ben traces the timeline, pausing proudly at the gold Nobel disc.}
 
 \ben{The release of AlphaFold 2 in 2021 triggered an unprecedented revolution across biological science. 
 
@@ -475,8 +419,6 @@ In 2024, Demis Hassabis and John Jumper were awarded the Nobel Prize in Chemistr
 % ---------------------------------------------------------------------------------------------
 \slideheader{19}{AlphaFold 3: which choices survived}{Ben}{23:30--24:45}
 \shadowbox{Table comparing the 4 AF2 choices against AlphaFold 3 (Nature 2024): MSA raw attention dropped; Triangles kept (48 blocks); Frames/IPA dropped for Diffusion; FAPE dropped for Aligned MSE. Chirality violations 4.4\%.}
-
-\stage{Ben leans in. This is the critical theoretical takeaway comparing AF2 to AF3.}
 
 \ben{In 2024, DeepMind published AlphaFold~3, predicting complexes of proteins, DNA, RNA, and drug ligands. Looking back at our four design choices from Slide 4, which ones survived in AlphaFold~3?
 
@@ -495,8 +437,6 @@ This reflects Rich Sutton's \textit{Bitter Lesson}: generic generative diffusion
 \slideheader{20}{Summary: four design choices, measured}{Ben}{24:45--25:30}
 \shadowbox{Component ablation scorecard: No raw MSA ($-2.2$), No triangles ($-4.6$), No IPA ($-2.3$), No recycling ($-4.5$), No frames (mirrored structures). Final takeaway sentence.}
 
-\stage{Ben delivers the final synthesis with resonance.}
-
 \ben{To conclude: the four biological facts we introduced at the start became four mathematical design choices. The ablation study proves their necessity:
 Removing sequence attention costs $2.2$ GDT. 
 Removing triangle updates costs $4.6$ GDT. 
@@ -504,72 +444,50 @@ Removing IPA costs $2.3$ GDT.
 Removing recycling costs $4.5$ GDT.
 And removing frames causes the model to produce mirror-image molecules.
 
-AlphaFold 2 solved protein structure prediction not by ignoring biology, but by translating the geometry of physics and evolution into end-to-end differentiable neural architecture. Thank you very much.}
-
-\stage{Evita steps forward to join Ben at stage center. Both bow slightly and smile. Applause pause.}
+AlphaFold 2 solved protein structure prediction not by ignoring biology, but by translating the geometry of physics and evolution into end-to-end differentiable neural architecture. Thank you.}
 
 \newpage
 % =============================================================================================
-\section{Act III: Seminar Defense, Moderated Discussion, and Backups}
+\section{Part III: Seminar Discussion and References}
 % =============================================================================================
 
-\slideheader{21}{Exam question}{Evita \& Ben}{25:30--27:30}
-\shadowbox{Two-column slide: Left box shows course assignment prompt (Prof.~Valentina Boeva). Right box shows structured solution breakdown: (1) Inductive bias, (2) Loss formulation, (3) Genomic impact.}
+\slideheader{21}{Questions for the audience}{Evita \& Ben}{25:30--30:00}
+\shadowbox{Three discussion questions: (1) Inductive bias vs unconstrained diffusion, (2) Has the network learned physics or evolution?, (3) pLDDT reliability in genomics. Bottom: repository link.}
 
-\stage{Evita addresses the assignment prompt; Ben outlines the theoretical derivation.}
+\evita{\textbf{Question 1}: \textit{AlphaFold 2 hardcoded $\SE$ equivariance and stereochemical chirality into its architecture and loss. AlphaFold 3 dropped both in favor of unconstrained diffusion. When is geometric inductive bias indispensable, and when is unconstrained generative modeling preferable?}}
 
-\evita{We now open the discussion and examination segment of our presentation, beginning with the official seminar exam question assigned for course 263-5351-00L.}
-
-\ben{To answer this question rigorously from a machine learning perspective, we break the solution into three structural pillars:
-First, the architectural inductive bias: how the interplay between Evoformer triangle updates and Invariant Point Attention guarantees geometric consistency.
-Second, the mathematical loss formulation: how FAPE provides non-saturated gradients on $\SE / \SO$ while breaking reflection symmetry.
-Third, genomic impact: how calibrated pLDDT enables genome-wide variant effect prediction without laboratory ground truth.}
-
-% ---------------------------------------------------------------------------------------------
-\slideheader{22}{Questions for the audience}{Evita \& Ben}{27:30--32:00}
-\shadowbox{Three bold discussion questions: (1) Inductive bias vs unconstrained diffusion, (2) Has the network learned physics or evolution?, (3) pLDDT reliability in genomics. Bottom banner with contact info and GitHub link.}
-
-\stage{Evita moderates Question 1; Ben moderates Question 2; both address Question 3.}
-
-\evita{We would now like to invite our peers into an interactive debate. We pose three fundamental questions:
-
-\textbf{Question 1}: \textit{AlphaFold 2 hardcoded $\SE$ equivariance and stereochemical chirality into its architecture and loss. AlphaFold 3 dropped both in favor of unconstrained diffusion. When is geometric inductive bias indispensable, and when is unconstrained generative modeling preferable?}}
-
-\stage{Evita takes 2 peer responses from the audience. Summarizes: inductive bias is critical when data is scarce (PDB scale); unconstrained diffusion dominates when scaling across heterogeneous multi-modal complexes, provided post-hoc filtering is affordable.}
+\technicalnote{Analytical Perspective}{%
+Inductive bias is critical when data is scarce (e.g., PDB scale, $\sim 10^5$ structures). Unconstrained diffusion dominates when scaling across heterogeneous multi-modal complexes (proteins, nucleic acids, small molecules), provided post-hoc filtering or ranking across random seeds is computationally affordable.}
 
 \ben{\textbf{Question 2}: \textit{Given that accuracy drops precipitously below 30 related sequences, has AlphaFold truly learned the physical energy landscape of protein folding, or has it learned a statistical compression of evolutionary variation? What experiment would settle this?}}
 
-\stage{Ben takes 2 peer responses. Highlights: de novo designed proteins (David Baker's Hallucination/RFdiffusion) fold without natural MSAs, suggesting partial physical learning, yet true ab initio folding from single sequences remains the frontier of ESMFold.}
+\technicalnote{Analytical Perspective}{%
+De novo designed proteins (Baker Lab RFdiffusion) fold accurately without natural evolutionary MSAs, suggesting partial physical energy learning. However, true ab initio folding from single sequences remains the domain of protein language models (ESMFold), indicating AF2 relies heavily on co-evolutionary covariance.}
+
+\evita{\textbf{Question 3}: \textit{pLDDT is trained on the model's own errors. On which proteins would you distrust it, and what should a genomics pipeline do with a low-confidence region?}}
+
+\technicalnote{Analytical Perspective}{%
+pLDDT can over-predict confidence on isolated monomer models of obligate multimers that require binding partners to stabilize. In clinical genomics pipelines, low-confidence regions ($\text{pLDDT} < 50$) should be flagged as candidate intrinsically disordered regions (IDRs) rather than discarded as misfolded errors.}
 
 % ---------------------------------------------------------------------------------------------
-\slideheader{23--24}{References: Primary Literature \& Machine Learning}{Evita \& Ben}{32:00--33:00}
-\shadowbox{Two full slides listing standardized [FWP+19] citations: Jumper 2021, Tunyasuvunakool 2021, Evans 2021, Baek 2021, Abramson 2024, Marks 2011, Lin 2023, Avsec 2025, Devlin 2019, Xie 2020, Sutton 2019.}
+\slideheader{22--23}{References: Primary Literature \& Machine Learning}{Evita \& Ben}{30:00--31:00}
+\shadowbox{Two slides listing standardized citations: Jumper 2021, Tunyasuvunakool 2021, Evans 2021, Baek 2021, Abramson 2024, Marks 2011, Lin 2023, Avsec 2025, Devlin 2019, Xie 2020, Sutton 2019.}
 
-\joint{For complete derivations and literature provenance, all citations are cataloged here on Slides 23 and 24.}
-
-% ---------------------------------------------------------------------------------------------
-\slideheader{25}{Resources: AlphaFold at ETH}{Evita \& Ben}{33:00--35:00}
-\shadowbox{Two cards: Tooling \& Deployment on left (ColabFold, Euler cluster GPU batch jobs, AFDB). Repository \& Contacts on right (GitHub repo link, email contacts, seminar details).}
-
-\stage{This slide remains prominently displayed on the auditorium screen throughout the remaining open Q\&A.}
-
-\ben{For researchers at ETH Zürich looking to deploy AlphaFold in their genomics pipelines: you can run ColabFold locally or submit batch GPU jobs on the ETH Euler cluster using our SLURM submission scripts. All TikZ drawing sources, mathematical derivations, and these screenplay notes are open-source on our GitHub repository: \texttt{github.com/BenBullinger/ML4Genomics-Presentation-AF2}.}
-
-\evita{Thank you once again. We are now delighted to take any questions from Prof.~Boeva, the teaching assistants, and the audience.}
+\joint{Complete literature provenance and benchmark publications are cataloged here on Slides 22 and 23.}
 
 \newpage
 % =============================================================================================
-\section{Technical Defense Manual: Backup Slides (1/14 to 14/14)}
+\section{Mathematical Appendix: Key Derivations (Backup Slides 1--14)}
 % =============================================================================================
 
-\noindent When tough technical questions are posed during the examination segment, the speakers can immediately jump to the designated backup slide. Below is the exact mathematical script for each backup.
+\noindent This appendix provides step-by-step mathematical proofs and algorithmic details corresponding to the 14 backup slides in \texttt{main.tex}.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (1/14): Why is IPA invariant to rigid motions?}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (1/14): Why is IPA invariant to rigid motions? (SI 1.8.2, Alg.~22)}
 
-\textbf{Spoken Script (Ben)}:
-``If asked why IPA is invariant: the only geometry entering the attention weights is the Euclidean distance between points placed by residues $i$ and $j$ in their own frames:
+\textbf{Mathematical Derivation}:
+The only geometry entering the attention weights is the Euclidean distance between points placed by residues $i$ and $j$ in their own frames:
 \begin{equation}
 \left\| (\Tg \circ T_i) \circ \vq_i - (\Tg \circ T_j) \circ \vk_j \right\|^2 = \left\| \Tg \circ (T_i \circ \vq_i - T_j \circ \vk_j) \right\|^2 = \left\| T_i \circ \vq_i - T_j \circ \vk_j \right\|^2.
 \end{equation}
@@ -577,109 +495,109 @@ Because the Euclidean norm is invariant under any rigid motion $\Tg \in \SE$, th
 \begin{equation}
 (\Tg \circ T_i)^{-1} \circ \sum_j a_{ij} (\Tg \circ T_j) \circ \vval_j = T_i^{-1} \circ \Tg^{-1} \circ \Tg \circ \sum_j a_{ij} T_j \circ \vval_j = T_i^{-1} \circ \sum_j a_{ij} T_j \circ \vval_j.
 \end{equation}
-$\Tg$ cancels identically against its inverse. Invariance is an exact algebraic identity, not an approximation.''
+$\Tg$ cancels identically against its inverse. Invariance is an exact algebraic identity.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (2/14): Why is the structure module equivariant?}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (2/14): Why is the structure module equivariant? (SI 1.8.2, Alg.~20)}
 
-\textbf{Spoken Script (Ben)}:
-``The structure module is $\SE$-equivariant because the frame update $T_i^{\text{upd}} = (\Delta R_i, \Delta \vt_i)$ is predicted directly from scalar features $\mathbf{s}_i$, which are invariant under global rotation. Because the update is composed in local coordinates:
+\textbf{Mathematical Derivation}:
+The structure module is $\SE$-equivariant because the frame update $T_i^{\text{upd}} = (\Delta R_i, \Delta \vt_i)$ is predicted directly from scalar features $\mathbf{s}_i$, which are invariant under global rotation. Because the update is composed in local coordinates:
 \begin{equation}
 (\Tg \circ T_i) \circ T_i^{\text{upd}} = \Tg \circ (T_i \circ T_i^{\text{upd}}).
 \end{equation}
-Applying a rigid transformation to the input structure before the block produces the exact same result as applying it to the output structure after the block.''
+Applying a rigid transformation to the input structure before the block produces the exact same result as applying it to the output structure after the block.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (3/14): Origin of stereochemical chirality}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (3/14): Origin of stereochemical chirality (SI 1.8.1, Alg.~21)}
 
-\textbf{Spoken Script (Ben)}:
-``Residue frames are constructed via Gram--Schmidt orthogonalization on $(\mathrm{N}, \mathrm{C}\alpha, \mathrm{C})$:
+\textbf{Mathematical Derivation}:
+Residue frames are constructed via Gram--Schmidt orthogonalization on $(\mathrm{N}, \mathrm{C}\alpha, \mathrm{C})$:
 $\bm{e}_1 = \frac{\bm{x}_{\mathrm{C}} - \bm{x}_{\mathrm{C}\alpha}}{\|\bm{x}_{\mathrm{C}} - \bm{x}_{\mathrm{C}\alpha}\|}$, $\bm{e}_2$ in the $\mathrm{N}$--$\mathrm{C}\alpha$--$\mathrm{C}$ plane, and $\bm{e}_3 = \bm{e}_1 \times \bm{e}_2$. 
 By definition of the vector cross product, the frame is strictly right-handed. 
 If all atomic coordinates undergo spatial inversion (reflection $\bm{x} \mapsto -\bm{x}$), the frames do not reflect: Gram--Schmidt continues to construct right-handed frames. In local frame coordinates, the $z$-coordinate negates: $(T_i^{-1} \circ \bm{x}_j)_z \mapsto -(T_i^{-1} \circ \bm{x}_j)_z$. 
-FAPE evaluates $\sum |(T_i^{-1} \circ \bm{x}_j)_z|$, penalizing the mirrored structure with a massive loss unless the molecule is strictly planar. Models trained with reflection-blind dRMSD produce 50\% mirror images; FAPE eliminates them completely.''
+FAPE evaluates $\sum |(T_i^{-1} \circ \bm{x}_j)_z|$, penalizing the mirrored structure with a massive loss unless the molecule is strictly planar. Models trained with reflection-blind dRMSD produce 50\% mirror images; FAPE eliminates them completely.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (4/14): What does FAPE measure?}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (4/14): What does FAPE measure? (SI 1.9.2, Alg.~28)}
 
-\textbf{Spoken Script (Ben)}:
-``FAPE evaluates all $N_{\text{frames}} \times N_{\text{atoms}}$ local coordinates clamped at 10\,\AA. In Supplementary Section 1.9.4, Jumper et al.\ prove that FAPE is bounded below by optimal Kabsch RMSD:
+\textbf{Mathematical Derivation}:
+FAPE evaluates all $N_{\text{frames}} \times N_{\text{atoms}}$ local coordinates clamped at 10\,\AA. In Supplementary Section 1.9.4, Jumper et al.\ prove that FAPE is bounded below by optimal Kabsch RMSD:
 \begin{equation}
 \mathcal{L}_{\text{FAPE}} \ge \min_{R \in \SO, \bm{t} \in \R^3} \sqrt{\frac{1}{M}\sum_{i=1}^M \| R\bm{x}_i + \bm{t} - \bm{x}_i^{\text{true}} \|^2}.
 \end{equation}
-Thus, FAPE reaches zero if and only if the predicted and true point sets coincide under a proper rigid motion. Furthermore, FAPE satisfies the triangle inequality on structures, establishing it as a rigorous pseudometric on $\R^{3M}/\SE$.''
+Thus, FAPE reaches zero if and only if the predicted and true point sets coincide under a proper rigid motion. Furthermore, FAPE satisfies the triangle inequality on structures, establishing it as a rigorous pseudometric on $\R^{3M}/\SE$.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (5/14): Is AlphaFold 2 a graph neural network?}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (5/14): Is AlphaFold 2 a graph neural network? (Bronstein et al., 2021)}
 
-\textbf{Spoken Script (Evita)}:
-``In the formal geometric deep learning framework of Bronstein et al., AlphaFold 2 is an edge-attributed Graph Neural Network. Residues $u$ are nodes with scalar features $\mathbf{s}_u$ and frame attributes $T_u \in \SE$. Pairs $(u,v)$ are directed edges with attributes $\mathbf{z}_{uv}$. The Evoformer and Structure Module implement message passing $\mathbf{h}_u = \phi(\mathbf{x}_u, \bigoplus_{v} \psi(\mathbf{x}_u, \mathbf{x}_v, \mathbf{e}_{uv}))$, where IPA passes geometric messages between nodes, and triangle updates pass messages between edges.''
+\textbf{Algorithmic Formulation}:
+In the formal geometric deep learning framework of Bronstein et al., AlphaFold 2 is an edge-attributed Graph Neural Network. Residues $u$ are nodes with scalar features $\mathbf{s}_u$ and frame attributes $T_u \in \SE$. Pairs $(u,v)$ are directed edges with attributes $\mathbf{z}_{uv}$. The Evoformer and Structure Module implement message passing $\mathbf{h}_u = \phi(\mathbf{x}_u, \bigoplus_{v} \psi(\mathbf{x}_u, \mathbf{x}_v, \mathbf{e}_{uv}))$, where IPA passes geometric messages between nodes, and triangle updates pass messages between edges.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (6/14): What does each block compute?}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (6/14): What does each block compute? (SI Algorithms 6 to 32)}
 
-\textbf{Spoken Script (Evita)}:
-``This table maps all 11 core updates to their formal algorithms in the Supplementary Information: lines 1--7 describe the 48 Evoformer blocks (Row/Column Attention, Transition MLPs, Outer Product Mean, Triangle Multiplications, Triangle Attention); lines 8--10 describe the 8 Structure Module iterations (IPA, Backbone Update); line 11 defines Recycling embedding.''
+\textbf{Algorithmic Breakdown}:
+This table maps all 11 core updates to their formal algorithms in the Supplementary Information: lines 1--7 describe the 48 Evoformer blocks (Row/Column Attention, Transition MLPs, Outer Product Mean, Triangle Multiplications, Triangle Attention); lines 8--10 describe the 8 Structure Module iterations (IPA, Backbone Update); line 11 defines Recycling embedding.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (7/14): What exactly did each ablation remove?}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (7/14): What exactly did each ablation remove? (SI 1.13)}
 
-\textbf{Spoken Script (Ben)}:
-``The ablation study in Supplementary Section 1.13 reveals critical non-linear synergies. Removing IPA costs $2.3$ GDT. Removing recycling costs $4.5$ GDT. But removing \textit{both IPA and recycling simultaneously} costs a catastrophic $16.3$ GDT. The components act synergistically: recycling gives IPA the iterative depth needed to refine difficult topologies.''
+\textbf{Ablation Analysis}:
+The ablation study in Supplementary Section 1.13 reveals critical non-linear synergies. Removing IPA costs $2.3$ GDT. Removing recycling costs $4.5$ GDT. But removing \textit{both IPA and recycling simultaneously} costs a catastrophic $16.3$ GDT. The components act synergistically: recycling gives IPA the iterative depth needed to refine difficult topologies.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (8/14): How is confidence predicted?}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (8/14): How is confidence predicted? (SI 1.9.6, Alg.~29)}
 
-\textbf{Spoken Script (Ben)}:
-``Confidence is trained with self-distillation. The pLDDT head takes single representation $\mathbf{s}_i$ and outputs logits over 50 discrete bins representing intervals of $[0, 100]$ in lDDT-$C\alpha$. It is trained using cross-entropy against the model's own ground-truth error. Similarly, the pairwise head outputs Predicted Aligned Error (PAE) over 64 distance bins ($0$--$32$\,\AA), allowing researchers to gauge domain-domain relative orientation confidence.''
+\textbf{Mathematical Formulation}:
+Confidence is trained with self-distillation. The pLDDT head takes single representation $\mathbf{s}_i$ and outputs logits over 50 discrete bins representing intervals of $[0, 100]$ in lDDT-$C\alpha$. It is trained using cross-entropy against the model's own ground-truth error. Similarly, the pairwise head outputs Predicted Aligned Error (PAE) over 64 distance bins ($0$--$32$\,\AA), allowing researchers to gauge domain-domain relative orientation confidence.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (9/14): How was it trained?}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (9/14): How was it trained? (Methods \& SI 1.3, Table 4)}
 
-\textbf{Spoken Script (Ben)}:
-``Training executed in two stages across 128 TPUv3 cores for 11 days per model. Stage 1 trained on 256-residue crops over $10^7$ samples for 7 days. Stage 2 increased crop size to 384 residues, lowered learning rate, and switched on the structural violation loss for $1.5 \times 10^6$ samples (4 days). Training utilized 170k PDB structures augmented with 350k self-distilled high-confidence Uniclust30 predictions comprising 75\% of each training batch.''
+\textbf{Training Protocol}:
+Training executed in two stages across 128 TPUv3 cores for 11 days per model. Stage 1 trained on 256-residue crops over $10^7$ samples for 7 days. Stage 2 increased crop size to 384 residues, lowered learning rate, and switched on the structural violation loss for $1.5 \times 10^6$ samples (4 days). Training utilized 170k PDB structures augmented with 350k self-distilled high-confidence Uniclust30 predictions comprising 75\% of each training batch.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (10/14): AlphaFold 3: further changes}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (10/14): AlphaFold 3: further changes (Abramson et al., 2024)}
 
-\textbf{Spoken Script (Ben)}:
-``Beyond diffusion, AlphaFold 3 unifies chemical inputs: proteins, DNA, RNA, ions, and small-molecule ligands are tokenized into a common embedding space. The pairformer uses 48 blocks with no MSA track retention. Confidence is trained on 20-step mini-rollouts, and generation samples 25 trajectories across 5 random seeds to overcome diffusion hallucination.''
+\textbf{Architectural Analysis}:
+Beyond diffusion, AlphaFold 3 unifies chemical inputs: proteins, DNA, RNA, ions, and small-molecule ligands are tokenized into a common embedding space. The pairformer uses 48 blocks with no MSA track retention. Confidence is trained on 20-step mini-rollouts, and generation samples 25 trajectories across 5 random seeds to overcome diffusion hallucination.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (11/14): MSA row attention with pair bias}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (11/14): MSA row attention with pair bias (Suppl.~Fig.~2, Alg.~7)}
 
-\textbf{Spoken Script (Evita)}:
-``Supplementary Figure 2 visualizes how the pair representation biases attention weights along rows. The pair tensor $\mathbf{z}_{ij}$ is projected to scalar bias $b_{ij}$, ensuring that every homologous sequence in the alignment attends to positions that are physically close in 3D space.''
+\textbf{Algorithmic Analysis}:
+Supplementary Figure 2 visualizes how the pair representation biases attention weights along rows. The pair tensor $\mathbf{z}_{ij}$ is projected to scalar bias $b_{ij}$, ensuring that every homologous sequence in the alignment attends to positions that are physically close in 3D space.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (12/14): Evoformer: columns and outer product mean}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (12/14): Evoformer: columns and outer product mean (Suppl.~Figs.~3--5)}
 
-\textbf{Spoken Script (Evita)}:
-``Supplementary Figures 3 to 5 illustrate column-wise attention and the outer product mean. Column attention aggregates information across sequences at position $i$. The outer product mean computes $\mathbf{m}_{si} \otimes \mathbf{m}_{sj}$ and averages over sequences, transferring correlated mutation signals directly into the pair edge representation.''
+\textbf{Algorithmic Analysis}:
+Supplementary Figures 3 to 5 illustrate column-wise attention and the outer product mean. Column attention aggregates information across sequences at position $i$. The outer product mean computes $\mathbf{m}_{si} \otimes \mathbf{m}_{sj}$ and averages over sequences, transferring correlated mutation signals directly into the pair edge representation.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (13/14): Prediction and experiment superposed}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (13/14): Prediction and experiment superposed (Fig.~1b--d)}
 
-\textbf{Spoken Script (Evita)}:
-``This figure highlights CASP14 target superpositions across three scales: isolated backbone alignment ($0.8$\,\AA\ RMSD), rotamer sidechain accuracy around catalytic metal ions, and multi-domain inter-domain orientation across a 2,180-residue single chain solved without human intervention.''
+\textbf{Structural Analysis}:
+This figure highlights CASP14 target superpositions across three scales: isolated backbone alignment ($0.8$\,\AA\ RMSD), rotamer sidechain accuracy around catalytic metal ions, and multi-domain inter-domain orientation across a 2,180-residue single chain solved without human intervention.
 
 % ---------------------------------------------------------------------------------------------
 \subsection{Backup (14/14): The AlphaFold 3 architecture}
 \textbf{Slide Counterpart}:\enspace \textsl{Backup (14/14): The AlphaFold 3 architecture (Nature 2024, Fig.~1d)}
 
-\textbf{Spoken Script (Ben)}:
-``Figure 1d from Abramson et al.\ illustrates the AF3 diffusion trunk. Notice that the Evoformer is replaced by the Pairformer, and the Structure Module is replaced by a 3D score-based diffusion model. Denoising random Gaussian coordinates eliminates rigid-body frames, enabling flexible all-atom modeling at the expense of post-hoc chirality ranking.''
+\textbf{Architectural Analysis}:
+Figure 1d from Abramson et al.\ illustrates the AF3 diffusion trunk. Notice that the Evoformer is replaced by the Pairformer, and the Structure Module is replaced by a 3D score-based diffusion model. Denoising random Gaussian coordinates eliminates rigid-body frames, enabling flexible all-atom modeling at the expense of post-hoc chirality ranking.
 
 \end{document}
