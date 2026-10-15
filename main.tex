@@ -325,40 +325,38 @@
 \section{The benchmark}
 
 \begin{frame}[t]{The benchmark: CASP14}
+  \vspace{-2mm}
   % Redrawn from Fig. 1a. Height of each bar and its 95% interval are measured on the figure.
   % For AlphaFold and the next best group they agree with the numbers printed in the paper.
-  \say{CASP14:  Critical Assessment of protein Structure Prediction}
-  \say{May-July 2020}
-  \say{Blind test - experimental structures are not revealed until the end of experiment.}
-  \say{Å (angstrom): a unit of length equal to $10^{-10}$ meters.}
-  \say{Smaller RMSD (root mean square deviation of the atom positions) means a closer structural match.}
-  \say{\textbf{Show the average prediction \textrightarrow{} hist from the paper}}
-  
-  % \begin{tikzpicture}[x=5.1mm, y=8.2mm]
-    % \foreach \h/\lo/\hi [count=\n] in {
-    %     2.836/2.656/4.017, 2.880/2.544/3.558, 2.917/2.617/3.670, 2.967/2.721/3.381,
-    %     3.091/2.742/4.058, 3.099/2.703/4.207, 3.113/2.531/3.699, 3.126/2.584/4.007,
-    %     3.130/2.549/3.945, 3.140/2.628/4.045, 3.185/2.569/3.988, 3.186/2.761/4.214,
-    %     3.223/2.763/4.423, 3.254/2.724/4.202} {
-    %   \fill[ETHGray!35] (\n+3.14,0) rectangle (\n+3.86,\h);
-    %   \draw[ETHGray, line width=0.6pt] (\n+3.5,\lo) -- (\n+3.5,\hi);
-    % }
-    % \fill[ETHBlue] (0.64,0) rectangle (1.36,0.956);
-    % \draw[line width=0.6pt] (1,0.846) -- (1,1.163);
-    % \draw[line width=0.6pt] (0,4.6) -- (0,0) -- (18.3,0);
-    % \foreach \v in {0,1,2,3,4}
-    %   \draw[line width=0.6pt] (0,\v) -- ++(-1.2mm,0) node[left, font=\footnotesize, inner sep=1.5pt] {\v};
-    % \node[rotate=90, font=\small] at (-1.7,2.3) {Median backbone error (\AA)};
-    % \draw[ETHRed, line width=1.2pt, densely dashed] (0,1.4) -- (18.7,1.4);
-    % \node[callout text, anchor=west, align=left, text height=, text depth=] at (18.8,1.4) {A carbon atom is\\ about 1.4\,\AA\ wide};
-    % \node[text=ETHBlue, font=\small\bfseries, anchor=west, inner sep=1.5pt] at (1.45,0.5) {0.96\,\AA};
-    % \node[font=\small, anchor=east, inner sep=1.5pt] at (4.1,2.84) {2.8\,\AA};
-    % \node[text=ETHBlue, font=\small\bfseries, anchor=north] at (1,-0.08) {AlphaFold};
-    % \node[font=\small, anchor=north] at (11,-0.08) {the 14 next best groups};
-  % \end{tikzpicture}
+  \say{CASP14: Critical Assessment of protein Structure Prediction, May to July 2020}
+  \say{Blind test: experimental structures withheld until predictions were submitted}
+  \vspace{0.5mm}
+
+  \begin{tikzpicture}[x=5.1mm, y=5.8mm]
+    \foreach \h/\lo/\hi [count=\n] in {
+        2.836/2.656/4.017, 2.880/2.544/3.558, 2.917/2.617/3.670, 2.967/2.721/3.381,
+        3.091/2.742/4.058, 3.099/2.703/4.207, 3.113/2.531/3.699, 3.126/2.584/4.007,
+        3.130/2.549/3.945, 3.140/2.628/4.045, 3.185/2.569/3.988, 3.186/2.761/4.214,
+        3.223/2.763/4.423, 3.254/2.724/4.202} {
+      \fill[ETHGray!35] (\n+3.14,0) rectangle (\n+3.86,\h);
+      \draw[ETHGray, line width=0.6pt] (\n+3.5,\lo) -- (\n+3.5,\hi);
+    }
+    \fill[ETHBlue] (0.64,0) rectangle (1.36,0.956);
+    \draw[line width=0.6pt] (1,0.846) -- (1,1.163);
+    \draw[line width=0.6pt] (0,4.6) -- (0,0) -- (18.3,0);
+    \foreach \v in {0,1,2,3,4}
+      \draw[line width=0.6pt] (0,\v) -- ++(-1.2mm,0) node[left, font=\footnotesize, inner sep=1.5pt] {\v};
+    \node[rotate=90, font=\small] at (-1.7,2.3) {Median backbone error (\AA)};
+    \draw[ETHRed, line width=1.2pt, densely dashed] (0,1.4) -- (18.7,1.4);
+    \node[callout text, anchor=west, align=left, text height=, text depth=] at (18.8,1.4) {A carbon atom is\\ about 1.4\,\AA\ wide};
+    \node[text=ETHBlue, font=\small\bfseries, anchor=west, inner sep=1.5pt] at (1.45,0.5) {0.96\,\AA};
+    \node[font=\small, anchor=east, inner sep=1.5pt] at (4.1,2.84) {2.8\,\AA};
+    \node[text=ETHBlue, font=\small\bfseries, anchor=north] at (1,-0.08) {AlphaFold};
+    \node[font=\small, anchor=north] at (11,-0.08) {the 14 next best groups};
+  \end{tikzpicture}
   \par\vspace{1mm}
   \key{The median backbone error is below one atom width}
-  \reffootnote{Redrawn from Fig.~1a. The error is the C$\alpha$ r.m.s.d.$_{95}$ on 87 domains, with 95\% confidence intervals.}
+  \reffootnote{Redrawn from Fig.~1a. C$\alpha$ r.m.s.d.$_{95}$ on 87 domains (95\% CIs). 1\,\AA\ $= 10^{-10}$\,m.}
 \end{frame}
 
 % Evita, 14 October, in the title: "delete?"
@@ -412,7 +410,7 @@
     & & {\color{ETHGray} Fact} & {\color{ETHGray} Design choice in AlphaFold 2} \\[1mm]
     {\color{ETHRed}\bfseries 1} & \pictoset & An MSA is a set of sequences. A protein is a chain of residues. & Attention over the sequences themselves, along the rows and the columns. \\[1.5mm]
     {\color{ETHRed}\bfseries 2} & \pictotriangle & Distances in 3D must close triangles. & The pairs are the edges of a residue graph, updated through triangles. \\[1.5mm]
-    {\color{ETHRed}\bfseries 3} & \pictorotate & A structure is the same after any rotation or translation. & One frame per residue. Attention uses only distances in the frames. \\[1.5mm]
+    {\color{ETHRed}\bfseries 3} & \pictorotate & A structure is the same after any rotation or translation. & One frame per residue. Attention uses distances; updates in local frames. \\[1.5mm]
     {\color{ETHRed}\bfseries 4} & \pictomirror & A protein and its mirror image are different molecules. & The loss compares atoms in local frames. A mirror image is penalised. \\
   \end{tabular}
   \par\vspace{2.5mm}
@@ -774,7 +772,7 @@
   \par\vspace{0.5mm}
   \say{{\color{ETHRed}\bfseries 4}\enspace With a mirror-blind loss instead of FAPE, the model often builds the mirror image}
   \key{Each of the four choices costs accuracy on CASP14 when it is removed}
-  \reffootnote{Redrawn from Fig.~4a, the mean change against the baseline over the training runs of a row. GDT is the global distance test, lDDT the local distance difference test, both 0 to 100. Line 4: Suppl.\ Fig.~9.}
+  \reffootnote{Redrawn from Fig.~4a, mean change vs baseline over training runs. GDT and lDDT 0--100. Row 3 (No IPA) removes iterative refinement but keeps frames and FAPE (SI 1.13.1). Line 4: Suppl.\ Fig.~9.}
 \end{frame}
 
 \begin{frame}[t]{Intermediate structures in the trunk}
@@ -862,16 +860,16 @@
 \section{Conclusion}
 
 \begin{frame}[t]{After AlphaFold 2: 2021 to 2025}
-  \begin{tikzpicture}[x=10mm, y=6.3mm]
+  \begin{tikzpicture}[x=9.6mm, y=6.3mm]
     \draw[ETHGray, line width=1pt] (0,0.35) -- (0,-6.35);
     \foreach \y/\text in {
-        0/{RoseTTAFold appears online the same day},
-        -1/{98.5\% of human proteins are predicted},
-        -2/{AlphaFold-Multimer predicts complexes},
-        -3/{ESMFold uses a language model and no MSA},
-        -4/{AlphaFold~3 is one model for proteins, DNA, RNA and ligands},
-        -5/{Baker, Hassabis and Jumper receive the Nobel Prize in Chemistry},
-        -6/{AlphaGenome predicts regulatory activity from a million bases of DNA}} {
+        0/{RoseTTAFold appears online the same day \enspace{\color{ETHGray}\footnotesize(Baek et al., \textit{Science}'21)}},
+        -1/{98.5\% of human proteins are predicted \enspace{\color{ETHGray}\footnotesize(Tunyasuvunakool et al., \textit{Nature}'21)}},
+        -2/{AlphaFold-Multimer predicts complexes \enspace{\color{ETHGray}\footnotesize(Evans et al., bioRxiv'21)}},
+        -3/{ESMFold uses a language model, no MSA \enspace{\color{ETHGray}\footnotesize(Lin et al., \textit{Science}'23)}},
+        -4/{AlphaFold~3: proteins, DNA, RNA, ligands \enspace{\color{ETHGray}\footnotesize(Abramson et al., \textit{Nature}'24)}},
+        -5/{Baker, Hassabis and Jumper receive the Nobel Prize in Chemistry (2024)},
+        -6/{AlphaGenome predicts regulatory activity from DNA \enspace{\color{ETHGray}\footnotesize(Avsec et al., 2025)}}} {
       \fill[ETHBlue] (0,\y) circle (2.4pt);
       \node[anchor=mid west, inner sep=0pt] at (0.5,\y) {\text};
     }
@@ -882,12 +880,12 @@
     \fill[Gold] (0,-5) circle (2.6mm);
     \draw[Gold!60!black, line width=0.5pt] (0,-5) circle (2.6mm);
     \draw[Gold!60!black, line width=0.5pt] (0,-5) circle (2.0mm);
-    \draw[callout, rounded corners=0pt] (11.1,-1.7) -- (11.3,-1.7) -- (11.3,-4.3) -- (11.1,-4.3);
-    \node[callout text, font=\footnotesize, anchor=west, align=left, text height=, text depth=] at (11.33,-3) {address\\ the limits};
+    \draw[callout, rounded corners=0pt] (12.0,-1.7) -- (12.2,-1.7) -- (12.2,-4.3) -- (12.0,-4.3);
+    \node[callout text, font=\footnotesize, anchor=west, align=left, text height=, text depth=] at (12.23,-3) {address\\ the limits};
   \end{tikzpicture}
   \par\vspace{3mm}
   \key{AlphaFold~3 is more accurate than specialised tools, with one exception}
-  \reffootnote{The first authors are Baek 2021, Tunyasuvunakool 2021, Evans 2021, Lin 2022, Abramson 2024 and Avsec 2025.}
+  \reffootnote{Exception: AIchemy\_RNA2 with human expert intervention on CASP15 RNA targets.}
 \end{frame}
 
 % The follow-up paper's own verdict on each of the four design choices.
@@ -976,9 +974,9 @@
     \end{column}
   \end{columns}
   \vspace{2mm}
-  \say{Evolution and geometry are trained end to end, in about one GPU minute per model}
+  \say{Trained end to end. One prediction takes about a GPU minute}
   \key{The median backbone error is below one atom width}
-  \reffootnote{J.~Jumper et al., ``Highly accurate protein structure prediction with AlphaFold,'' \textit{Nature} 596, 583--589 (2021). GDT lost on CASP14 when removed, Fig.~4a and Suppl.\ Fig.~9.}
+  \reffootnote{J.~Jumper et al., ``Highly accurate protein structure prediction with AlphaFold,'' \textit{Nature} 596, 583--589 (2021). GDT lost on CASP14 when removed, Fig.~4a and Suppl.\ Fig.~9. Prediction time: 384 residues.}
 \end{frame}
 
 % ---------------------------------------------------------------------------------------------
@@ -1056,11 +1054,11 @@
       {$(\Tg\circ T_i)\circ T_i^{\text{upd}}=\Tg\circ(T_i\circ T_i^{\text{upd}})$\par}
       {\color{ETHGray} moving the input first or the output last gives the same frames\par}
       \vspace{1.5mm}
-      \say{``Rigid motion'' in the supplement means proper rotation and translation, not reflection. In group language: SE(3).}
+      \say{``Rigid motion'' in the supplement means proper rotation and translation: SE(3). (Reflections are penalized by FAPE, backup 3).}
     \end{column}
   \end{columns}
-  \say{All frames start as the identity, so the output's global frame is arbitrary and the loss must be invariant to it}
-  \key{Exact SE(3) equivariance. Reflections are excluded on purpose.}
+  \say{All frames start as the identity, so the output lives in the initialisation frame; the loss must be invariant to it}
+  \key{Exact equivariance. Handedness is enforced by FAPE and chiral data.}
 \end{frame}
 
 \begin{frame}[t]{Where does the handedness come from?}{SI 1.8.1, 1.9.3 and 1.8.4, Algorithm 21, equations 11 to 17}
@@ -1148,14 +1146,14 @@
     \midrule
     MSA row attention & $\psi(\mathbf m_{su},\mathbf m_{sv},\mathbf z_{uv})$, the edge biases the weight & node $u$ \\
     outer product mean & $\psi(\mathbf m_{\cdot u},\mathbf m_{\cdot v})$, averaged over the sequences & edge $uv$ \\
-    triangle updates & $\psi(\mathbf z_{uw},\mathbf z_{wv})$ over every third node $w$ & edge $uv$ \\
+    triangle updates & $\psi(\mathbf z_{uv},\mathbf z_{uw},\mathbf z_{vw})$ over third nodes $w$ (out and in) & edge $uv$ \\
     IPA & $\psi(\mathbf s_u,\mathbf s_v,\mathbf z_{uv},\|T_u\circ\vec{\mathbf q}_u-T_v\circ\vec{\mathbf k}_v\|)$, values moved by $T_u^{-1}\!\circ T_v$ & node $u$ \\
     backbone update & none, $\phi$ alone & frame $T_u$ \\
     \bottomrule
   \end{tabular}\par}
   \vspace{0.5mm}
-  \say{Triangles are two-hop messages. They make the edges consistent with one structure.}
-  \key{Geometry enters only through distances. A frame is a gauge fixed by its atoms.}
+  \say{Triangles combine two edges into the third to make the graph consistent with 3D space.}
+  \key{Geometry enters through invariants: distances in weights, relative frames in values.}
 \end{frame}
 
 \begin{frame}[t]{What does each block compute?}{Supplement, Algorithms 6 to 32}
