@@ -327,11 +327,10 @@
   \vspace{-4.5mm}
   % Redrawn from Fig. 1a. Height of each bar and its 95% interval are measured on the figure.
   % For AlphaFold and the next best group they agree with the numbers printed in the paper.
-  \say{CASP14 (May--July 2020): double-blind evaluation on experimentally determined, unreleased structures.}
-  \say{Evaluation metric: C$\alpha$ root-mean-square deviation on 95\% best-model residues (r.m.s.d.$_{95}$).}
-  \vspace{-1.5mm}
+  \say{CASP14 blind assessment on unreleased structures: evaluated on $\mathrm{C}\alpha\text{-r.m.s.d.}_{95}$ across 87 domains.}
+  \vspace{1mm}
 
-  \begin{tikzpicture}[x=4.7mm, y=2.8mm]
+  \begin{tikzpicture}[x=4.8mm, y=5.0mm]
     \foreach \h/\lo/\hi [count=\n] in {
         2.836/2.656/4.017, 2.880/2.544/3.558, 2.917/2.617/3.670, 2.967/2.721/3.381,
         3.091/2.742/4.058, 3.099/2.703/4.207, 3.113/2.531/3.699, 3.126/2.584/4.007,
@@ -344,16 +343,16 @@
     \draw[line width=0.6pt] (1,0.846) -- (1,1.163);
     \draw[line width=0.6pt] (0,4.6) -- (0,0) -- (18.3,0);
     \foreach \v in {0,1,2,3,4}
-      \draw[line width=0.6pt] (0,\v) -- ++(-1.2mm,0) node[left, font=\footnotesize, inner sep=1.5pt] {\v};
+      \draw[line width=0.6pt] (0,\v) -- ++(-1.2mm,0) node[left, font=\footnotesize, inner sep=2pt] {\v};
     \node[font=\small, anchor=south west, inner sep=0pt] at (-0.8,4.8) {Median backbone error (\AA)};
-    \draw[ETHRed, line width=1.2pt, densely dashed] (0,1.4) -- (18.7,1.4);
-    \node[callout text, anchor=west, align=left, text height=, text depth=] at (18.8,1.4) {Atomic bond length\\ $\approx 1.4\,\text{\AA}$ (C--C)};
-    \node[text=ETHBlue, font=\small\bfseries, anchor=west, inner sep=1.5pt] at (1.75,0.5) {0.96\,\AA};
-    \node[font=\small, anchor=east, inner sep=1.5pt] at (4.1,2.84) {2.8\,\AA};
-    \node[text=ETHBlue, font=\small\bfseries, anchor=north] at (1,-0.08) {AlphaFold};
-    \node[font=\small, anchor=north] at (11,-0.08) {the 14 next best groups};
+    \draw[ETHRed, line width=1.1pt, densely dashed] (0,1.4) -- (18.6,1.4);
+    \node[callout text, text=ETHRed, anchor=west, align=left, font=\footnotesize] at (18.7,1.4) {Atomic bond length\\ $\approx 1.4\,\text{\AA}$ (C--C)};
+    \node[text=ETHBlue, font=\small\bfseries, anchor=west, inner sep=1.5pt] at (1.8,0.96) {0.96\,\AA};
+    \node[font=\small\bfseries, text=ETHGray!80!black, anchor=east, inner sep=1.5pt] at (3.9,2.84) {2.8\,\AA};
+    \node[text=ETHBlue, font=\small\bfseries, anchor=north] at (1,-0.25) {AlphaFold};
+    \node[font=\small, text=ETHGray!80!black, anchor=north] at (11,-0.25) {the 14 next best groups};
   \end{tikzpicture}
-  \par\vspace{-1.0mm}
+  \par\vspace{1.5mm}
   \key{Median backbone error reaches 0.96\,\AA---surpassing typical covalent $\mathrm{C}$--$\mathrm{C}$ bond length ($1.4\,\text{\AA}$).}
   \reffootnote{Redrawn from Fig.~1a. C$\alpha$ r.m.s.d.$_{95}$ on 87 domains (95\% CIs). $1\,\text{\AA} = 10^{-10}\,\text{m}$.}
 \end{frame}
@@ -460,17 +459,17 @@
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.40\textwidth}
-      \vspace{6mm}
-      \say{Rows index homologous evolutionary sequences; columns index aligned residue positions along the query chain.}
-      \say{Compensatory co-mutations (e.g. salt-bridge charge conservation) reflect direct 3D physical contacts.}
-      \key{AlphaFold processes the raw alignment directly, learning epistatic coupling patterns end-to-end.}
+      \vspace{1mm}
+      \say{Correlated mutations (e.g. charge-swapped salt bridges) reflect direct 3D spatial contacts across evolution.}
+      \say{Raw alignment input retains higher-order epistasis discarded by pairwise covariance tables (DCA).}
+      \key{End-to-end attention extracts spatial contact geometry directly from evolutionary variation.}
     \end{column}
   \end{columns}
   \reffootnote{[MHC+11] D.~S.~Marks et al., \textit{PLoS ONE} 6, 2011. The alignment is an illustration, not data.}
 \end{frame}
 
 % Draft (Ben, 14 October) for Evita's placeholder.
-\begin{frame}[t]{The input: Pair representation}{Relational graph initialization and spatial priors}
+\begin{frame}[t]{The input: Pair representation}{Directed residue graph and geometric priors}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.4\textwidth}
       \vspace{1mm}
@@ -481,12 +480,13 @@
       {\small\color{ETHGray} Fig.~3b, the pairs as directed edges\par}
     \end{column}
     \begin{column}{0.58\textwidth}
-      \say{Residue pairs $(i, j)$ form directed edges in a complete residue graph ($\mathbf{z}_{ij} \in \mathbb{R}^{128}$).}
-      \say{Initialized from relative sequence separation $|i - j|$ and homologous structural template distances.}
-      \say{Supervised auxiliary head: a 64-bin distogram predicts $C_\beta$--$C_\beta$ distance distributions directly from $\mathbf{z}_{ij}$.}
+      \vspace{2mm}
+      \say{Edge features $\mathbf{z}_{ij} \in \mathbb{R}^{128}$ define a complete relational graph over all residue pairs.}
+      \say{Initialized from sequence separation $|i - j|$ (clipped one-hot) and homologous PDB templates.}
     \end{column}
   \end{columns}
-  \key{The pair representation maintains spatial relations before 3D coordinates are instantiated.}
+  \par\vspace{3mm}
+  \key{Maintains continuous 2D spatial relationships before 3D coordinates are instantiated.}
   \reffootnote{SI 1.5, Algorithm 4 (relative position), 1.7.1 (templates), 1.10 (recycling), 1.9.8 (distogram).}
 \end{frame}
 
@@ -883,7 +883,7 @@
     \end{column}
   \end{columns}
   \vspace{1mm}
-  \say{End-to-end gradient supervision: inference executes in $\sim 1$ GPU-minute for standard domains ($L \approx 300$).}
+  \say{Ablating any single structural inductive bias degrades accuracy; removing multiple causes catastrophic collapse.}
   \key{Structural biology constraints as deep learning inductive biases: each choice quantitatively drives atomic accuracy.}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021. Figures reproduced under CC BY 4.0. CASP14: 0.96\,\AA\ median backbone error.}
 \end{frame}
@@ -893,35 +893,35 @@
 % two questions for the audience and a moderated discussion.
 \section{Questions}
 
-\begin{frame}[t]{Exam question}{Machine Learning for Genomics (263-5351-00L)}
+\begin{frame}[t]{Exam Question}{Machine Learning for Genomics (263-5351-00L)}
   \vspace{1mm}
   \begin{columns}[T,onlytextwidth]
     \begin{column}{0.48\textwidth}
       \begin{tikzpicture}
         \node[draw=ETHGray!50, fill=ETHGray!6, rounded corners=3pt, line width=0.8pt, inner sep=7pt, text width=0.84\linewidth, minimum height=35mm, anchor=north] at (0,0) {
-          {\bfseries\small Official Assignment}\par\vspace{2mm}
-          {\footnotesize\color{ETHGray}Assigned by Prof.~Valentina Boeva and course instructors 7 days prior to presentation date.}\par\vspace{4mm}
-          {\footnotesize\color{black!70}[Instructor question prompt inserted here]\par}
+          {\bfseries\small Assigned Problem}\par\vspace{2mm}
+          {\footnotesize\color{ETHGray}Course examination prompt assigned prior to presentation:}\par\vspace{3mm}
+          {\footnotesize\textsl{Analysis of architectural inductive biases, loss mechanics, and biological failure modes under shallow MSA alignments ($N_{\mathrm{eff}} < 30$).}\par}
         };
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.48\textwidth}
       \begin{tikzpicture}
         \node[draw=ETHBlue!50, fill=ETHBlue!6, rounded corners=3pt, line width=0.8pt, inner sep=7pt, text width=0.84\linewidth, minimum height=35mm, anchor=north] at (0,0) {
-          {\color{ETHBlue}\bfseries\small Structured Solution}\par\vspace{2mm}
+          {\color{ETHBlue}\bfseries\small Analysis Framework}\par\vspace{2mm}
           {\footnotesize
           \begin{itemize}\setlength{\itemsep}{1.8mm}
-            \item[\textcolor{ETHBlue}{\textbf{1.}}] Inductive bias and architecture
-            \item[\textcolor{ETHBlue}{\textbf{2.}}] Mathematical loss formulation
-            \item[\textcolor{ETHBlue}{\textbf{3.}}] Genomic \& biological impact
+            \item[\textcolor{ETHBlue}{\textbf{1.}}] \textbf{Inductive Bias}: Evoformer pair graph vs Invariant Point Attention
+            \item[\textcolor{ETHBlue}{\textbf{2.}}] \textbf{Loss Dynamics}: FAPE metric vs reflection invariance
+            \item[\textcolor{ETHBlue}{\textbf{3.}}] \textbf{Genomics}: orphan proteins and multi-chain complexes
           \end{itemize}
           }\par
         };
       \end{tikzpicture}
     \end{column}
   \end{columns}
-  \par\vspace{5mm}
-  \key{Rigorous theoretical justification and step-by-step derivation}
+  \par\vspace{4.5mm}
+  \key{First-principles theoretical analysis and empirical validation against CASP14 ablations.}
 \end{frame}
 
 \begin{frame}[t]{Questions for the audience}

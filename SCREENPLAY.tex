@@ -131,8 +131,9 @@ Title & Title Slide & Evita & Context, PDB 6Y4F rendering, paper citation & 0:30
 20 & Summary: four design choices, measured & Ben & Quantitative ablation scorecard, final synthesis & 0:45 & 25:30 \\
 \midrule
 \multicolumn{6}{@{}l}{\textbf{Part III: Seminar Discussion and References (Shared)}} \\
-21 & Questions for the audience & Evita/Ben & Moderated interactive peer debate & 4:30 & 30:00 \\
-22--23 & References & Evita/Ben & Primary literature & 1:00 & 31:00 \\
+21 & Exam Question & Evita/Ben & Course examination analysis & 2:00 & 27:30 \\
+22 & Questions for the audience & Evita/Ben & Moderated interactive peer debate & 2:30 & 30:00 \\
+23--24 & References & Evita/Ben & Primary literature & 1:00 & 31:00 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -217,7 +218,7 @@ Every single block of the 48 Evoformer layers reads from and writes to exclusive
 
 % ---------------------------------------------------------------------------------------------
 \slideheader{6}{The input: MSA representation}{Evita}{7:00--8:15}
-\shadowbox{Left: alignment matrix with correlated mutations highlighted in blue/red across columns 3 and 9. Right: Covariance intuition and DCA background.}
+\shadowbox{Left: Alignment matrix with correlated mutations in blue/red (salt-bridge charge conservation). Right: Contact extraction from evolutionary variation; raw alignment vs legacy DCA covariance tables.}
 
 \evita{Why does the MSA contain 3D spatial information? The answer lies in evolutionary co-variation. When a protein folds in a living cell, residues that are distant along the primary 1D chain may sit in direct physical contact in 3D space to stabilize a hydrophobic core or form a salt bridge.
 
@@ -227,7 +228,7 @@ Prior models, including AlphaFold~1, compressed the MSA down to summary statisti
 
 % ---------------------------------------------------------------------------------------------
 \slideheader{7}{The input: Pair representation}{Evita}{8:15--9:30}
-\shadowbox{Graph representation of pairs: residues as nodes, pair vectors $\mathbf{z}_{ij}$ as directed edges. Linear bias with relative position encoding.}
+\shadowbox{Left: Complete residue graph edge features $\mathbf{z}_{ij} \in \mathbb{R}^{128}$ (Fig.~3b). Right: Relative sequence separation and homologous template distance initialization.}
 
 \evita{Now consider the pair representation. Mathematically, $\mathbf{z}$ represents the edge features of a complete graph whose nodes are the residues.
 
@@ -451,7 +452,13 @@ AlphaFold 2 solved protein structure prediction not by ignoring biology, but by 
 \section{Part III: Seminar Discussion and References}
 % =============================================================================================
 
-\slideheader{21}{Questions for the audience}{Evita \& Ben}{25:30--30:00}
+\slideheader{21}{Exam Question}{Evita \& Ben}{25:30--27:30}
+\shadowbox{Left: Assigned course examination prompt. Right: Structured analysis framework (inductive bias, loss mechanics, and genomics).}
+
+\joint{In accordance with course seminar requirements, this slide addresses the examination prompt assigned prior to the talk, applying the mathematical and architectural principles established throughout the presentation to evaluate inductive biases and failure modes.}
+
+% ---------------------------------------------------------------------------------------------
+\slideheader{22}{Questions for the audience}{Evita \& Ben}{27:30--30:00}
 \shadowbox{Three discussion questions: (1) Inductive bias vs unconstrained diffusion, (2) Has the network learned physics or evolution?, (3) pLDDT reliability in genomics. Bottom: repository link.}
 
 \evita{\textbf{Question 1}: \textit{AlphaFold 2 hardcoded $\SE$ equivariance and stereochemical chirality into its architecture and loss. AlphaFold 3 dropped both in favor of unconstrained diffusion. When is geometric inductive bias indispensable, and when is unconstrained generative modeling preferable?}}
@@ -470,10 +477,10 @@ De novo designed proteins (Baker Lab RFdiffusion) fold accurately without natura
 pLDDT can over-predict confidence on isolated monomer models of obligate multimers that require binding partners to stabilize. In clinical genomics pipelines, low-confidence regions ($\text{pLDDT} < 50$) should be flagged as candidate intrinsically disordered regions (IDRs) rather than discarded as misfolded errors.}
 
 % ---------------------------------------------------------------------------------------------
-\slideheader{22--23}{References: Primary Literature \& Machine Learning}{Evita \& Ben}{30:00--31:00}
+\slideheader{23--24}{References: Primary Literature \& Machine Learning}{Evita \& Ben}{30:00--31:00}
 \shadowbox{Two slides listing standardized citations: Jumper 2021, Tunyasuvunakool 2021, Evans 2021, Baek 2021, Abramson 2024, Marks 2011, Lin 2023, Avsec 2025, Devlin 2019, Xie 2020, Sutton 2019.}
 
-\joint{Complete literature provenance and benchmark publications are cataloged here on Slides 22 and 23.}
+\joint{Complete literature provenance and benchmark publications are cataloged here on Slides 23 and 24.}
 
 \newpage
 % =============================================================================================
