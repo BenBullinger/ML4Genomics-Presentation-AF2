@@ -304,7 +304,7 @@
       \vspace{1.5mm}
       {\small\color{ETHGray} Primary amino acid sequence $\mathbf{s} \in \mathcal{A}^L$\par}
       \vspace{4mm}
-      \say{Genomic sequencing yields $>2\times 10^8$ known proteins (UniProt); structural experiments cover $<2\times 10^5$ (PDB).}
+      \say{Genomic sequencing yields $>2\times 10^8$ known proteins (UniProt); structural experiments cover $<2\times 10^5$ (Protein Data Bank, PDB).}
       \say{Thermodynamic fold determination (Anfinsen) faces astronomical conformational search ($10^{143}$ states, Levinthal).}
       \key{Predict all heavy-atom 3D coordinates $\mathbf{x} \in \mathbb{R}^{N_{\text{atoms}} \times 3}$ directly from primary sequence.}
     \end{column}
@@ -406,13 +406,15 @@
     \foreach \c in {0,...,11}
       \fill[ETHBlue!55] (\c*4.2, 0) rectangle ++(3.8,-3.8);
     \fill[ETHBlue!70] (5*4.2, -2*4.2) rectangle ++(3.8,-3.8);
-    \node[font=\scriptsize, anchor=south west] at (0,1.5) {MSA representation $\mathbf m_{si} \in \mathbb{R}^{256}$ per cell};
+    \node[font=\scriptsize, anchor=south west] at (0,1.5) {MSA representation $\textcolor{ETHBlue}{\mathbf m_{si}} \in \mathbb{R}^{256}$ per cell};
     \node[font=\scriptsize, text=ETHGray, anchor=east] at (-1.5,-1.9) {query};
     \node[font=\scriptsize, text=ETHGray, anchor=east, align=right] at (-1.5,-14.5) {homologous\\sequences};
     \node[font=\scriptsize, text=ETHGray, anchor=north] at (25,-26) {$N_{\text{res}}$ residues};
-    \node[font=\scriptsize, text=ETHGray, anchor=west, align=left] at (52.5,-12) {$N_{\text{seq}}$\\sequences};
-    % pair: residues by residues
-    \begin{scope}[shift={(75,0)}]
+    % Dimension bracket clearly attributing N_seq to the MSA
+    \draw[ETHGray!70, line width=0.5pt] (51.0, 0) -- (52.2, 0) -- (52.2, -24.8) -- (51.0, -24.8);
+    \node[font=\scriptsize, text=ETHGray!80!black, anchor=west, align=left] at (53.5,-12.4) {$N_{\text{seq}}$\\sequences};
+    % pair: residues by residues (shifted right to create clear visual separation)
+    \begin{scope}[shift={(88,0)}]
       \foreach \r in {0,...,11} \foreach \c in {0,...,11}
         \fill[black!12] (\c*2.1, -\r*2.1) rectangle ++(1.9,-1.9);
       \foreach \r in {0,...,11}
@@ -425,7 +427,7 @@
   \end{tikzpicture}
   \end{center}
   \vspace{-2mm}
-  \say{Evolutionary variation in $\mathbf{m}_{si}$; pairwise spatial geometry and orientation in $\mathbf{z}_{ij}$.}
+  \say{Evolutionary variation in $\textcolor{ETHBlue}{\mathbf{m}_{si}}$; pairwise spatial geometry and orientation in $\mathbf{z}_{ij}$.}
   \key{Dual-track representation: maintaining both tracks simultaneously avoids premature loss of raw evolutionary signals.}
   \reffootnote{Supplementary Information (SI) 1.5, Algorithms 3 and 4. Sizes in training: 128 sequences, crops of 256 residues (SI Table 4).}
 \end{frame}
@@ -522,7 +524,7 @@
     \end{column}
     \begin{column}{0.62\textwidth}
       \vspace{0mm}
-      \say{Edge $(i,j)$ aggregates two-hop paths through intermediate nodes $k$: $\sum_k \mathbf{z}_{ik} \odot \mathbf{z}_{jk}$.}
+      \say{Edge $\textcolor{ETHRed}{(i,j)}$ aggregates two-hop paths through intermediate nodes $k$: $\sum_k \textcolor{ETHBlue}{\mathbf{z}_{ik}} \odot \textcolor{ETHBlue}{\mathbf{z}_{jk}}$.}
       \key{Enforces the 3D triangle inequality and metric consistency directly in 2D pair space.}
     \end{column}
   \end{columns}
@@ -558,7 +560,7 @@
     \end{column}%
   \end{columns}
   \par\vspace{1mm}
-  \say{Residues are independent $\mathrm{SE}(3)$ rigid bodies $T_i = (R_i, \vec{\mathbf{t}}_i)$; dihedral angles $\chi$ place sidechains.}
+  \say{Residues are independent $\mathrm{SE}(3)$ rigid bodies $\textcolor{ETHRed}{T_i} = (\textcolor{ETHRed}{R_i}, \textcolor{ETHBlue}{\vec{\mathbf{t}}_i})$; dihedral angles $\chi$ place sidechains.}
   \key{Simultaneous updates as an unconstrained residue gas; covalent chain geometry is learned, not hardcoded.}
   \reffootnote{[JEP+21] Jumper et al., \textit{Nature} 2021, Fig.~3c,d (8 iterations, SI Algorithms 20--23).}
 \end{frame}
@@ -567,8 +569,8 @@
   \props{3}
   \vspace{-1mm}
   {$\displaystyle a_{ij} \;=\; \text{softmax}_j \Bigl(\,
-    \term{\bm{q}_i^{\top} \bm{k}_j}{scalar sequence attention} \;+\; \term{b_{ij}}{pair bias}
-    \;-\; \term{\textstyle\sum_{p} \bigl\| T_i \circ \vec{\bm{q}}_{ip} - T_j \circ \vec{\bm{k}}_{jp} \bigr\|^2}{\,3\text{D coordinate distance penalty} \,} \,\Bigr)$\par}
+    \term{\textcolor{ETHBlue}{\bm{q}_i}^{\top} \bm{k}_j}{scalar sequence attention} \;+\; \term{b_{ij}}{pair bias}
+    \;-\; \term{\textstyle\sum_{p} \bigl\| \textcolor{ETHRed}{T_i} \circ \textcolor{ETHBlue}{\vec{\bm{q}}_{ip}} - \textcolor{ETHRed}{T_j} \circ \vec{\bm{k}}_{jp} \bigr\|^2}{\,3\text{D coordinate distance penalty} \,} \,\Bigr)$\par}
   \vspace{-0.5mm}
   \begin{tikzpicture}[x=6.5mm, y=6.5mm]
     \ipapair
@@ -609,7 +611,7 @@
     \node[font=\small] at (11.6,-1.45) {both, seen from frame $k$};
   \end{tikzpicture}
   \par\vspace{1mm}
-  {$\displaystyle \text{FAPE} \;=\; \frac{1}{Z}\,\mathop{\text{mean}}_{k,\,i}\; \text{min}\Bigl( d_{\text{clamp}},\; \bigl\| (\bm{R}_k, \bm{t}_k)^{-1} \bm{x}_i \;-\; (\bm{R}_k^{\text{true}}, \bm{t}_k^{\text{true}})^{-1} \bm{x}_i^{\text{true}} \bigr\| \Bigr)$\par}
+  {$\displaystyle \text{FAPE} \;=\; \frac{1}{Z}\,\mathop{\text{mean}}_{\textcolor{ETHRed}{k},\,i}\; \text{min}\Bigl( d_{\text{clamp}},\; \bigl\| \textcolor{ETHRed}{(\bm{R}_k, \bm{t}_k)}^{-1} \textcolor{ETHBlue}{\bm{x}_i} \;-\; \textcolor{ETHRed}{(\bm{R}_k^{\text{true}}, \bm{t}_k^{\text{true}})}^{-1} \bm{x}_i^{\text{true}} \bigr\| \Bigr)$\par}
   \vspace{1mm}
   \key{Local-frame point alignment: rigorously $\mathrm{SE}(3)$-invariant, strictly sensitive to chiral enantiomer reflections.}
   \reffootnote{Supplementary Information, Algorithm 28, with $Z = d_{\text{clamp}} = 10$\,\AA. Pseudometric proof in backup 2.}
