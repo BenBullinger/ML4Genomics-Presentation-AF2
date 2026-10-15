@@ -966,137 +966,258 @@
 % reason in grey, and the answer in blue. They do not count in the slide total.
 
 \begin{frame}[t]{Backup (1/5): Exact $\mathrm{SE}(3)$ invariance of IPA}{SI 1.8.2, Algorithm 22, equations 3 to 6}
-  \vspace{-3.5mm}
+  \vspace{-4.5mm}
   \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.26\textwidth}
-      \vspace{2mm}
-      \begin{tikzpicture}[x=3.8mm, y=3.8mm] \ipapair \end{tikzpicture}
+    \begin{column}{0.25\textwidth}
+      \vspace{0.5mm}
+      \centering
+      \begin{tikzpicture}[x=3.8mm, y=3.8mm]
+        % Backbone peptide trace
+        \draw[ETHGray!40, line width=1.6pt, line cap=round, line join=round] (-0.8,-0.5) -- (0,0) -- (1.5,-1.2) -- (3.2,-0.8) -- (4.2,0.2) -- (5.0,0.8);
+        % Residue frames
+        \frameaxes{(0,0)}{25}
+        \node[font=\tiny\bfseries, text=ETHRed, anchor=north east] at (0,-0.1) {$T_i$};
+        \frameaxes{(4.2,0.2)}{-15}
+        \node[font=\tiny\bfseries, text=ETHRed, anchor=north west] at (4.2,-0.1) {$T_j$};
+        % Query from frame i (blue)
+        \draw[ETHBlue!60, line width=0.8pt, -{Latex[length=3.5pt]}] (0,0) -- (1.4,1.1);
+        \fill[ETHBlue] (1.4,1.1) circle (1.8pt) node[anchor=south, font=\tiny, text=ETHBlue] {$\vec{\bm q}_i$};
+        % Key from frame j (black)
+        \draw[black!60, line width=0.8pt, -{Latex[length=3.5pt]}] (4.2,0.2) -- (2.6,1.0);
+        \fill[black] (2.6,1.0) circle (1.8pt) node[anchor=south, font=\tiny] {$\vec{\bm k}_j$};
+        % Value from frame j (green)
+        \draw[PaperCurveGreen!70, line width=0.8pt, -{Latex[length=3.5pt]}] (4.2,0.2) -- (3.0,-0.8);
+        \fill[PaperCurveGreen] (3.0,-0.8) circle (1.8pt) node[anchor=north, font=\tiny, text=PaperCurveGreen] {$\vec{\bm v}_j$};
+        % Distance between query and key
+        \draw[ETHRed, line width=1pt, densely dashed] (1.4,1.1) -- node[midway, above=-0.5mm, font=\tiny\bfseries, text=ETHRed] {$d_{ij}$} (2.6,1.0);
+        % Global motion arc
+        \draw[ETHRed, line width=0.8pt, -{Latex[length=3.5pt]}] (1.8,1.9) arc[start angle=140, end angle=40, radius=1.5] node[midway, above, font=\tiny\bfseries, text=ETHRed] {$\Tg \in \mathrm{SE}(3)$};
+      \end{tikzpicture}\par
+      \vspace{1mm}
+      \scriptsize
+      \setlength{\tabcolsep}{1.2pt}
+      \renewcommand{\arraystretch}{0.92}
+      \begin{tabular}{@{}ll@{}}
+        \textcolor{ETHRed}{$\bm\to$} \textbf{Frames} & $T_i, T_j \in \mathrm{SE}(3)$ \\
+        \textcolor{ETHBlue}{$\bullet$} \textbf{Query} & $\textcolor{ETHBlue}{\vec{\bm q}_i} \in \mathbb{R}^3$ \\
+        $\bullet$ \textbf{Key} & $\vec{\bm k}_j \in \mathbb{R}^3$ \\
+        \textcolor{PaperCurveGreen}{$\bullet$} \textbf{Val} & $\textcolor{PaperCurveGreen}{\vec{\bm v}_j} \in \mathbb{R}^3$ \\
+        \textcolor{ETHRed}{\bf \textendash\,\textendash} \textbf{Dist.} & $d_{ij}$ invariant \\
+        \textcolor{ETHRed}{$\Tg$} \textbf{Global} & $\in \mathrm{SE}(3)$
+      \end{tabular}
     \end{column}
     \begin{column}{0.73\textwidth}
       \footnotesize
-      \setlength{\abovedisplayskip}{1pt}\setlength{\belowdisplayskip}{1pt}
-      {\raggedright Attention affinity uses pairwise Euclidean distances between query and key points:\par}
+      \setlength{\abovedisplayskip}{0.5pt}\setlength{\belowdisplayskip}{0.5pt}\setlength{\jot}{0pt}
+      {\raggedright \textbf{1. Attention Affinities}: invariant under global rigid motion $\textcolor{ETHRed}{\Tg \in \mathrm{SE}(3)}$:\par}
       \vspace{-1mm}
-      \begin{align*}
-        &\|(\Tg\circ T_i)\circ\vec{\bm q}_i-(\Tg\circ T_j)\circ\vec{\bm k}_j\|^2\\
-        &\quad= \|\Tg\circ(T_i\circ\vec{\bm q}_i-T_j\circ\vec{\bm k}_j)\|^2
-        = \|T_i\circ\vec{\bm q}_i-T_j\circ\vec{\bm k}_j\|^2
-      \end{align*}
-      {\color{ETHGray} Global rigid motion $\Tg \in \mathrm{SE}(3)$ cancels identically under Euclidean norm.\par}
-      \vspace{1.5mm}
-      {\raggedright Value aggregation mapped back into residue $i$ local frame:\par}
+      \begin{equation*}
+        \big\|(\textcolor{ETHRed}{\Tg}\circ T_i)\circ\textcolor{ETHBlue}{\vec{\bm q}_i} - (\textcolor{ETHRed}{\Tg}\circ T_j)\circ\vec{\bm k}_j\big\|^2
+        = \big\|\textcolor{ETHRed}{\Tg}\circ(T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i}-T_j\circ\vec{\bm k}_j)\big\|^2
+        = \big\|T_i\circ\textcolor{ETHBlue}{\vec{\bm q}_i}-T_j\circ\vec{\bm k}_j\big\|^2
+      \end{equation*}
+      {\color{ETHGray}\scriptsize Rigid motion $\textcolor{ETHRed}{\Tg}$ is an isometry: preserves Euclidean norm identically $\implies a_{ij}$ is $\mathrm{SE}(3)$-invariant.\par}
+      \vspace{1mm}
+      {\raggedright \textbf{2. Local Frame Projection}: value aggregation mapped back to residue $i$ frame:\par}
       \vspace{-1mm}
-      \begin{align*}
-        &(\Tg\circ T_i)^{-1}\circ\textstyle\sum_j a_{ij}\,(\Tg\circ T_j)\circ\vec{\bm v}_j\\
-        &\quad= T_i^{-1}\circ\Tg^{-1}\circ\Tg\circ\textstyle\sum_j a_{ij}\,T_j\circ\vec{\bm v}_j
-        = T_i^{-1}\circ\textstyle\sum_j a_{ij}\,T_j\circ\vec{\bm v}_j
-      \end{align*}
-      {\color{ETHGray} $\Tg^{-1}\Tg = I$ cancels algebraically; local representation is strictly invariant.\par}
+      \begin{gather*}
+        (\textcolor{ETHRed}{\Tg}\circ T_i)^{-1}\circ\sum_j a_{ij}\,(\textcolor{ETHRed}{\Tg}\circ T_j)\circ\textcolor{PaperCurveGreen}{\vec{\bm v}_j}\\
+        =\; T_i^{-1}\circ\underbrace{\textcolor{ETHRed}{\Tg^{-1}\Tg}}_{=\,\mathbf{I}}\circ\sum_j a_{ij}\,T_j\circ\textcolor{PaperCurveGreen}{\vec{\bm v}_j}
+        \;=\; T_i^{-1}\circ\sum_j a_{ij}\,T_j\circ\textcolor{PaperCurveGreen}{\vec{\bm v}_j}
+      \end{gather*}
+      {\color{ETHGray}\scriptsize Group inverse $\textcolor{ETHRed}{\Tg^{-1}\Tg} = \mathbf{I}$ cancels algebraically $\implies$ updated coordinate representation is invariant.\par}
     \end{column}
   \end{columns}
   \par\vspace{1mm}
   \key{Exact algebraic $\mathrm{SE}(3)$-invariance: attention weights and coordinate updates are independent of global pose.}
 \end{frame}
 
-\begin{frame}[t]{Backup (2/5): Stereochemical chirality and FAPE metric properties}{SI 1.8.1, 1.8.4, 1.9.4, Algorithm 28}
-  \vspace{-3mm}
+\begin{frame}[t]{Backup (2/5): Chirality and FAPE metric bounds}{SI 1.8.1, 1.8.4, 1.9.4, Algorithm 28}
+  \vspace{-3.5mm}
   \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.33\textwidth}
-      \vspace{0.5mm}
-      \pictoatoms\par
-      \vspace{1.5mm}
-      \pictomirrorpage
+    \begin{column}{0.28\textwidth}
+      \vspace{1mm}
+      \centering
+      \begin{tikzpicture}[x=3.8mm, y=3.8mm]
+        \coordinate (N) at (-1.4,-0.7);
+        \coordinate (CA) at (0,0);
+        \coordinate (C) at (1.4,-0.7);
+        \draw[black!40, line width=1.2pt] (N) -- (CA) -- (C);
+        \fill[black] (N) circle (1.8pt) node[below=1pt, font=\tiny] {N};
+        \fill[ETHRed] (CA) circle (1.8pt) node[above=2pt, font=\tiny\bfseries, text=ETHRed] {C$\alpha$};
+        \fill[black] (C) circle (1.8pt) node[below=1pt, font=\tiny] {C};
+        \draw[ETHRed, line width=1pt, -{Latex[length=3.5pt]}] (CA) -- (1.0,-0.5) node[right, font=\tiny\bfseries, text=ETHRed] {$\bm e_1$};
+        \draw[ETHRed, line width=1pt, -{Latex[length=3.5pt]}] (CA) -- (-0.5,-1.1) node[below, font=\tiny\bfseries, text=ETHRed] {$\bm e_2$};
+        \draw[ETHRed, line width=0.8pt] (0.8,0.7) circle (2.2pt);
+        \fill[ETHRed] (0.8,0.7) circle (0.8pt);
+        \node[font=\tiny\bfseries, text=ETHRed, anchor=west] at (1.1,0.7) {$\bm e_3$};
+      \end{tikzpicture}\par
+      {\scriptsize \textbf{Right-handed basis}: $\bm e_3 = \bm e_1 \times \bm e_2$\par}
+      \vspace{2mm}
+      \begin{tikzpicture}[x=3.8mm, y=3.8mm]
+        % Original frame and point
+        \draw[ETHGray!60, line width=0.8pt] (-1.2,0) -- (1.2,0);
+        \fill[ETHBlue] (0,1.1) circle (2.0pt) node[above, font=\tiny, text=ETHBlue] {$\bm x_j\,(z > 0)$};
+        \draw[ETHBlue, densely dashed, line width=0.7pt] (0,0) -- (0,1.1);
+        % Arrow for reflection
+        \draw[black!60, line width=0.8pt, -{Latex[length=3.5pt]}] (1.8,0.4) -- (3.2,0.4) node[midway, above, font=\tiny] {mirror};
+        % Reflected frame and point
+        \begin{scope}[shift={(5.0,0)}]
+          \draw[ETHGray!60, line width=0.8pt] (-1.2,0) -- (1.2,0);
+          \fill[ETHRed] (0,-1.1) circle (2.0pt) node[below, font=\tiny, text=ETHRed] {$\bm x_j^{\text{mir}}\,(z < 0)$};
+          \draw[ETHRed, densely dashed, line width=0.7pt] (0,0) -- (0,-1.1);
+        \end{scope}
+      \end{tikzpicture}\par
+      {\scriptsize \textbf{Reflection inverts $z$}: $z \mapsto -z$\par}
     \end{column}
-    \begin{column}{0.65\textwidth}
+    \begin{column}{0.70\textwidth}
       \footnotesize
-      \setlength{\abovedisplayskip}{1.5pt}\setlength{\belowdisplayskip}{1.5pt}
-      \say{Right-handed frames: Gram--Schmidt ($\bm e_3 = \bm e_1 \times \bm e_2$). Reflection negates local $z$:}
-      \vspace{-1.5mm}
-      \begin{equation*}
-        T_i^{-1}\circ \bm x_j \mapsto \mathrm{diag}(1,1,-1)(T_i^{-1}\circ \bm x_j)
-      \end{equation*}
-      \say{$\mathrm{FAPE}(X, X_{\text{mirror}}) = \frac{2}{Z}\sum_{k,i} \min\big(d_{\text{clamp}}, |(T_k^{-1}\circ \bm x_i)_z|\big) > 0$.}
-      {\color{ETHGray} Strictly positive for non-planar structures; breaks mirror reflection symmetry.\par}
-      \vspace{0.8mm}
-      \say{\textbf{Metric bound}: $\text{FAPE}(X, Y) \ge \min_{R,\bm t} \mathrm{RMSD}(R X + \bm t, Y)$. Non-negative, symmetric; satisfies triangle inequality (pseudometric on $\mathbb{R}^{3M}/\mathrm{SE}(3)$).}
+      \setlength{\abovedisplayskip}{0.5pt}\setlength{\belowdisplayskip}{0.5pt}\setlength{\jot}{1.5pt}
+      {\raggedright Gram--Schmidt local frames break reflection symmetry via $z$-axis inversion:\par}
+      \vspace{-1mm}
+      \begin{alignat*}{2}
+        &\text{\textbf{Mirror flip}:} &\quad T_i^{-1} \circ \bm x_j &\;\xrightarrow{\text{mirror}}\; \mathrm{diag}(1,\, 1,\, \textcolor{ETHRed}{-1}) \, (T_i^{-1} \circ \bm x_j)\\[1pt]
+        &\text{\textbf{FAPE loss}:} &\quad \mathcal{L}_{\mathrm{FAPE}}(X, X_{\text{mir}}) &\;=\; \frac{2}{Z} \sum_{k,i} \min\Big(d_{\text{clamp}},\, \big|\textcolor{ETHBlue}{(T_k^{-1} \bm x_i)_z}\big|\Big) > 0\\[1pt]
+        &\text{\textbf{RMSD bound}:} &\quad \mathcal{L}_{\mathrm{FAPE}}(X, Y) &\;\ge\; \min_{R \in \mathrm{SO}(3),\, \bm t} \mathrm{RMSD}(R X + \bm t,\, Y)
+      \end{alignat*}
+      \vspace{0.5mm}
+      {\color{ETHGray}\scriptsize Strictly positive for non-planar geometries ($z_i \ne 0$): detects chirality and bounds optimal RMSD without Kabsch SVD.\par}
     \end{column}
   \end{columns}
-  \par\vspace{1.5mm}
+  \par\vspace{1mm}
   \key{Breaks reflection symmetry without Kabsch alignment while bounding optimal RMSD.}
 \end{frame}
 
 \begin{frame}[t]{Backup (3/5): Triangle updates and 2D metric consistency}{SI 1.6.4--1.6.6, Algorithms 11--14}
-  \vspace{-2.5mm}
+  \vspace{-3.5mm}
   \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.32\textwidth}
-      \vspace{2mm}
+    \begin{column}{0.28\textwidth}
+      \vspace{1mm}
+      \centering
       \begin{tikzpicture}[x=7.2mm, y=7.2mm,
-          res/.style={circle, draw, line width=0.8pt, minimum size=5.5mm, inner sep=0pt, font=\footnotesize}]
-        \node[res] (i) at (0,1.8) {$i$};
-        \node[res] (j) at (3.2,1.8) {$j$};
-        \node[res] (k) at (1.6,0.2) {$k$};
-        \draw[ETHRed, line width=1.8pt, -{Latex[length=5pt]}] (i) -- node[above, callout text] {$\mathbf{z}_{ij}$} (j);
-        \draw[ETHBlue, line width=1.2pt, -{Latex[length=4pt]}] (i) -- node[below left, font=\scriptsize, text=ETHBlue] {$\mathbf{z}_{ik}$} (k);
-        \draw[ETHBlue, line width=1.2pt, -{Latex[length=4pt]}] (k) -- node[below right, font=\scriptsize, text=ETHBlue] {$\mathbf{z}_{kj}$} (j);
-      \end{tikzpicture}
+          res/.style={circle, draw, line width=0.9pt, minimum size=5.5mm, inner sep=0pt, font=\scriptsize}]
+        \node[res] (i) at (0,1.9) {$i$};
+        \node[res] (j) at (3.4,1.9) {$j$};
+        \node[res] (k) at (1.7,0.2) {$k$};
+        \draw[ETHRed, line width=1.7pt, -{Latex[length=4.5pt]}] (i) -- node[above, font=\scriptsize\bfseries, text=ETHRed] {$\mathbf{z}_{ij}$} (j);
+        \draw[ETHBlue, line width=1.2pt, -{Latex[length=4pt]}] (i) -- node[below left, font=\tiny, text=ETHBlue] {$\mathbf{a}_{ik}$} (k);
+        \draw[ETHBlue, line width=1.2pt, -{Latex[length=4pt]}] (j) -- node[below right, font=\tiny, text=ETHBlue] {$\mathbf{b}_{jk}$} (k);
+        \node[font=\footnotesize, text=PaperCurveGreen] at (1.7, 1.0) {$\odot$};
+      \end{tikzpicture}\par
+      \vspace{1mm}
+      {\scriptsize \textbf{Metric closure}: $d_{ij} \le d_{ik} + d_{kj}$\par
+      \vspace{0.6mm}
+      \textbf{Path marginalization}: $\sum_k$ combines all $k$\par}
     \end{column}
-    \begin{column}{0.66\textwidth}
+    \begin{column}{0.70\textwidth}
       \footnotesize
-      \setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}
-      \say{Physical 3D distances must satisfy the metric triangle inequality: $d_{ik} \le d_{ij} + d_{jk}$.}
-      \say{Standard 2D convolutions or axial attention cannot enforce metric closure across triplets.}
-      \say{\textbf{Multiplicative update}: marginalizes directed paths via intermediate residues $k$:}
-      \vspace{-1mm}
+      \setlength{\abovedisplayskip}{1.5pt}\setlength{\belowdisplayskip}{1.5pt}
+      {\raggedright \textbf{1. Multiplicative Updates} (SI Algorithm 11--12):\par}
       \begin{equation*}
-        \mathbf{z}_{ij} \leftarrow \mathbf{z}_{ij} + \mathrm{Linear}\Big(\sum_k \sigma(\mathbf{a}_{ik}) \odot \sigma(\mathbf{b}_{jk})\Big)
+        \textcolor{ETHRed}{\mathbf{z}_{ij}} \;\leftarrow\; \textcolor{ETHRed}{\mathbf{z}_{ij}} \;+\; \mathrm{Linear}\left(\sum_{k=1}^N \sigma(\textcolor{ETHBlue}{\mathbf{a}_{ik}}) \odot \sigma(\textcolor{ETHBlue}{\mathbf{b}_{jk}})\right)
       \end{equation*}
-      \say{\textbf{Triangle self-attention}: updates edges $(i,j)$ with attention biased by $(j,k)$.}
+      {\color{ETHGray}\scriptsize Gated Hadamard product $\odot$ of outgoing edges $(i,k)$ and $(j,k)$ completes triangular path $(i,k,j)$.\par}
+      \vspace{1.5mm}
+      {\raggedright \textbf{2. Triangle Self-Attention} (SI Algorithm 13--14):\par}
+      \begin{equation*}
+        \mathbf{A}_{ij} \;=\; \mathrm{softmax}_j\left(\frac{1}{\sqrt{c}}\,\mathbf{q}_{ij}^\top \mathbf{k}_{ij} \;+\; \mathbf{b}_{ij} \;+\; \sum_{k=1}^N \mathbf{w}^\top \textcolor{ETHBlue}{\mathbf{z}_{ik}}\right)
+      \end{equation*}
+      {\color{ETHGray}\scriptsize Edge $(i,j)$ attends across the full graph, biased by third-edge marginalization $\sum_k \mathbf{w}^\top \mathbf{z}_{ik}$.\par}
     \end{column}
   \end{columns}
-  \par\vspace{1.5mm}
+  \par\vspace{1mm}
   \key{Enforces geometric consistency and metric embeddability directly in 2D pair space.}
 \end{frame}
 
 \begin{frame}[t]{Backup (4/5): Non-linear ablation synergies and recycling}{SI 1.10 and 1.13, Figure 4a}
-  \vspace{-2.5mm}
-  \footnotesize
-  \renewcommand{\arraystretch}{1.03}
-  \setlength{\tabcolsep}{1.2mm}
-  \begin{tabular}{@{}p{0.36\textwidth}r>{\raggedright\arraybackslash}p{0.50\textwidth}@{}}
-    \toprule
-    Ablated component & $\Delta\text{GDT}$ & Underlying failure mechanism \\
-    \midrule
-    No IPA alone & \textminus 2.3 & Single linear frame projection; loses iterative geometry refinement. \\
-    No recycling alone & \textminus 4.5 & Single pass; pair representation cannot re-embed intermediate distances. \\
-    \textbf{No IPA AND no recycling} & \textbf{\textminus 16.3} & \textbf{Catastrophic collapse: recycling provides iterative depth for IPA.} \\
-    No raw MSA (only DCA tables) & \textminus 2.2 & Discards higher-order epistatic mutational couplings. \\
-    No triangle updates & \textminus 4.6 & Pair graph violates 3D metric embeddability. \\
-    \bottomrule
-  \end{tabular}
-  \par\vspace{1.5mm}
-  \say{Ablations reveal severe non-linear coupling: individual errors compound without iterative correction.}
+  \vspace{-3.5mm}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.51\textwidth}
+      \footnotesize
+      \renewcommand{\arraystretch}{1.08}
+      \setlength{\tabcolsep}{0.8mm}
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.44\linewidth}r>{\raggedright\arraybackslash}p{0.38\linewidth}@{}}
+        \toprule
+        \textbf{Ablated component} & $\bm{\Delta\text{GDT}}$ & \textbf{Mechanism} \\
+        \midrule
+        No IPA alone & \textcolor{ETHBlue}{-2.3} & Linear frame loss \\
+        No recycling alone & \textcolor{ETHBlue}{-4.5} & Single-pass limit \\
+        \textbf{No IPA + recycling} & $\bm{\textcolor{ETHRed}{-16.3}}$ & \textbf{Collapse} \\
+        No raw MSA (DCA) & \textcolor{ETHGray}{-2.2} & Epistatic loss \\
+        No triangle updates & \textcolor{ETHBlue}{-4.6} & Metric violation \\
+        \bottomrule
+      \end{tabular}
+      \vspace{1.5mm}
+      {\color{ETHGray}\scriptsize Ablations reveal severe non-linear coupling: single errors compound without iterative correction.\par}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \footnotesize
+      \centering
+      \begin{tikzpicture}[x=0.70mm, y=0.70mm]
+        % Axis
+        \draw[ETHGray!60, line width=0.5pt] (0,0) -- (0,24);
+        \node[font=\tiny, anchor=south] at (0,24) {$0$};
+        \node[font=\tiny, anchor=south] at (-20.4,24) {$-6.8$};
+        \node[font=\tiny, anchor=south] at (-48.9,24) {$-16.3$};
+        \draw[ETHGray!30, dashed] (-20.4,0) -- (-20.4,24);
+        \draw[ETHGray!30, dashed] (-48.9,0) -- (-48.9,24);
+        % Bar 1: Additive prediction
+        \fill[ETHBlue!30] (-20.4,14) rectangle (0,21);
+        \draw[ETHBlue, line width=0.8pt] (-20.4,14) rectangle (0,21);
+        \node[anchor=west, font=\scriptsize] at (1,17.5) {Additive: $\mathbf{-6.8}$};
+        % Bar 2: Actual joint
+        \fill[ETHRed!25] (-48.9,3) rectangle (0,10);
+        \draw[ETHRed, line width=1.1pt] (-48.9,3) rectangle (0,10);
+        \node[anchor=west, font=\scriptsize\bfseries, text=ETHRed] at (1,6.5) {Joint: $\mathbf{-16.3}$};
+        % Synergy bracket
+        \draw[ETHRed, line width=0.8pt] (-20.4,12) -- (-48.9,12);
+        \draw[ETHRed, line width=0.8pt] (-20.4,10.5) -- (-20.4,13.5);
+        \draw[ETHRed, line width=0.8pt] (-48.9,10.5) -- (-48.9,13.5);
+        \node[font=\tiny\bfseries, text=ETHRed, anchor=south] at (-34.65,12) {$\Delta_{\text{gap}} = \mathbf{-9.5}$};
+      \end{tikzpicture}
+      \vspace{1mm}
+      \setlength{\abovedisplayskip}{1.5pt}\setlength{\belowdisplayskip}{1.5pt}
+      \begin{gather*}
+        \Delta\mathrm{GDT}(\text{Joint}) \;\ll\; \Delta\mathrm{GDT}(\text{IPA}) \;+\; \Delta\mathrm{GDT}(\text{Rec})\\
+        \bm{\textcolor{ETHRed}{-16.3}} \;\ll\; \bm{\textcolor{ETHBlue}{-6.8}} \quad (\text{excess: } \bm{\textcolor{ETHRed}{-9.5}}\text{ GDT})
+      \end{gather*}
+      {\color{ETHGray}\scriptsize 4 cycles $\times$ 48 blocks = 192 effective Evoformer layers: recycling provides iterative depth for IPA.\par}
+    \end{column}
+  \end{columns}
+  \par\vspace{1mm}
   \key{Synergy: recycling provides the iterative trunk depth required for IPA to resolve complex topological knots.}
 \end{frame}
 
-\begin{frame}[t]{Backup (5/5): AlphaFold 3 evolution: diffusion vs inductive bias}{Abramson et al. [AAD+24], \textit{Nature} 630 (2024), Fig.~1d}
+\begin{frame}[t]{Backup (5/5): AlphaFold 3: Diffusion vs Inductive Bias}{Abramson et al. [AAD+24], \textit{Nature} 630 (2024), Fig.~1d}
   \vspace{-3.5mm}
   \begin{center}
-  \begin{markedAFthree}[0.64\linewidth]{2}{44 344 30 329}
+  \begin{markedAFthree}[0.56\linewidth]{2}{44 344 30 329}
     \fill[cover] (0,0.88) rectangle (0.025,1.01);
     \draw[callout] (0.395,0.22) rectangle (0.49,0.8);
     \draw[callout] (0.5,0.2) rectangle (0.63,0.8);
     \draw[callout] (0.72,0.2) rectangle (0.86,0.8);
-    \node[callout text, anchor=south] at (0.4425,1.02) {MSA};
-    \node[callout text, anchor=south] at (0.565,1.02) {pairformer};
-    \node[callout text, anchor=south] at (0.79,1.02) {diffusion};
+    \node[font=\tiny\bfseries, text=ETHRed, anchor=north] at (0.4425,0.18) {MSA (4 blocks)};
+    \node[font=\tiny\bfseries, text=ETHRed, anchor=south] at (0.565,0.82) {Pairformer (48 blocks)};
+    \node[font=\tiny\bfseries, text=ETHRed, anchor=north] at (0.79,0.18) {Diffusion (30 steps)};
   \end{markedAFthree}
   \end{center}
-  \vspace{-2mm}
+  \vspace{-3mm}
   \footnotesize
-  \say{\textbf{Generative paradigm}: Diffusion replaces residue frames, IPA, and FAPE with all-atom Cartesian denoising.}
-  \say{\textbf{Pair graph survival}: The Pairformer retains 48 blocks of triangle updates---the 2D relational graph remains essential.}
-  \say{\textbf{Trade-off}: Dropping frames causes 4.4\% chirality violations, requiring 25 rollouts and post-hoc ranking.}
-  \key{The pair graph survived; physical kinematic frames yielded to all-atom diffusion.}
+  \centering
+  \renewcommand{\arraystretch}{1.06}
+  \setlength{\tabcolsep}{1.2mm}
+  \begin{tabular}{@{}p{0.22\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}@{}}
+    \toprule
+    \textbf{Dimension} & \textbf{AlphaFold 2 (Inductive Bias)} & \textbf{AlphaFold 3 (Generative Diffusion)} \\
+    \midrule
+    \textbf{Geometric space} & Rigid residue gas $(R_i, \bm t_i) \in \mathrm{SE}(3)$ & All-atom Cartesian coordinates $\bm x \in \mathbb{R}^{3N}$ \\
+    \textbf{3D structure module} & Invariant Point Attention (IPA) + FAPE & Cartesian score-based diffusion model \\
+    \textbf{Relational core} & \textbf{Evoformer (48 triangle blocks)} & \textbf{Pairformer (48 triangle blocks retained!)} \\
+    \textbf{Chirality guarantee} & \textcolor{ETHBlue}{\textbf{Exact 0\% violations}} (Gram--Schmidt) & \textcolor{ETHRed}{\textbf{4.4\% violations}} (requires 25 rollouts) \\
+    \bottomrule
+  \end{tabular}
+  \par\vspace{1mm}
+  \key{The relational pair graph survived; physical kinematic frames yielded to all-atom diffusion.}
 \end{frame}
 
 \end{document}
