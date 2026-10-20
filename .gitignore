@@ -1,0 +1,17 @@
+# LaTeX build files. main.pdf stays tracked for Overleaf and for upload.
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.synctex.gz
+scratch/
+# The course lecture is the lecturer's material and stays out of the repository.
+Lecture5_Folding.pdf
+# Manual transfer folders for Overleaf, see tools/overleaf.py
+to_overleaf/
+from_overleaf/
+.DS_Store
