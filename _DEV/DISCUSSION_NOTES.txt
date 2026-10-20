@@ -1,0 +1,326 @@
+================================================================================
+ML4GENOMICS: ALPHAFOLD2 PRESENTATION & TECHNICAL DISCUSSION NOTES
+================================================================================
+Course:       Machine Learning for Genomics (HS26, ETH Zurich)
+Topic:        AlphaFold 2: Architecture, Geometry, and Evolutionary Constraints
+File Created: October 16, 2026
+Filename:     DISCUSSION_NOTES.txt
+Repository:   ML4Genomics-Presentation-AF2
+================================================================================
+
+TABLE OF CONTENTS
+-----------------
+1. Executive Overview
+2. Technical Inquiries & Conceptual Foundations
+   2.1 Stoichiometry & Multimer Assemblies
+   2.2 Homotypic vs. Heterotypic Contacts & MSA Pairing Mechanics
+   2.3 Prosthetic Groups, Cofactors & Small Molecules (e.g., Haem Group)
+   2.4 MSA Clustering & Representation Sampling
+   2.5 Biological Meaning of Homotypic vs. Heterotypic Underperformance
+3. Presentation Restructuring Strategy & Team Consensus
+   3.1 The Meeting Critique: Disconnected Mathematical Formalisms
+   3.2 Evita's Strategy: Supplementary Figures 2 & 8 as Architectural Anchors
+   3.3 Pedagogical Hierarchy: Model Intuition vs. Backup Defense Proofs
+   3.4 Visual Design System: Red Callout Rectangles and Floating Badges
+4. Exact Architectural Changes in the Deck
+   4.1 Slide 8: Evoformer Communication via Supp. Fig. 2 (SI p. 16, Alg. 7)
+   4.2 Slide 11: Invariant Point Attention via Supp. Fig. 8 (SI p. 28, Alg. 22)
+   4.3 Slide 12: FAPE as the Structure Module Supervision Loop
+5. Alignment of Deliverables (Deck, Script, Screenplay) & Verification
+6. Summary of Commits & Git State
+
+================================================================================
+1. EXECUTIVE OVERVIEW
+================================================================================
+During preparation for the 25-minute seminar presentation on DeepMind's AlphaFold 2
+(Jumper et al., Nature 2021), a technical debate and team meeting took place
+regarding both advanced biological/computational nuances (stoichiometry, contact
+co-evolution, haem cofactors, MSA clustering) and the pedagogical framing of the
+presentation deck.
+
+The consensus reached was that the previous presentation structure treated key
+mathematical concepts—specifically Invariant Point Attention (IPA) and the Frame
+Aligned Point Error (FAPE)—too much as isolated, standalone mathematical lemmas,
+disconnected from the actual neural network architecture. 
+
+To fix this:
+1. The architectural flow was grounded directly in the paper's Supplementary Figures.
+2. Evita's Slide 8 was rebuilt around Supplementary Figure 2 (SI p. 16) to show
+   the exact MSA row-wise gated self-attention mechanism and pair bias injection.
+3. Ben's Slide 11 was rebuilt around Supplementary Figure 8 (SI p. 28) to show
+   the three parallel affinity streams and the local pullback operator.
+4. Slide 12 was re-anchored as the Structure Module's end-to-end supervision loop.
+5. All detailed algebraic proofs (SE(3) group invariance, metric bounds, non-linear
+   ablation dynamics) were preserved in Backup Slides 1–5 for targeted Q&A defense.
+
+
+================================================================================
+2. TECHNICAL INQUIRIES & CONCEPTUAL FOUNDATIONS
+================================================================================
+
+--------------------------------------------------------------------------------
+2.1 Stoichiometry & Multimer Assemblies
+--------------------------------------------------------------------------------
+- Question: How does stoichiometry work in protein modeling, and how does AlphaFold
+  handle multimeric complexes?
+- Discussion:
+  * Stoichiometry describes the exact integer molar ratios of distinct polypeptide
+    chains in a biological complex (e.g., A2B2 for human hemoglobin with 2 alpha
+    and 2 beta globin subunits; A4 for a homotetramer).
+  * Monomeric AlphaFold 2 (Nature 2021) was trained purely on single polypeptide
+    chains from the PDB. It used an artificial residue index offset (e.g., +1000)
+    if users concatenated multiple chains into a single input, which lacked proper
+    cross-chain relative positional encodings.
+  * AlphaFold-Multimer (Evans et al., 2022) solved this natively by accepting user-
+    specified stoichiometry (specifying exact copy counts of each chain).
+  * The pair representation was partitioned into intra-chain blocks (residues
+    within the same chain) and inter-chain blocks (residues between different chains),
+    introducing symmetric positional encodings and chain identifier embeddings so
+    the model distinguishes within-subunit distances from cross-subunit distances.
+
+--------------------------------------------------------------------------------
+2.2 Homotypic vs. Heterotypic Contacts & MSA Pairing Mechanics
+--------------------------------------------------------------------------------
+- Question: What is the difference between homotypic and heterotypic contacts,
+  and why does MSA pairing perform strongly on heterotypic contacts but weakly
+  on homotypic contacts?
+- Discussion:
+  * Heterotypic contacts: Physical interfaces formed between two *different*
+    proteins (e.g., Protein A and Protein B).
+  * Homotypic contacts: Physical interfaces formed between two *identical* copies
+    of the *same* protein (e.g., Monomer A1 and Monomer A2 in a homodimer).
+  * Why heterotypic MSA pairing works well:
+    - To detect co-evolution between Protein A and Protein B, one must align rows
+      from the same organism (species matching) or from the same operon/genomic
+      locus.
+    - If residue i on Protein A mutates, and Protein B in the same organism undergoes
+      a compensatory mutation at residue j, the co-variation across paired species
+      is clean and unambiguous.
+  * Why homotypic MSA pairing struggles (The Self-Interaction Ambiguity):
+    - In a homomer, the sequences are identical! Residue i on chain A1 has the
+      exact same sequence identity and evolutionary history as residue i on chain A2.
+    - An intra-chain evolutionary signal between residue i and residue j within a
+      single monomer cannot be cleanly mathematically distinguished from an
+      inter-chain contact between residue i on chain A1 and residue j on chain A2.
+    - Furthermore, homomers often exhibit cyclic (Cn) or dihedral (Dn) point-group
+      symmetry where interface mutations can simultaneously affect multiple
+      symmetric contact points, confounding pairwise correlation analysis.
+
+--------------------------------------------------------------------------------
+2.3 Prosthetic Groups, Cofactors & Small Molecules (e.g., Haem Group)
+--------------------------------------------------------------------------------
+- Question: How does AlphaFold handle non-protein prosthetic groups like the Haem
+  group in hemoglobin or myoglobin?
+- Discussion:
+  * AlphaFold 2 does NOT explicitly represent or output coordinates for small
+    molecules, prosthetic groups (haem, flavin, ATP), metal ions (Fe, Zn, Mg),
+    or post-translational modifications (glycosylation, phosphorylation).
+  * Despite omitting haem from its inputs, AlphaFold 2 consistently predicts the
+    empty haem-binding pocket with remarkable geometric precision (leaving the
+    exact cavity open where the iron-porphyrin ring fits).
+  * Reason: Millions of years of evolution have selected the surrounding amino
+    acid backbone to hold that binding pocket rigid. The MSA contains strong
+    conservation profiles for the proximal and distal histidines that coordinate
+    the iron.
+  * Generative Shift to AlphaFold 3 (2024): AF3 completely redesigned the generative
+    pipeline, replacing the Structure Module with a full-atom Diffusion Module
+    that natively models proteins, DNA, RNA, ligands, haem groups, and ions
+    simultaneously in a single unified framework.
+
+--------------------------------------------------------------------------------
+2.4 MSA Clustering & Representation Sampling
+--------------------------------------------------------------------------------
+- Question: How does AlphaFold cluster and sample the MSA?
+- Discussion:
+  * Full genomic MSAs can contain hundreds of thousands of sequences (e.g., 200,000
+    homologs). An attention mechanism over all sequences is computationally
+    intractable (O(S^2 * R) memory).
+  * AlphaFold 2 uses a two-tier MSA strategy:
+    1. Cluster MSA Representation (m_si):
+       - MSA sequences are grouped into clusters based on sequence identity.
+       - A set of N_seq = 512 cluster representatives (centroids) are selected.
+         The first row is always the query target sequence.
+       - Each cluster representative is augmented with cluster profile statistics
+         (average amino acid frequencies and deletion rates across all members
+         assigned to that cluster).
+       - Full row-wise and column-wise gated axial attention executes on this
+         representation inside the 48 Evoformer blocks.
+    2. Extra MSA Representation (e_si):
+       - A larger sample of N_extra = 1024 (or up to 5120) raw sequences is kept.
+       - These sequences do not pass through expensive axial self-attention;
+         instead, they pass through simplified 4-block Extra MSA blocks that
+         refine the pair matrix via Outer Product Mean projections at low cost.
+
+--------------------------------------------------------------------------------
+2.5 Biological Meaning of Homotypic vs. Heterotypic Underperformance
+--------------------------------------------------------------------------------
+- Question: What does homotypic underperformance mean biologically?
+- Discussion:
+  * When a model struggles with homotypic assemblies compared to heterotypic ones,
+    it reveals that the network cannot lean entirely on statistical co-evolution.
+  * Biologically, homodimers rely heavily on structural symmetry constraints,
+    hydrophobic exclusion at packing cores, and backbone rigidity rather than
+    independent residue-pair co-adaptation.
+  * For machine learning in structural biology, this demonstrates why pure sequence
+    transformers fall short unless combined with explicit 3D inductive biases:
+    when evolutionary signals become ambiguous (as in homomers), the network must
+    rely on physical geometric reasoning (triangle consistency in 2D and rigid-body
+    docking in 3D).
+
+
+================================================================================
+3. PRESENTATION RESTRUCTURING STRATEGY & TEAM CONSENSUS
+================================================================================
+
+--------------------------------------------------------------------------------
+3.1 The Meeting Critique: Disconnected Mathematical Formalisms
+--------------------------------------------------------------------------------
+In the seminar preparation meeting, the team agreed that:
+- Previously, the presentations of Invariant Point Attention (IPA) and the Frame
+  Aligned Point Error (FAPE) were introduced almost as abstract mathematical
+  curiosities (equations and generic triad sketches).
+- Audience feedback indicated that while the math was impressive, listeners lost
+  track of *where* these operations lived inside the neural network and *why* the
+  network needed them.
+
+--------------------------------------------------------------------------------
+3.2 Evita's Strategy: Supplementary Figures 2 & 8 as Architectural Anchors
+--------------------------------------------------------------------------------
+Evita and the team decided to ground the slides directly in DeepMind's official
+system architecture schematics from the Supplementary Information:
+- Slide 8: Use **Supplementary Figure 2** (SI p. 16, Algorithm 7) to visualize
+  the exact row-wise gated self-attention block where sequence and pair tracks meet.
+- Slide 11: Use **Supplementary Figure 8** (SI p. 28, Algorithm 22) to visualize
+  the internal wiring of the Invariant Point Attention (IPA) module.
+
+--------------------------------------------------------------------------------
+3.3 Pedagogical Hierarchy: Model Intuition vs. Backup Defense Proofs
+--------------------------------------------------------------------------------
+To satisfy both general clarity and high-level academic rigor:
+- **Main 25-Minute Deck (Slides 1–20)**: Focuses on architectural dataflow,
+  biological problem formulation, and physical constraints (invariance to rotations,
+  triangle inequality closure, enantiomer chirality, loss landscape stability).
+- **Backup Slides 1–5 (Q&A Defense)**: Reserved for formal mathematical derivations:
+  * Backup 1: Rigorous algebraic proof of SE(3) invariance for IPA attention logits
+    and SE(3) equivariance for local coordinate updates.
+  * Backup 2: Metric proofs of FAPE on the quotient manifold R^(3M) / SE(3).
+  * Backup 3: Triangle update derivations and Cauchy-Schwarz bounds.
+  * Backup 4: Non-linear component ablation dynamics (-16.3 collapse).
+  * Backup 5: Evolution from AlphaFold 2 to AlphaFold 3 generative diffusion.
+
+--------------------------------------------------------------------------------
+3.4 Visual Design System: Red Callout Rectangles and Floating Badges
+--------------------------------------------------------------------------------
+Rather than displaying complex SI diagrams passively, prominent red rounded
+callout rectangles (`\draw[callout]`) and floating white badges (`fill=white,
+rounded corners=2pt`) were placed on the exact operational nodes:
+- Supplementary Figure 2:
+  * Pair bias box at the bottom.
+  * The summation node (+) where pair spatial bias enters sequence logits.
+  * The sigmoid gating module at the top right.
+- Supplementary Figure 8:
+  * Stream 1: Pair bias.
+  * Stream 2: Scalar attention.
+  * Stream 3: 3D coordinate point distance penalty.
+  * Central summation node (+) before softmax.
+  * The `invert` pullback node ($T_i^{-1}$) ensuring SE(3) equivariance.
+
+
+================================================================================
+4. EXACT ARCHITECTURAL CHANGES IN THE DECK
+================================================================================
+
+--------------------------------------------------------------------------------
+4.1 Slide 8: The Evoformer Block (Evita, 9:30–10:45)
+--------------------------------------------------------------------------------
+- File: `main.tex`, Frame: `The Evoformer block`
+- Replaced the high-level macro schematic with cropped Supplementary Figure 2:
+  `\begin{markedSI}[0.74\linewidth]{16}{52bp 605bp 38bp 52bp}`
+- Added TikZ Callouts:
+  * `\draw[callout] (0.335,0.012) rectangle (0.442,0.286);` (Pair bias stack)
+  * `\draw[callout, line width=1.1pt] (0.4665,0.493) ellipse [x radius=0.013, y radius=0.035];` (Addition node `+`)
+  * `\node[callout text, anchor=west, font=\scriptsize\bfseries] at (0.478,0.20) {Pair bias};`
+  * `\draw[callout] (0.718,0.698) rectangle (0.758,0.988);` (Gating stack)
+  * `\draw[callout, line width=1.1pt] (0.7365,0.493) ellipse [x radius=0.013, y radius=0.035];` (Gating node `\odot`)
+  * `\node[callout text, anchor=west, font=\scriptsize\bfseries] at (0.766,0.845) {Gating};`
+- Textual Refinement:
+  * Say line: "Row attention updates sequence residues; column attention updates
+    evolutionary lineages."
+  * Key line: "Bidirectional cross-talk: pair spatial distances directly bias
+    sequence attention, while gating filters evolutionary noise."
+  * Footnote: Cites Supplementary Figure 2 (SI 1.6.1, Alg. 7) and Outer product
+    mean (SI Fig. 5).
+
+--------------------------------------------------------------------------------
+4.2 Slide 11: Invariant Point Attention (Ben, 13:30–15:00)
+--------------------------------------------------------------------------------
+- File: `main.tex`, Frame: `Invariant Point Attention (IPA)`
+- Replaced the standalone triad diagram with cropped Supplementary Figure 8:
+  `\begin{markedSI}[0.53\linewidth]{28}{55bp 501bp 55bp 55bp}`
+- Added TikZ Callouts:
+  * `\draw[callout] (0.380,0.703) rectangle (0.469,0.842);` (Pair bias stream)
+  * `\node[callout text, anchor=east, font=\tiny\bfseries] at (0.372,0.810) {1. Pair bias};`
+  * `\draw[callout] (0.357,0.461) rectangle (0.469,0.649);` (Scalar attention stream)
+  * `\node[callout text, anchor=east, align=right, font=\tiny\bfseries, text height=, text depth=] at (0.348,0.578) {2. Scalar\\[-1.5pt]attention};`
+  * `\draw[callout] (0.357,0.175) rectangle (0.469,0.422);` (3D point distance stream)
+  * `\node[callout text, anchor=east, font=\tiny\bfseries] at (0.348,0.395) {3. 3D distance};`
+  * `\draw[callout, line width=1.1pt] (0.494,0.528) ellipse [x radius=0.0115, y radius=0.018];` (Summation node `+`)
+  * `\draw[callout] (0.734,0.116) rectangle (0.777,0.154);` (Invert node)
+  * `\node[callout text, anchor=west, font=\scriptsize\bfseries] at (0.785,0.135) {pullback $T_i^{-1}$};`
+- Textual Refinement:
+  * Say line: "Three parallel streams: abstract scalar features, 2D pair bias,
+    and 3D physical coordinate distances."
+  * Key line: "Local invariance yields global equivariance: pulling 3D values back
+    via $T_i^{-1}$ cancels global pose identically."
+  * Footnote: Cites Supplementary Figure 8 (SI 1.8.2, Alg. 22) and points to backup 1.
+
+--------------------------------------------------------------------------------
+4.3 Slide 12: Frame Aligned Point Error (Ben, 15:00–16:30)
+--------------------------------------------------------------------------------
+- File: `main.tex`, Frame: `Frame Aligned Point Error (FAPE)`
+- Compacted the coordinate chain diagram to `[x=8.8mm, y=8.0mm]` with explicit
+  local frame coordinate labels $T_k^{\text{true}-1}\bm{x}_i^{\text{true}}$ and $T_k^{-1}\bm{x}_i$.
+- Textual Refinement:
+  * Say line: "Supervises Structure Module predictions from the local frame
+    ``camera'' of every residue $k$."
+  * Key line: "End-to-end supervision: avoids SVD Kabsch gradient instability,
+    clamps distant errors at 10\,\AA, and penalizes mirror reflections."
+  * Footnote: Cites SI Algorithm 28 ($Z = d_{\text{clamp}} = 10$\,\AA) and points
+    to backup 2.
+
+
+================================================================================
+5. ALIGNMENT OF DELIVERABLES & VERIFICATION
+================================================================================
+All companion documents were synchronized to maintain consistency across the deck:
+
+1. `SCRIPT.tex` & `SCRIPT.pdf`:
+   - Updated the timing overview table on page 1 for Slides 8, 11, and 12.
+   - Synchronized shadowbox summaries and long-form speaker prose.
+   - Recompiled cleanly via `pdflatex` to a pristine 13-page reference PDF.
+
+2. `SCREENPLAY.txt`:
+   - Updated lines 147–164 (Slide 8, Evita) with stage cues `(Point at Supplementary
+     Figure 2 and the pair bias callout box at the bottom.)` and `(Point at the red
+     addition node circle.)`.
+   - Updated lines 203–223 (Slide 11, Ben) with stage cues `(Point at the three
+     parallel affinity streams in Supplementary Figure 8.)` and `(Point at the
+     invert operator callout at the bottom right.)`.
+   - Updated lines 224–240 (Slide 12, Ben) with stage cues `(Point at the three
+     coordinate chains and the local frame k camera.)`.
+
+3. Visual Inspection:
+   - Rendered PNGs of Slides 8, 11, and 12 were inspected at high resolution.
+   - All callout boxes, labels, and text margins verified with **zero overfull vboxes**.
+
+
+================================================================================
+6. SUMMARY OF COMMITS & GIT STATE
+================================================================================
+- Initial plan and design roadmap committed in: `533683e`
+- Full restructuring of `main.tex`, `main.pdf`, `SCRIPT.tex`, `SCRIPT.pdf`, and
+  `SCREENPLAY.txt` committed and pushed in: `c6a2f9f`
+- Current branch: `main` tracking `origin/main` (GitHub repository:
+  `github.com:BenBullinger/ML4Genomics-Presentation-AF2.git`).
+- Working tree status: completely clean.
+================================================================================

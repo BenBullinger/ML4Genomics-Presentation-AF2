@@ -1,0 +1,391 @@
+% Speaker script for the talk on Jumper et al. 2021 (AlphaFold 2), Machine Learning for Genomics,
+% ETH Zürich, fall 2026. Evita Bosch Pokunevich speaks slides 1 to 10, Ben Bullinger slides 11 to 20.
+%
+% SCREENPLAY.txt is generated from this file: python3 -I tools/make_screenplay.py
+% The generator reads \slide, \cue, \stage, \evita, \ben and \both. Everything else stays here.
+% Spoken text is written in words only (no math mode, no macros), so that it reads aloud as written.
+% Build: latexmk -pdf SCRIPT.tex
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=22mm,bottom=26mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{XCharter}
+\usepackage[xcharter,vvarbb]{newtxmath}
+\usepackage{amsmath,booktabs,microtype,xcolor,array}
+\usepackage[colorlinks,linkcolor=ETHBlue,urlcolor=ETHBlue]{hyperref}
+
+\definecolor{ETHBlue}{RGB}{33,92,175}
+\definecolor{ETHRed}{RGB}{183,53,45}
+\definecolor{ETHGray}{RGB}{111,111,111}
+
+% Slide header: number, title, speaker, timing. The generator writes the timing of the title slide and
+% slides 1 to 20 ("ends at m:ss") from the word counts.
+\newcommand{\slide}[4]{\par\vspace{5mm}\noindent{\large\bfseries\color{ETHBlue}#1\quad #2}\hfill{\small\color{ETHGray}#3, #4}\par\vspace{1mm}\hrule\vspace{2mm}}
+% A line in square brackets in the screenplay: handover, part change.
+\newcommand{\cue}[1]{\par\vspace{3mm}{\centering\small\color{ETHGray}[#1]\par}\vspace{1mm}}
+% What is on the slide, for the reader of this document only.
+\newcommand{\onslide}[1]{\par{\small\color{ETHGray}On the slide: #1\par}\vspace{1.5mm}}
+% Stage direction, in round brackets in the screenplay.
+\newcommand{\stage}[1]{\par{\small\itshape\color{ETHGray}(#1)\par}}
+% Spoken text.
+\newcommand{\evita}[1]{\par\noindent{\bfseries\color{ETHBlue}Evita}\enspace #1\par\vspace{1.5mm}}
+\newcommand{\ben}[1]{\par\noindent{\bfseries\color{ETHRed}Ben}\enspace #1\par\vspace{1.5mm}}
+\newcommand{\both}[1]{\par\noindent{\bfseries\color{ETHGray}Evita and Ben}\enspace #1\par\vspace{1.5mm}}
+% Where every statement of the spoken text comes from. Article pages are printed pages (583 to 589).
+\newcommand{\sources}[1]{\par\vspace{1mm}{\small\color{ETHGray}Sources: #1\par}}
+% A likely question and the answer, with the source.
+\newcommand{\ifasked}[2]{\par\vspace{1mm}{\small\noindent\textbf{If asked} #1\enspace #2\par}}
+
+\title{\vspace{-10mm}\bfseries Highly accurate protein structure prediction with AlphaFold\\[1mm]\large\mdseries Speaker script}
+\author{Evita Bosch Pokunevich \quad Ben Bullinger\\[1mm]\small Machine Learning for Genomics (263-5351-00L), ETH Z\"urich, fall 2026}
+\date{\small Written for the deck of 17 October 2026 (\texttt{main.pdf}, 20 slides, 4 backups)}
+
+\begin{document}
+\maketitle
+
+\section*{How to use this document}
+
+The talk is 25 minutes, then 10 minutes for the exam question and the discussion. Evita speaks the title and slides 1 to 10, Ben slides 11 to 20. The handover is after the triangle slide, at about 12 minutes. The end times below are computed from the word counts and leave about half a minute of reserve.
+
+Every slide follows the same pattern: the spoken text, then what is on the slide, then the source of every statement, then the questions we expect. The spoken text is written exactly as it should be said, in words, so that \texttt{SCREENPLAY.txt} can be generated from it for rehearsal. Symbols are spoken: C alpha, angstrom, q transposed k, N eff.
+
+Two rules of the deck also hold for the speech. Nothing is used before the slide that explains it, so the speech must not point forward either. Every number comes from the paper, the supplement (SI) or the cited work, and the source stands under each slide.
+
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}rlllr@{}}
+\toprule
+Slide & Title & Speaker & Ends at & Words \\
+\midrule
+% timing-begin
+Title & Highly accurate protein structure prediction with AlphaFold & Evita & 0:33 & 77 \\
+1 & The problem: sequence to structure & Evita & 1:39 & 155 \\
+2 & The benchmark: CASP14 & Evita & 2:36 & 131 \\
+3 & Confidence: pLDDT against measured lDDT & Evita & 3:46 & 164 \\
+4 & The network: inputs, Evoformer, structure module & Evita & 4:57 & 166 \\
+5 & The design: four constraints built into the network & Evita & 6:16 & 184 \\
+6 & The input: the multiple sequence alignment & Evita & 7:21 & 153 \\
+7 & The representations: MSA array and pair array & Evita & 8:03 & 97 \\
+8 & Evoformer: one block & Evita & 9:23 & 187 \\
+9 & Evoformer: row attention with pair bias & Evita & 10:29 & 154 \\
+10 & Evoformer: triangle updates & Evita & 12:05 & 224 \\
+\midrule
+11 & Structure module: residues as rigid bodies & Ben & 13:38 & 216 \\
+12 & Structure module: invariant point attention (IPA) & Ben & 15:06 & 206 \\
+13 & The loss: frame aligned point error (FAPE) & Ben & 16:44 & 229 \\
+14 & Training: self-distillation, masked MSA, total loss & Ben & 18:00 & 178 \\
+15 & Ablations: accuracy lost without each component & Ben & 19:47 & 248 \\
+16 & Interpretation: intermediate structures in the Evoformer & Ben & 20:38 & 119 \\
+17 & Limitations: MSA depth and complexes & Ben & 21:23 & 106 \\
+18 & After AlphaFold 2: 2021 to 2025 & Ben & 22:23 & 140 \\
+19 & AlphaFold 3: the four constraints revisited & Ben & 24:13 & 257 \\
+20 & Summary: the four constraints and their ablation & Ben & 24:56 & 99 \\
+\midrule
+21 & Exam question & both & about 27:30 & \\
+22 & Questions for the audience & both & about 35:00 & \\
+% timing-end
+\bottomrule
+\end{tabular}
+\end{center}
+
+The end times are computed from the word counts at 140 words per minute by the generator, which rewrites this table.
+
+% =============================================================================================
+\section*{Part 1, Evita: the problem, the benchmark, the Evoformer}
+
+\slide{Title}{Highly accurate protein structure prediction with AlphaFold}{Evita}{ends at 0:33}
+\evita{Good morning. Ben and I present the paper Highly accurate protein structure prediction with AlphaFold, by John Jumper and colleagues at DeepMind, published in Nature in 2021. The system in the paper is AlphaFold 2. We say AlphaFold for short. I present the problem, the benchmark, and the first half of the network. Ben presents the second half, the training, the results, and what came after. Then we answer the exam question and ask you three questions.}
+\onslide{Title, Jumper et al., Nature 596 (2021), the two names, the repository address, the course.}
+
+\slide{1}{The problem: sequence to structure}{Evita}{ends at 1:39}
+\stage{Point at the sequence on the left.}
+\evita{A protein is a chain of amino acids. In the chain we call each amino acid a residue. There are twenty kinds. Every residue has the same backbone atoms, a nitrogen, a carbon called C alpha, a second carbon and an oxygen. The side chain hangs off the C alpha and differs from kind to kind. In the cell the chain folds into one three dimensional shape, and that shape decides what the protein does.}
+\stage{Point at the sentence with the two numbers.}
+\evita{Sequencing is cheap, so billions of sequences are known. A structure is measured by X-ray crystallography or electron microscopy, which takes months or years. When the paper was written, the Protein Data Bank, the database of measured structures, held about one hundred thousand distinct proteins.}
+\stage{Point at the picture.}
+\evita{The task is to predict the position of every heavy atom, that is every atom except hydrogen, from the sequence alone. The picture shows one protein. Green is the measured structure, blue is AlphaFold's prediction.}
+\onslide{The sequence SIFSYITESTGTPS with an arrow, the grey definition of residue and side chain, the two numbers, the key line, Fig.~1b (CASP14 target T1049, PDB 6Y4F, experiment green, prediction blue).}
+\sources{Article p.~583: ``the structures of around 100,000 unique proteins have been determined'', ``a small fraction of the billions of known protein sequences''. Heavy atoms: the task statement of the article (all-atom accuracy, p.~584). Fig.~1b legend p.~584.}
+\ifasked{what the 20 kinds are:}{the 20 standard amino acids. The MSA representation uses 23 classes, the 20 amino acids, an unknown type, a gap and a mask token (SI 1.9.9).}
+
+\slide{2}{The benchmark: CASP14}{Evita}{ends at 2:36}
+\evita{CASP is the Critical Assessment of protein Structure Prediction, a competition held every two years. It is blind. The organisers hand out sequences whose structures have just been measured but not yet published. CASP14 took place in 2020. It is scored on domains, the parts of a protein that fold on their own.}
+\stage{Point at the vertical axis.}
+\evita{The score here is the backbone error. For each target we overlay prediction and experiment and measure the distance between matching C alpha atoms, in angstrom. One angstrom is a tenth of a nanometre. The chart shows the median error over 87 domains.}
+\stage{Point at the blue bar, then at the grey bars.}
+\evita{AlphaFold's median error is 0.96 angstrom. The next best group is at 2.8 angstrom.}
+\stage{Point at the dashed line.}
+\evita{The paper gives a comparison. A carbon atom is about 1.4 angstrom wide. AlphaFold's typical error is smaller than one atom.}
+\onslide{The sentence defining CASP14 and domains, the chart redrawn from Fig.~1a, AlphaFold in blue, 14 grey bars, 95\,\% intervals, the dashed line at 1.4\,\AA, the key line.}
+\sources{Article p.~583 to 584: CASP ``carried out biennially'', ``median backbone accuracy of 0.96\,\AA\ r.m.s.d.$_{95}$ (95\,\% confidence interval 0.85 to 1.16\,\AA)'', ``next best performing method 2.8\,\AA\ r.m.s.d.$_{95}$ (2.7 to 4.0\,\AA)'', ``the width of a carbon atom is approximately 1.4\,\AA''. Fig.~1a: 87 domains. The bar heights and intervals were measured on Fig.~1a.}
+\ifasked{what r.m.s.d.$_{95}$ is:}{the root mean square distance between matching C$\alpha$ atoms after the best overlay, computed on the 95\,\% of residues that fit best, so that a floppy tail does not dominate (article p.~584 and Methods, Metrics).}
+\ifasked{about all atoms, not only the backbone:}{all-atom r.m.s.d.$_{95}$ 1.5\,\AA\ (1.2 to 1.6) against 3.5\,\AA\ (3.1 to 4.2) for the next best method (article p.~584).}
+\ifasked{about the official CASP ranking:}{by summed z scores AlphaFold scored 244.0, the next best group 90.8 (Jumper et al., Proteins 2021, in \texttt{background/}).}
+
+\slide{3}{Confidence: pLDDT against measured lDDT}{Evita}{ends at 3:46}
+\evita{AlphaFold also says how much it trusts each residue. The local distance difference test, lDDT, compares a predicted structure with the measured one. It takes pairs of atoms that are close to each other in the measured structure and checks whether their distance is the same in the prediction. It is local because it looks only at nearby pairs, and it needs no overlay of the two structures. The score runs from 0 to 100.}
+\evita{pLDDT is the predicted lDDT. AlphaFold outputs it for every residue. It is trained on the network's own mistakes. During training the predicted structure is scored against the truth, and a small output layer learns to predict that score.}
+\stage{Point at the plot.}
+\evita{The plot shows 10,795 protein chains. The horizontal axis is the mean pLDDT of a chain, the vertical axis the measured lDDT. The fitted line has slope 0.997 and an offset of about one point, so when AlphaFold says 90, the measured score is about 89. The correlation is 0.76.}
+\onslide{Fig.~2c with re-set axis labels, the fit in red, the definition of lDDT and pLDDT, the key line.}
+\sources{Fig.~2c legend p.~585: ``lDDT-C$\alpha$ = 0.997 pLDDT $-$ 1.17 (Pearson's $r$ = 0.76). $n$ = 10,795 protein chains''. SI 1.9.6: pLDDT is predicted from the final single representation in 50 bins, the target is the per-residue lDDT-C$\alpha$ of the predicted structure against the ground truth, cross-entropy loss. SI 1.9.7: lDDT-C$\alpha$ is ``a local error metric that operates pairwise''.}
+\ifasked{why $r$ is only 0.76 when the slope is 1:}{the slope says the scale is right, the correlation says how much scatter there is around the line. Most chains have pLDDT above 80, where the plot is dense, so a small scatter there lowers $r$ (Fig.~2c).}
+\ifasked{what low pLDDT means:}{the paper treats it as low confidence. Tunyasuvunakool et al. (2021) use low pLDDT as a sign of regions ``likely to be disordered'' and test AlphaFold as a disorder predictor on the CAID benchmark.}
+
+\slide{4}{The network: inputs, Evoformer, structure module}{Evita}{ends at 4:57}
+\stage{Point from left to right while speaking.}
+\evita{This is the whole network, Figure 1e of the paper. The input is one sequence.}
+\stage{Point at the MSA box.}
+\evita{The sequence is searched against genetic databases. The hits are sequences of related proteins. They are written row by row and aligned column by column into a multiple sequence alignment, the MSA.}
+\stage{Point at the templates box.}
+\evita{The sequence is also searched against the structure database. Known structures of related proteins become templates.}
+\stage{Point at the two arrays.}
+\evita{From the MSA and the templates the network builds two arrays. The MSA representation has one row per sequence and one column per residue. The pair representation has one entry per pair of residues.}
+\stage{Point at the Evoformer, then at the structure module.}
+\evita{The Evoformer is a stack of 48 blocks that updates the two arrays. The structure module has 8 blocks and turns the arrays into coordinates, coloured by confidence, blue is high and orange is low.}
+\stage{Point at the recycling bar.}
+\evita{Then the whole network runs again three times, with its own outputs as extra inputs. The paper calls this recycling. The network outputs the 3D coordinates directly, and it is trained end to end.}
+\onslide{Fig.~1e with five red callouts: Multiple sequence alignment (MSA), Templates, Evoformer, Structure module, Recycled three times. The key line.}
+\sources{Fig.~1e p.~584: ``Evoformer (48 blocks)'', ``Structure module (8 blocks)'', ``Recycling (three times)'', ``High confidence'' blue, ``Low confidence'' orange. Article p.~584: ``end-to-end''. SI 1.10: recycling embeds the previous outputs as additional inputs. SI 1.2.3: the top 4 templates are given to the model.}
+\ifasked{what is recycled:}{the previous pair representation, the first row of the previous MSA representation, and the previous C$\beta$ distances in 15 bins, all embedded and added to the inputs (SI 1.10, Algorithm 32).}
+\ifasked{about the final relaxation:}{after the network, the structure is relaxed by gradient descent in the Amber force field. This fixes bond geometry and does not change accuracy (article p.~586).}
+
+\slide{5}{The design: four constraints built into the network}{Evita}{ends at 6:16}
+\evita{Before we look inside the blocks, here is the plan of the talk. The paper says the network is based on the evolutionary, physical and geometric constraints of protein structures. We picked four such constraints. Each is a fact about proteins that is known before training, and each is built into one part of the network.}
+\stage{Point row by row.}
+\evita{One. Two residues that touch in the folded protein change together across homologous proteins, that is related proteins. So the network attends over their alignment, the MSA.}
+\evita{Two. All pairwise distances must fit one three dimensional structure. Three residues form a triangle, and the three distances of a triangle constrain each other. So the pair features are updated in triangles of three residues.}
+\evita{Three. A protein that is rotated or moved in space is the same protein. So the network gives every residue its own coordinate system and attends over distances, which do not change under rotation.}
+\evita{Four. A protein and its mirror image are different molecules. Chemists call this chirality. So the loss compares atom positions residue by residue, in a way that tells the two apart.}
+\onslide{The table with four pictograms under the headers ``Known before training'' and ``Built into AlphaFold 2'', the key line.}
+\sources{Article p.~584: ``based on the evolutionary, physical and geometric constraints of protein structures''. Row 1: p.~587 (covariation, the raw MSA). Row 2: p.~585 to 586 (triangle inequality, triangles of edges). Row 3: p.~587 (IPA invariant to global rotations and translations). Row 4: SI 1.9.3 (FAPE and chirality).}
+\ifasked{why these four and not recycling or self-distillation:}{recycling and self-distillation are training and inference techniques, not facts about proteins. Both appear on the ablation slide.}
+
+\slide{6}{The input: the multiple sequence alignment}{Evita}{ends at 7:21}
+\stage{Point at the rows and the columns.}
+\evita{Constraint one in detail. This is a small alignment. The first row is the input sequence, every other row is a homologous protein, a relative of it. Each column is one aligned position.}
+\stage{Point at the two grey columns.}
+\evita{Look at the two grey columns. In the first row the left column has K, lysine, which is positively charged, and the right column has E, glutamate, which is negatively charged. In the lower rows it is the other way round, E on the left and K or R on the right, R is arginine and also positive. The two positions swap their charges together, so the two residues keep attracting each other. That happens when the two positions touch in the folded protein. Such a pair is called a contact.}
+\evita{Marks and colleagues computed statistics of such co-variation in 2011 and predicted contacts from them. AlphaFold takes the alignment itself as input, and the attention layers extract the patterns.}
+\onslide{Six aligned rows with two highlighted columns, the arc ``in contact in 3D'', the charge legend, the key line ``The alignment itself is the input to the network''.}
+\sources{Marks et al. (2011): ``residues in spatial proximity may co-evolve across a protein family''. Article p.~587: the masked MSA objective ``encourages the network to learn to interpret phylogenetic and covariation relationships without hardcoding a particular correlation statistic''. The alignment is an illustration, not real data.}
+\ifasked{whether the raw alignment matters:}{yes, the ablation that gives the network only the MSA profile and pairwise frequencies loses about 2 GDT (Fig.~4a, SI 1.13.1). Say this only after slide 15.}
+
+\slide{7}{The representations: MSA array and pair array}{Evita}{ends at 8:03}
+\stage{Point left, then right.}
+\evita{The network stores the alignment and the pairs as two arrays of vectors. The MSA representation has one vector per cell of the alignment, with 256 numbers. The pair representation has one vector per ordered pair of residues, with 128 numbers. Row i, column j describes how residue i relates to residue j.}
+\evita{At the start the pair array is built from the sequence, the distance of i and j along the chain, the templates, and a first pass over the alignment. Everything else is learned.}
+\evita{Every Evoformer block reads these two arrays and writes them back.}
+\onslide{The two arrays as grids, $\mathbf m_{si}\in\mathbb R^{256}$, $\mathbf z_{ij}\in\mathbb R^{128}$, the key line.}
+\sources{SI 1.5, Algorithm 3 and 4: $c_m = 256$, $c_z = 128$, the pair representation is initialised from linear projections of the target features and the relative position along the chain, clipped at 32. Algorithm 2: the template embedding and the extra MSA stack then write into it.}
+
+\slide{8}{Evoformer: one block}{Evita}{ends at 9:23}
+\evita{This is one Evoformer block, Figure 3a. The MSA array runs along the top, the pair array along the bottom.}
+\stage{Point along the top row.}
+\evita{In the top row, each sequence first attends along its own row, over the residues. Then each column attends along itself, over the sequences. A transition layer follows, a small two layer network applied to every cell.}
+\stage{Point at the red arrow into the outer product mean, and at the arrow out of it.}
+\evita{Now each array updates the other. MSA to pair goes through the outer product mean. For every pair of columns i and j, the network takes the vector of column i and the vector of column j in each sequence, forms their outer product, and averages over all sequences. The result updates the pair i j. This is where the co-variation we saw on the alignment becomes a pair feature.}
+\stage{Point at the pair to MSA arrow.}
+\evita{Pair to MSA is on the next slide.}
+\stage{Point at the bracket.}
+\evita{Then the pair array gets four triangle layers and a transition.}
+\evita{The paper describes the pair array as a graph. Every residue is a node, every pair of residues is an edge, and the network infers which pairs are in contact. There are 48 such blocks and none of them share weights.}
+\onslide{Fig.~3a with the arrows ``pair to MSA'' and ``MSA to pair'', the outer product mean boxed, the bracket ``triangle layers'', the two sentences, the key line.}
+\sources{Fig.~3a p.~586: ``48 blocks (no shared weights)''. Article p.~585: ``view the prediction of protein structures as a graph inference problem in 3D space in which the edges of the graph are defined by residues in proximity''. p.~585: ``The MSA representation updates the pair representation through an element-wise outer product that is summed over the MSA sequence dimension''. SI Algorithms 6 to 15.}
+\ifasked{what the transition is:}{a two-layer MLP with ReLU applied to each cell, expanding the channels by four (SI Algorithm 9 and 15).}
+
+\slide{9}{Evoformer: row attention with pair bias}{Evita}{ends at 10:29}
+\evita{Here is the row attention in detail, Supplementary Figure 2.}
+\stage{Point at the MSA input, then at the queries and keys.}
+\evita{We are inside one sequence s. Residue i has a query vector, residue j has a key vector. Their dot product says how much i should attend to j.}
+\stage{Point at the blue box and at the plus.}
+\evita{The pair array adds a bias. A linear layer maps the pair vector z i j to one number b i j per attention head, and that number is added to the dot product before the softmax. So the attention weight of i on j is the softmax over j of q transposed k, divided by the square root of the vector length c, plus b i j.}
+\stage{Point at the gate.}
+\evita{On the right, a sigmoid gate computed from the same input multiplies the output.}
+\evita{So the pair representation biases the attention within every sequence. And the sequences, through the outer product mean, update the pairs. The paper says that this closes the loop between the two arrays.}
+\onslide{Suppl.\ Fig.~2 with the pair bias boxed in blue, the plus circled, the gate boxed in red, the inset of one row, the formula, the key line.}
+\sources{SI 1.6.1 and Algorithm 7: the pair representation enters ``as an additional bias term (line 3)'', ``communication from the pair stack into the MSA stack to encourage consistency between them''. Suppl.\ Fig.~2: sigmoid gating of the output.}
+\ifasked{about the column attention:}{Algorithm 8, the same attention along a column, over the sequences, without pair bias, with gating.}
+
+\slide{10}{Evoformer: triangle updates}{Evita}{ends at 12:05}
+\evita{Constraint two, the triangles. A set of pairwise distances is not automatically a shape. For three residues i, j and k, the distance from i to j can be no larger than the distance i k plus the distance k j. The paper does not enforce this. It arranges the pair updates so that the edge i j is always updated from the two edges that complete a triangle with it, i k and j k, for every third residue k.}
+\stage{Point at the two graphs on the left.}
+\evita{There are two kinds. The multiplicative update takes a projection of edge i k and a projection of edge j k, multiplies them element by element, and sums over k. The formula is on the slide. Edges have a direction, from the first residue to the second. The outgoing version uses the two edges that leave i and j towards k, the incoming version the two edges that arrive at i and j from k.}
+\stage{Point at the two graphs on the right.}
+\evita{The triangle attention lets the edge i j attend to the edges i k that start at the same node, with the third edge j k as a bias. The second version does the same around the ending node j.}
+\evita{Each block runs all four. The paper reports that either kind alone already gives accurate structures, and both together are more accurate.}
+\evita{Ben continues with the structure module.}
+\onslide{Fig.~3c with the headers Multiplication and Attention, the sentence, the formula $\tilde{\mathbf z}_{ij}\propto\sum_k \mathbf a_{ik}\odot\mathbf b_{jk}$, the key line.}
+\sources{Article p.~585 to 586: ``many constraints must be satisfied including the triangle inequality on distances. On the basis of this intuition, we arrange the update operations on the pair representation in terms of triangles of edges involving three different nodes''. ``networks that use only the attention or multiplicative update are both able to produce high-accuracy structures. However, the combination of the two updates is more accurate.'' SI 1.6.5, Algorithms 11 to 14.}
+\ifasked{what $\mathbf a$ and $\mathbf b$ are:}{gated linear projections of the pair vectors, $\mathbf a_{ij} = \mathrm{sigmoid}(\mathrm{Linear}(\mathbf z_{ij}))\odot\mathrm{Linear}(\mathbf z_{ij})$, and the sum is normalised, projected and gated again (Algorithm 11).}
+
+\cue{Handover to Ben at about 12 minutes 40 seconds.}
+
+% =============================================================================================
+\section*{Part 2, Ben: the structure module, the loss, training, results}
+
+\slide{11}{Structure module: residues as rigid bodies}{Ben}{ends at 13:38}
+\ben{Thank you, Evita. The structure module, Figure 3d, turns the two arrays into atoms. This is constraint three. The module takes the pair representation and the single representation, which is a projection of the first row of the MSA array, the input sequence.}
+\stage{Point at the frames at the bottom left.}
+\ben{The key object is the frame. A frame is a rotation and a translation, one per residue, written T i. It is a small coordinate system placed on the backbone atoms N, C alpha and C of that residue. At the start all frames sit at the origin with the same orientation.}
+\stage{Point at the IPA box, then at the two purple boxes.}
+\ben{Each of the 8 layers does two things, and the layers share their weights. Invariant point attention, IPA, updates the single representation. I open it on the next slide. A linear layer then predicts a small rotation and translation per residue, which is composed onto its frame, so every frame moves.}
+\stage{Point at the green box.}
+\ben{The network also predicts torsion angles, the rotations around the backbone and side chain bonds. After the last layer the atoms are placed from the frames and these angles, with ideal bond lengths and angles.}
+\stage{Point at the inset.}
+\ben{The residues move as free rigid bodies. The bond geometry between residues is repaired afterwards, by an extra loss term late in training and by a short physics based optimisation of the final atom positions.}
+\onslide{Fig.~3d with IPA boxed in red, the frame update and the frames in purple, the atom placement in green, the two sentences, the inset ``all at the origin'' to ``one frame per residue'', the key line.}
+\sources{Article p.~586: ``Nres independent rotations and translations, each with respect to the global frame (residue gas)'', ``the peptide bond geometry is completely unconstrained'', violation loss in fine-tuning, Amber relaxation. SI 1.8: ``8 layers with shared weights'', frames $T_i = (R_i, \vec t_i)$, ``black hole initialization'', Algorithm 20. SI 1.8.1 and Algorithm 21: frames from N, C$\alpha$, C.}
+\ifasked{why the chain is allowed to break:}{the paper: breaking the chain constraint ``enables the local refinement of all parts of the chain without solving complex loop closure problems'' (p.~586).}
+
+\slide{12}{Structure module: invariant point attention (IPA)}{Ben}{ends at 15:06}
+\ben{Invariant point attention, Supplementary Figure 8. It is attention over residues, with three terms in the score.}
+\stage{Point at the red box.}
+\ben{The first is the usual dot product between the query of residue i and the key of residue j, both from the single representation.}
+\stage{Point at the blue box.}
+\ben{The second is the pair bias b i j from the pair array.}
+\stage{Point at the green box.}
+\ben{The third is geometric. Every residue also produces query points and key points, three dimensional points in its own frame. The network maps the query points of i and the key points of j into the common global frame, with the frames T i and T j, and subtracts the squared distance between them, weighted by a learned factor gamma.}
+\stage{Point at the formula.}
+\ben{The three terms are added and passed through a softmax over j.}
+\stage{Point at the invert box.}
+\ben{The values also come with points. They are summed in the global frame and mapped back into the frame of residue i, in the invert box.}
+\ben{Why invariant. If we rotate or move the whole protein, every frame moves with it. The distances between the placed points do not change, and the points mapped back into frame i do not change. So the attention weights are invariant to a global rotation and translation. The algebra is on backup slide one.}
+\onslide{Suppl.\ Fig.~8 with the dot product in red, the pair bias in blue, the squared distance and the invert box in green, the plus circled, the inset of two frames with points, the formula, the key line.}
+\sources{SI 1.8.2, Algorithm 22, Suppl.\ Fig.~8: ``invariant under global Euclidean transformations $T_{\text{global}}$ on said frames'', the weight $\gamma^h$ is a softplus of a learned scalar, the three terms are weighted to contribute equally at initialisation. Article p.~587: ``3D queries and keys also impose a strong spatial/locality bias on the attention''.}
+\ifasked{how many points:}{4 query points and 4 key points per head, 8 value points, 12 heads (SI Algorithm 22 header).}
+\ifasked{whether IPA is equivariant:}{the attention output in local coordinates is invariant, the frame update composed in the local frame makes the module equivariant (end of SI 1.8.2, backup slide 1).}
+
+\slide{13}{The loss: frame aligned point error (FAPE)}{Ben}{ends at 16:44}
+\ben{Constraint four, the loss. It is called frame aligned point error, FAPE, Figure 3f.}
+\stage{Point at the figure.}
+\ben{Green is the predicted chain, grey the true one. Take a frame k on the predicted chain, and the same frame k on the true chain. Take an atom j. Express its predicted position in the predicted frame k, and its true position in the true frame k. The gap between the two local positions is d k j.}
+\stage{Point at the formula.}
+\ben{FAPE is the mean of d k j over all frames k and all atoms j. Each term is clamped at 10 angstrom, and the mean is divided by 10 angstrom to make it unitless.}
+\stage{Point at the inset.}
+\ben{Two properties. If we rotate or move the whole prediction, every local coordinate stays the same, so the loss stays the same. Now reflect the prediction. The frames are built from the three backbone atoms. The first two axes follow the atoms, and the third axis is their cross product, so every frame is right handed. Reflect all atoms, and the first two axes flip with them, but their cross product does not. In local coordinates this flips exactly the z coordinate. A mirror image therefore gets a large loss, while a loss on distances alone gives the same value for both. This is how the loss tells a protein from its mirror image. The derivation is on backup slide two.}
+\onslide{Fig.~3f, the sentence with $d_{kj}$ in red, the formula with $Z = d_{\text{clamp}} = 10$\,\AA, the inset ``atom $j$ seen from frame $k$'', the key line.}
+\sources{SI 1.9.2 and Algorithm 28: clamped L1 loss, $Z = 10$\,\AA, $d_{\text{clamp}} = 10$\,\AA, ``invariant under rigid motions (not including reflection)'', ``the z-axis of the local frames transforms as a pseudo-vector''. SI 1.9.3, equations 11 to 17: under reflection the local coordinates flip in $z$, $\mathrm{FAPE}(X, X_{\text{mirror}}) = 2\sum_{ij}|(T_i^{-1}\circ\vec x_j)_z|$ unclamped.}
+\ifasked{whether FAPE is used on all atoms:}{the final FAPE scores all atoms in all backbone and side chain frames. The auxiliary loss in every layer scores only C$\alpha$ atoms in the backbone frames (SI 1.9.2).}
+\ifasked{about the clamp:}{errors above 10\,\AA\ count as 10\,\AA, so a misplaced domain does not dominate. In training, 90\,\% of the mini-batches use the clamped backbone loss and 10\,\% the unclamped one. The side chain loss is always clamped (SI 1.11.5).}
+
+\slide{14}{Training: self-distillation, masked MSA, total loss}{Ben}{ends at 18:00}
+\ben{How was it trained.}
+\stage{Point at the left diagram.}
+\ben{Supervised training on the Protein Data Bank alone already works. Two additions improve it. First, self distillation. A network trained on the PDB predicts structures for about 350,000 sequences from a sequence database, Uniclust30, that have no measured structure. Residues with low confidence are masked out. A new network is trained from scratch, and three in four training examples come from these predicted structures, one in four from the PDB.}
+\stage{Point at the right diagram.}
+\ben{Second, a masked MSA loss. 15 percent of the positions in the alignment are hidden, and the network must predict the hidden amino acids from its final MSA representation. This follows the masked language model objective of BERT.}
+\stage{Point at the loss line.}
+\ben{The total loss is a weighted sum of five terms, as on the slide. FAPE on the final structure, FAPE after each of the 8 layers on the C alpha atoms with a torsion angle loss, binned residue distances from the pair array, the masked MSA loss with the largest weight, two, and the confidence loss on pLDDT.}
+\ben{So training uses sequences that have no structure.}
+\onslide{The distillation diagram (PDB structures, network, predicted structures, 75\,\% and 25\,\%) under the sentence with the 350,000 sequences, the masked alignment, the loss table, the key line.}
+\sources{Article p.~587: ``around 350,000 diverse sequences from Uniclust30'', ``filtered to a high-confidence subset'', ``train the same architecture again from scratch'', BERT-style objective. SI 1.3: 355,993 sequences, residues with confidence below 0.5 masked. SI 1.2.4: 75\,\% distillation, 25\,\% PDB. SI 1.2.7: 15\,\% of positions masked, 70\,\% of them with the mask token. SI 1.9, equation 7: $0.5\,L_{\text{FAPE}} + 0.5\,L_{\text{aux}} + 0.3\,L_{\text{dist}} + 2.0\,L_{\text{msa}} + 0.01\,L_{\text{conf}}$, fine-tuning adds the violation and the experimentally resolved losses. SI 1.9.8: distogram, 64 bins from 2 to 22\,\AA\ on C$\beta$. Devlin et al. (2019), Xie et al. (2020).}
+\ifasked{how the distillation set was filtered:}{by a per-residue confidence from the KL divergence between the predicted distance distribution and a reference, residues below 0.5 are masked. The authors expect a pLDDT filter to work as well (SI 1.3).}
+\ifasked{about the training set:}{PDB chains, cropped to 256 residues in the first stage and 384 in fine-tuning, with MSA subsampling (SI 1.2 and Table 4).}
+
+\slide{15}{Ablations: accuracy lost without each component}{Ben}{ends at 19:47}
+\ben{Does each constraint matter. An ablation removes one component, retrains the network with three or four random seeds, and measures the loss in accuracy against the baseline.}
+\stage{Point at the two axes.}
+\ben{In the left figure, the first column is GDT on the CASP14 domains. GDT is the global distance test, the share of C alpha atoms that lie within a few distance cutoffs after the best overlay, from 0 to 100. The second column is lDDT C alpha on recent PDB chains. Zero is the baseline, and bars to the left are losses.}
+\stage{Point at the rows with the red numbers.}
+\ben{One. Give the network only statistics of the alignment, how often each amino acid occurs in each column and in each pair of columns, instead of the raw sequences. About two GDT points are lost.}
+\ben{Two. Replace the triangle updates, the pair bias and the gates by ordinary attention along the rows and columns of the pair array. Almost five points are lost.}
+\ben{Three. Replace IPA by a direct linear projection of the frames from the single representation. Between two and three points are lost. The paper also removed IPA and recycling together, and then sixteen points are lost. The supplement says that this double ablation must be interpreted with caution.}
+\stage{Point at the small plot on the right, Supplementary Figure 9.}
+\ben{Four. Train with a loss on distances only, instead of FAPE. The GDT splits into two groups. Score the low group against the mirror image of the truth, and it is high. The supplement concludes in section 1.9.3 that without FAPE the model often predicts the mirror image.}
+\onslide{Fig.~4a with re-set labels, the red numbers 1, 2, 3 at three rows, Suppl.\ Fig.~9 with the low group boxed, the sentence with the 4 and the SI section, the key line.}
+\sources{Fig.~4a p.~587, SI 1.13.1 (what each ablation removes), 1.13.2 (3 or 4 seeds, hyperparameters not re-tuned, GDT on CASP14 domains, lDDT-C$\alpha$ on 2,261 recent PDB chains), 1.13.3 (``This double-ablation must be interpreted with caution''). The GDT differences are read off the bars of Fig.~4a, the figure prints no numbers. SI 1.9.3 and Suppl.\ Fig.~9: dRMSD loss, bimodal GDT, ``FAPE is the main component that ensures the correct chirality''.}
+\ifasked{what GDT is exactly:}{GDT\_TS, the mean over the cutoffs 1, 2, 4 and 8\,\AA\ of the percentage of C$\alpha$ atoms within the cutoff after superposition (Zemla 2003, SI reference 120).}
+\ifasked{what recycling alone costs:}{about 4.5 GDT read off Fig.~4a. The supplement notes that recycling matters at all MSA depths (SI 1.13.3).}
+\ifasked{what self-distillation adds:}{the top row of Fig.~4a, about 2 GDT above the baseline, measured on the figure.}
+
+\slide{16}{Interpretation: intermediate structures in the Evoformer}{Ben}{ends at 20:38}
+\ben{What happens inside the Evoformer. The authors froze the trained network and trained a separate structure module after every Evoformer block. That gives one structure per block, 192 over the four passes.}
+\stage{Point at the curves.}
+\ben{The curves show the GDT of these intermediate structures. LmrP, a multidrug transporter with two domains, reaches its final structure after a few blocks and keeps it. ORF8 of SARS-CoV-2 stays low for two passes, jumps in the third and keeps climbing to the end. The paper writes that for such targets the network searches and rearranges the helices and strands for many layers before settling. In both cases the curves change gradually after the first few blocks, so the network improves the structure step by step.}
+\onslide{Fig.~4b with re-set labels, the four passes marked, the sentence, the key line.}
+\sources{Article p.~587: ``a separate structure module for each of the 48 Evoformer blocks in the network while keeping all parameters of the main network frozen'', ``192 intermediate structures'', ``surprisingly smooth after the first few blocks'', ORF8 ``searches and rearranges secondary structure elements for many layers'', LmrP ``finds the final structure within the first few layers''. Fig.~4b legend: LmrP T1024 with domains D1 and D2, ORF8 T1064.}
+
+\slide{17}{Limitations: MSA depth and complexes}{Ben}{ends at 21:23}
+\ben{Two limits the paper names.}
+\stage{Point at the plot.}
+\ben{The horizontal axis is the number of effective sequences in the alignment, N eff, counted after merging near duplicates, on a log scale. The vertical axis is lDDT C alpha. Below about 30 effective sequences the accuracy falls, steeply for the blue group, whose chains have little template coverage. The orange group has good templates and falls much less.}
+\stage{Point at the second sentence.}
+\ben{The second limit is complexes. AlphaFold was trained on single chains. When a chain gets its shape mostly from contacts with other chains, the prediction is much weaker.}
+\ben{So the accuracy depends on the depth of the alignment, or on a template.}
+\onslide{Fig.~5a with re-set labels, the red line at 30, the two sentences, the key line.}
+\sources{Article p.~588: ``accuracy decreases substantially when the median alignment depth is less than around 30 sequences'', ``improvements in MSA depth over around 100 sequences lead to small gains'', ``much weaker for proteins that have few intra-chain or homotypic contacts compared to the number of heterotypic contacts''. Fig.~5a legend: template coverage above 60\,\% ($n$ = 6,743 chains) and below 30\,\% ($n$ = 1,596), $N_{\text{eff}}$ at 80\,\% identity.}
+\ifasked{why the MSA matters:}{the paper's hypothesis is that the MSA is needed to find the coarse structure early in the network, and that the refinement does not depend on it (p.~588).}
+
+\slide{18}{After AlphaFold 2: 2021 to 2025}{Ben}{ends at 22:23}
+\stage{Point down the timeline.}
+\ben{What followed. On the same day in July 2021, Baek and colleagues published RoseTTAFold, a network with three parallel tracks for the sequence, the pairs and the coordinates. In the same issue of Nature, DeepMind predicted the structures of 98.5 percent of the human proteins. AlphaFold-Multimer extended the network to complexes of several chains. In 2022 ESMFold replaced the alignment by a protein language model and predicts from one sequence alone, an order of magnitude faster. In 2024 AlphaFold 3 extended prediction to DNA, RNA and ligands, the small molecules that bind to proteins. In the same year Baker, Hassabis and Jumper received the Nobel Prize in Chemistry. In 2025 AlphaGenome, from Google DeepMind, predicted gene regulation from DNA sequence.}
+\ben{Both limits from the last slide were addressed directly. Multimer and AlphaFold 3 handle complexes, and ESMFold removes the alignment.}
+\onslide{The timeline with seven rows and their citations, the key line.}
+\sources{Baek et al., Science 373 (2021), first release online 15 July 2021 (confirmed on the web, the repository copy gives only the issue date), the same day as the article (Nature, published online 15 July 2021). Tunyasuvunakool et al., Nature 596 (2021), ``98.5\,\% of human proteins''. Evans et al., bioRxiv 2021. Lin et al., Science 379 (2023), preprint 2022: ``an order of magnitude speed-up''. Abramson et al., Nature 630 (2024). The Royal Swedish Academy of Sciences (2024): Baker, Hassabis, Jumper. Avsec et al., Nature 649 (2026), preprint 2025.}
+\ifasked{what ESMFold gives up:}{accuracy. Lin et al. report a TM-score of 0.68 on CASP14 and 0.83 on CAMEO for ESMFold, against 0.85 and 0.88 for AlphaFold 2 with MSAs and templates, and an order of magnitude in speed.}
+
+\slide{19}{AlphaFold 3: the four constraints revisited}{Ben}{ends at 24:13}
+\ben{AlphaFold 3 is a test of our four constraints. This is its architecture, Figure 1d of the AlphaFold 3 paper.}
+\stage{Point at the red frame.}
+\ben{One, the alignment. The MSA module shrinks to four blocks. Their job is to write the alignment into the pair representation, through the same outer product mean as in AlphaFold 2. After that the alignment itself is dropped, and only the pair representation goes on. So constraint one survives in a reduced form, and the paper reports that accuracy still falls for shallow alignments.}
+\stage{Point at the blue frame.}
+\ben{Two, the triangles. The Pairformer keeps 48 blocks of triangle updates on the pair representation, largely unchanged.}
+\stage{Point at the green frame.}
+\ben{Three and four, frames, IPA and FAPE. All three are gone. A diffusion module starts from random atom positions and removes the noise step by step. The symmetry is taught by random rotations and translations of the training data, and the loss is computed after aligning prediction and truth. AlphaFold 3 draws several candidate structures and ranks them. The reported costs are overlapping atoms and, in one benchmark, 4.4 percent of predictions with the wrong hand, although the model receives the correct chirality as input. Both are penalised in the ranking, which reduces them but does not remove them.}
+\ben{The paper reports no ablation of the removed parts. Our reading follows an essay by Richard Sutton, the bitter lesson. It says that methods that learn from data and compute beat methods that build in human knowledge. Here two of the four constraints were dropped and learned from data instead, at a measurable cost. The triangles stayed.}
+\onslide{Fig.~1d of the AlphaFold 3 paper with the MSA module framed in red, the Pairformer in blue and the diffusion module in green, one line per module with the constraint number and the module name in its colour, the 4.4\,\% on the third line, the key line.}
+\sources{Abramson et al. (2024) p.~493 to 497: ``the number of blocks is reduced to four'', ``the MSA representation is not retained and all information passes through the pair representation''. AF3 supplement Algorithm 8: each MSA module block adds an outer product mean of the MSA to the pair representation and runs the triangle updates on it, and the module returns only the pair representation. Article p.~497: the 4.4\,\% is the chirality violation rate on the PoseBusters benchmark after the ranking penalty. ``The pair processing and the number of blocks (48) is largely unchanged from AF2'', ``diffusion module that replaces the structure module of AF2'', Fig.~2b: ``rand. rot. trans., random rotation and translation''. p.~497: ``model outputs do not always respect chirality'', ``chirality violation rate of 4.4\,\% in the benchmark'' (PoseBusters), ``penalty for chirality violation in our ranking formula'', ``Penalizing clashes during ranking reduces the occurrence of this failure mode but does not eliminate them'', ``We use multiple seeds to ensure correct chirality''. AF3 supplement 3.7.1: ``weighted aligned MSE loss''. Dependence on MSA depth: p.~497 and Extended Data Fig.~7a. Sutton (2019).}
+\ifasked{why the structure module was dropped without an ablation:}{the article says the team ``had observed in AF2 that removing most of the complexity of the structure module had only a modest effect on the prediction accuracy'' (p.~495), which is the No IPA ablation of slide 15.}
+\ifasked{whether AlphaFold 3 is more accurate on single proteins:}{the article reports a significant improvement in protein monomer lDDT over AlphaFold-Multimer v2.3, a marked improvement on antibody interfaces, and ``a very similar dependence on MSA depth'' (p.~497). It also reports hallucinated order in disordered regions as a cost of the generative model (p.~497).}
+
+\slide{20}{Summary: the four constraints and their ablation}{Ben}{ends at 24:56}
+\ben{To summarise. Four constraints of the problem, each built into one part of the network.}
+\stage{Point at the table.}
+\ben{Attention over the alignment costs about two GDT points when it is removed. The triangles cost almost five. Replacing IPA, and with it the iteration of the structure module, costs between two and three. Without FAPE the model builds mirror images.}
+\ben{The paper's own conclusion is that these built in constraints let the network learn from the limited data in the Protein Data Bank. AlphaFold 3, with far more data, kept one of the four.}
+\ben{Thank you. We now turn to the exam question.}
+\onslide{Fig.~1e with the four numbers on the four parts, the table ``Without it'', the key line, the CC BY line.}
+\sources{The table repeats slide 15. ``Atomic accuracy'': the article's title and p.~584 (0.96\,\AA\ against a carbon atom of 1.4\,\AA).}
+
+% =============================================================================================
+\section*{Question time, both: exam question, questions for the audience, backups}
+
+\slide{21}{Exam question}{Evita and Ben}{ends at about 27:30}
+\both{The question from the course team arrives about seven days before the talk. Until then the slide is a placeholder. When it arrives, we write the question on the slide, and our answer in three sentences: the component or mechanism it asks about, what the paper shows, and the limit of that evidence. Whoever presented the matching slide answers.}
+\onslide{Not built until the question arrives (\texttt{\textbackslash examslidefalse} in main.tex). The slide must not show an invented question.}
+
+\slide{22}{Questions for the audience}{Evita and Ben}{ends at about 35:00}
+\both{We ask three questions, in increasing difficulty, about five minutes in all. We read a question, wait, and take two or three answers before we add ours.}
+\evita{Question one. pLDDT is trained on the model's own errors. When would you distrust it?}
+\stage{Answers to collect: proteins with no related sequences, designed proteins, disordered regions, chains in complexes. Then add ours.}
+\evita{Our addition. pLDDT is itself a prediction, and it was trained only on structures with a resolution better than 3 angstrom, not on NMR structures. For a protein unlike anything in the Protein Data Bank, both the structure and the confidence are extrapolations. Low pLDDT is still informative. The paper on the human proteome that Ben mentioned uses it to find regions that have no fixed structure, called disordered regions.}
+\ben{Question two. Accuracy falls below about 30 related sequences. Did the network learn folding, or evolution?}
+\stage{Answers to collect: both, evolution first, the MSA is a shortcut. Then add ours.}
+\ben{Our addition. The paper's own reading is that the alignment is needed to find the coarse fold early in the network, and that the refinement does not depend on it. ESMFold is evidence on both sides. It predicts from one sequence, but its language model was trained on tens of millions of sequences, so the evolution is in its weights.}
+\ben{Question three. AlphaFold 2 built symmetry and chirality in. AlphaFold 3 learns them from data. When is building in worth it?}
+\stage{Answers to collect: when data is scarce, when the symmetry is exact, when the cost of a violation is high. Then close with ours.}
+\ben{Our closing. AlphaFold 2's own supplement makes a surprising observation. Equivariance means that when the input is rotated, the output rotates with it. The ablation that removes IPA removes every equivariant component, and the network is still very accurate. AlphaFold 3 had far more data and a decoder that samples structures, the diffusion module. It dropped the frames and FAPE and pays 4.4 percent wrong chirality, which it patches in the ranking. What it kept is the triangle update on the pairs. So a built in symmetry pays when data is scarce and the symmetry is exact. The constraint that lasted is the one on the representation, the pair array with its triangles, not the ones on the geometry of the output.}
+\onslide{The three questions and the repository address.}
+\sources{SI 1.9.6: pLDDT trained on examples with resolution between 0.1 and 3.0\,\AA, no NMR structures. Tunyasuvunakool et al. (2021): regions ``likely to be disordered'', CAID benchmark. Article p.~588: the hypothesis on the MSA. Lin et al. (2023): the language model saw about 65 million unique UniRef sequences. SI 1.13.3: ``Another surprise is that equivariance in the network is not essential as the single ablation of IPA, which removes all equivariant components, is still a very accurate structure prediction network.'' Abramson et al. (2024) p.~497: 4.4\,\%.}
+
+\subsection*{Backup slides, shown only on request}
+
+\slide{B1}{IPA: invariance and equivariance}{Ben}{on request}
+\ben{Three lines. A global motion T global multiplies every frame from the left. In the distance between a query point of i and a key point of j, T global appears on both sides and cancels, so the attention weights do not change. The output points are read back in frame i, and T global meets its inverse, so the output in local coordinates does not change. The frame update is composed in the frame's own coordinates, so the new frame is T global times the new frame of the unmoved protein. That is exact equivariance under rotations and translations, the group SE 3, by construction. A reflection is not covered. The frames are built from the atoms with a right handed rule, so reflecting the atoms does not act on the frames as one global motion, and the supplement notes that IPA as well as FAPE can tell a protein from its mirror image. The loss is the main source of the handedness.}
+\sources{SI 1.8.2, equations 3 to 6 and its closing paragraph (``rigid motion'' excludes reflection), SI 1.8.3, SI 1.9.3 (``both FAPE and IPA can distinguish global reflections''). Article p.~587: FAPE provides ``the main source of chirality''.}
+
+\slide{B2}{Chirality: where the handedness comes from}{Ben}{on request}
+\ben{Frames are built from N, C alpha and C by Gram Schmidt, with the third axis the cross product of the first two, so every frame is right handed. Reflect all atoms. The frames are rebuilt from the reflected atoms and do not simply reflect with them. In local coordinates exactly the z coordinate flips. The unclamped FAPE between a structure and its mirror image is twice the sum of the absolute local z coordinates, a large number. The supplement tested it. A model trained with a loss on pairwise distances only, called dRMSD, often builds the mirror image, Supplementary Figure 9. The side chains are a separate matter. They are built from ideal geometry with a fixed handedness, so even when the backbone comes out mirrored, the side chains do not.}
+\sources{SI 1.8.1, Algorithm 21, SI 1.9.3, equations 11 to 17, Suppl.\ Fig.~9.}
+
+\slide{B3}{Generalisation: recent PDB structures}{Ben}{on request}
+\ben{These are 3,144 chains released after the training cutoff, with no related structure of more than 40 percent identical sequence in the training set. The median backbone error is 1.46 angstrom. The right panel shows that the side chains are right where the backbone is right. The CASP14 number of 0.96 angstrom is on domains, this one is on whole chains, so errors in how the domains are placed against each other count here.}
+\sources{Fig.~2a and 2b and their legend, p.~585: $n$ = 3,144, median 1.46\,\AA\ (1.40 to 1.56), ``highly sensitive to domain packing''.}
+
+\slide{B4}{AlphaFold 3: the reported failures}{Ben}{on request}
+\ben{Figure 5 of the AlphaFold 3 paper, the authors' own examples. On the left, a sugar bound to an enzyme. The predicted ligand, in orange, has the wrong hand at the starred carbon, the alpha form instead of the beta form. On the right, a trinucleosome. Two protein chains and the DNA run through each other. Both failures are penalised when the samples are ranked, and both remain in the predictions.}
+\sources{Abramson et al. (2024), Fig.~5b and 5e with their legend (p.~499): 7CTM, ``AF3 predicts alpha-d-glucuronic acid; the differing chiral centre is indicated by an asterisk''; 7PEU, ``overlapping DNA (pink) and protein (blue) chains''. p.~497: the two penalties in the ranking, 4.4\,\%, ``does not eliminate them''.}
+
+\end{document}

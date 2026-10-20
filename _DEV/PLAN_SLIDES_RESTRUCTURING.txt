@@ -1,0 +1,223 @@
+================================================================================
+SLIDE RESTRUCTURING & FIGURE INTEGRATION PLAN
+AlphaFold 2: Architecture, Geometry, and Mathematics
+Seminar: Machine Learning for Genomics (263-5351-00L), ETH Zurich
+Presenters: Evita Bosch Pokunevich (Part I) & Ben Bullinger (Part II)
+Date: October 16, 2026
+================================================================================
+
+1. EXECUTIVE SUMMARY & CORE PHILOSOPHY
+--------------------------------------------------------------------------------
+Based on team feedback and alignment:
+- THE PROBLEM: Previously, Invariant Point Attention (IPA) and Frame Aligned
+  Point Error (FAPE) were presented primarily as abstract, isolated geometric
+  formulas, feeling disconnected from the neural network architecture.
+- THE STRATEGY: Shift the primary deck to a MODEL-FIRST, ARCHITECTURE-GROUNDED
+  narrative. Every component is explained as a concrete neural network layer
+  driven by physical/biological constraints.
+- THE ROLE OF MATHEMATICS: The rigorous group-theoretic proofs (SE(3)
+  associativity, Gram-Schmidt metric bounds, Kabsch lower bound, FAPE quotient
+  space metricity) serve as the formal foundation, held ready in the BACKUP
+  SLIDES and Q&A defense. In the 25-minute live talk, leading with model
+  dataflow and physical intuition maximizes audience engagement and clarity.
+- FIGURE INTEGRATION:
+  * Evoformer (Slide 8): Incorporate Supplementary Figure 2 (MSA row-wise gated
+    self-attention with pair bias) to reveal how sequence and pair tracks meet.
+  * Structure Module / IPA (Slide 11): Incorporate Supplementary Figure 8
+    (Invariant Point Attention Module) to reveal the 3 parallel attention streams.
+  * In both figures, use red rounded callout boxes (\draw[callout]) to guide the
+    audience's eye directly to the critical architectural interactions.
+
+
+================================================================================
+2. SLIDE 8: EVOFORMER TRUNK WITH SUPPLEMENTARY FIGURE 2
+--------------------------------------------------------------------------------
+TARGET SLIDE: Slide 8 ("The Evoformer block")
+SPEAKER: Evita Bosch Pokunevich (Part I)
+
+A. FIGURE SPECIFICATION
+- File: literature/_AF2-SI.pdf
+- Location: Page 16, Supplementary Figure 2
+- Caption in SI: "Supplementary Figure 2 | MSA row-wise gated self-attention with
+  pair bias. Dimensions: s: sequences, r: residues, c: channels, h: heads."
+- Exact LaTeX Crop (A4 scale):
+  \includegraphics[page=16, trim=45bp 580bp 45bp 55bp, clip, width=\linewidth]{literature/_AF2-SI.pdf}
+
+B. RED CALLOUT BOXES (\draw[callout]) & ANCHORS
+1. CALLOUT 1: The Pair Bias Injection (Crucial Interaction)
+   - Coordinates: Box around the "pair bias (r_q, r_v, h)" and the "(+)" node
+     where pair features add directly into dot-product affinities.
+   - Spoken Focus: "Notice the (+) addition node in the center. The pair
+     representation z_ij is projected to head dimension h and added directly
+     into the sequence attention logits before softmax. 3D spatial distance
+     estimates literally steer which sequences attend to each other."
+2. CALLOUT 2: The Sigmoid Gating Mechanism
+   - Coordinates: Box around the top "sigmoid" pill and the "(o)" gating node.
+   - Spoken Focus: "The top branch computes an elementwise sigmoid gate g_si.
+     If an evolutionary correlation is noisy or biologically irrelevant, the
+     network dynamically gates it out."
+3. CALLOUT 3: Dual-Track Input Ingestion
+   - Coordinates: Box around the left input blocks: MSA repr. (s, r, c_m) and
+     pair representation (r, r, c_z).
+   - Spoken Focus: "Information does not collapse into a 2D matrix; the MSA
+     tensor and the Pair matrix enter side by side."
+
+C. NARRATIVE & PHYSICAL CONSTRAINTS (EVITA)
+- Physical Fact: Residues that are close in 3D space experience correlated
+  mutations (covariation). But an MSA contains thousands of sequences.
+- Model Solution: Supplementary Figure 2 shows the exact mathematical bridge:
+  a_ij = softmax_j( (q_i^T k_j) / sqrt(c) + b_ij^pair ).
+  The 2D pair graph acts as an attention prior over the 1D sequences.
+
+
+================================================================================
+3. SLIDE 11: INVARIANT POINT ATTENTION (IPA) WITH SUPPLEMENTARY FIGURE 8
+--------------------------------------------------------------------------------
+TARGET SLIDE: Slide 11 ("Invariant Point Attention (IPA)")
+SPEAKER: Ben Bullinger (Part II)
+
+A. FIGURE SPECIFICATION
+- File: literature/_AF2-SI.pdf
+- Location: Page 28, Supplementary Figure 8
+- Caption in SI: "Supplementary Figure 8 | Invariant Point Attention Module.
+  (top, blue arrays) modulation by the pair representation.
+  (middle, red arrays) standard attention on abstract features.
+  (bottom, green arrays) Invariant point attention.
+  Dimensions: r: residues, c: channels, h: heads, p: points."
+- Exact LaTeX Crop (A4 scale):
+  \includegraphics[page=28, trim=45bp 470bp 45bp 50bp, clip, width=\linewidth]{literature/_AF2-SI.pdf}
+
+B. RED CALLOUT BOXES (\draw[callout]) & ANCHORS
+1. CALLOUT 1: The Three Parallel Streams (Color-Coded Anatomy)
+   - Blue Branch (Top): Pair representation modulation (injects pair bias into
+     attention logits and pair values into output).
+   - Red Branch (Middle): Standard transformer scalar attention (q_i^T k_j).
+   - Green Branch (Bottom): 3D Invariant Point Attention on physical coordinate points.
+   - Spoken Focus: "Look at the three colored streams feeding through the layer:
+     Blue is the 2D pair graph from the Evoformer. Red is standard scalar
+     attention on abstract features. Green is the breakthrough: 3D point
+     attention operating on physical coordinates."
+2. CALLOUT 2: The 3D Point Generation in Local Frames
+   - Coordinates: Box around "query pts. (r, h, p, 3)", "key pts.", "value pts."
+     and the circle-dot operator placing them into the global frame via T_i.
+   - Spoken Focus: "Each residue projects 3D points into its own local coordinate
+     frame (green boxes). The current backbone pose T_i maps them into global 3D
+     space: x = R q + t."
+3. CALLOUT 3: The Squared Distance Affinities
+   - Coordinates: Box around "squared distance affinities (r_q, r_v, h)" and
+     the gamma scaling node.
+   - Spoken Focus: "Instead of just dot products, attention depends on Euclidean
+     distance: ||T_i q_i - T_j k_j||^2. Residues physically close in 3D space
+     receive high attention weights."
+4. CALLOUT 4: The Inversion / Pullback Operator
+   - Coordinates: Box around the "invert" node at the bottom right.
+   - Spoken Focus: "When 3D value points are aggregated, they are pulled back
+     into local coordinates by T_i^{-1}. Because global rotation T_global
+     cancels exactly against T_global^{-1}, the resulting update is strictly
+     invariant, making coordinate motion globally SE(3)-equivariant."
+
+C. NARRATIVE & PHYSICAL CONSTRAINTS (BEN)
+- Physical Fact: The laws of physics do not depend on the laboratory coordinate
+  system (SE(3) symmetry: SO(3) rotations + R^3 translations).
+- Model Solution: Supplementary Figure 8 shows how IPA combines scalar features,
+  relational pair features, and 3D Euclidean distances into a single unified
+  attention weight, updating the single representation without breaking rotational symmetry.
+
+
+================================================================================
+4. SLIDE 12: FRAME ALIGNED POINT ERROR (FAPE) GROUNDED IN THE TRAINING LOOP
+--------------------------------------------------------------------------------
+TARGET SLIDE: Slide 12 ("Frame Aligned Point Error (FAPE)")
+SPEAKER: Ben Bullinger (Part II)
+
+A. RESTRUCTURING THE VISUAL NARRATIVE
+- Instead of showing FAPE as an isolated abstract clamping formula, present it as
+  THE END-TO-END SUPERVISION LOOP of the Structure Module:
+  1. The Structure Module outputs predicted frames {T_k} and atoms {x_i}.
+  2. Ground truth structures provide true frames {T_k^true} and atoms {x_i^true}.
+  3. Rather than running a global Kabsch alignment, FAPE places a "camera" on
+     every single residue frame k, evaluating atom i in local coordinates:
+     x_i^(k) = T_k^{-1} o x_i.
+
+B. THREE PHYSICAL CONSTRAINTS EXPLAINED INTUITIVELY
+1. Why NOT Global RMSD? (Numerical & Physical Failure of Kabsch SVD)
+   - Global Kabsch alignment requires SVD during backpropagation. If two
+     singular values coalesce, gradients diverge.
+   - Global alignment allows an error in a floppy, unconstrained terminal tail
+     to rotate the entire protein, corrupting gradients across the stable core.
+   - FAPE localizes errors: an error in domain B does not penalize domain A.
+2. The 10 Angstrom Clamping Horizon
+   - Errors are capped at d_clamp = 10 Angstroms.
+   - Once two domains are further than 10 A apart, the gradient is exactly zero.
+     The network does not waste capacity trying to resolve large rigid body
+     displacements before fine-grained local packing is solved.
+3. Enforcing Stereochemical Chirality (No Mirror Images)
+   - Distance matrices are reflection-invariant (O(3) symmetry), producing 50%
+     unphysical D-amino acid mirror images.
+   - Frames are constructed via right-handed cross product: e_3 = e_1 x e_2.
+   - Under a mirror reflection, atomic coordinates invert, but the right-handed
+     basis does NOT invert. The local z-coordinate flips sign: (x_i^(k))_z -> -(x_i^(k))_z,
+     triggering a massive FAPE penalty that eliminates mirror structures.
+
+
+================================================================================
+5. ROLE OF MATHEMATICS & BACKUP SLIDES (THE FORMAL DEFENSE)
+--------------------------------------------------------------------------------
+In the main deck (Slides 8, 11, 12), the slides focus on:
+- Layer schematics (Supp Fig 2, Supp Fig 8),
+- Information flow (inputs -> operations -> outputs),
+- Physical constraint intuition (rotations, chirality, loop closures).
+
+The formal mathematical machinery is fully preserved and highlighted in the
+BACKUP SLIDES, ready for instant invocation during Q&A:
+
+- BACKUP 1 (IPA Invariance Proof):
+  Algebraic proof of exact SE(3) cancellation:
+  ||(Tg o Ti) o q - (Tg o Tj) o k||^2 = ||Tg o (Ti o q - Tj o k)||^2 = ||Ti o q - Tj o k||^2
+  and the inverse pullback: (Tg o Ti)^{-1} o Tg o Tj = Ti^{-1} o Tg^{-1} o Tg o Tj = Ti^{-1} o Tj.
+- BACKUP 2 (Chirality & FAPE Metric Lower Bound):
+  Gram-Schmidt frame reflection breakdown, non-negativity on quotient space
+  R^{3M} / SE(3), and the formal lower bound: L_FAPE >= min_{R,t} RMSD(R X + t, Y).
+- BACKUP 3 (Triangle Updates & 2D Metric Consistency):
+  Hadamard path marginalization sum_k z_ik (x) z_jk enforcing metric closure
+  d_ik <= d_ij + d_jk prior to coordinate generation.
+- BACKUP 4 (Non-linear Ablations & Recycling):
+  Detailed breakdown of the -16.3 GDT catastrophic collapse when removing both
+  IPA and recycling simultaneously (coupling between iterative trunk depth and 3D frames).
+- BACKUP 5 (AlphaFold 3: Diffusion vs Inductive Bias):
+  Why AF3 dropped frames/IPA/FAPE for 3D all-atom diffusion (chemical generality
+  across DNA/RNA/ligands) and the cost (4.4% chirality violations, clash filters).
+
+
+================================================================================
+6. IMPLEMENTATION CHECKLIST (FOR WHEN WE HAVE TIME TO EXECUTE)
+--------------------------------------------------------------------------------
+[ ] 1. main.tex:
+    - On Slide 8: Replace current schematic with cropped Supp Fig 2. Add TikZ
+      callout rectangles around pair bias injection, gating, and inputs.
+    - On Slide 11: Replace current triad diagram with cropped Supp Fig 8. Add
+      TikZ callout rectangles around pair stream, scalar stream, 3D point stream,
+      and local inversion operator.
+    - On Slide 12: Reframe visual around the local frame "camera" inspection loop
+      and chirality basis.
+    - Check that math notes stay concise and blue takeaway keys remain sharp.
+    - Compile with pdflatex main.tex and verify 0 errors.
+
+[ ] 2. SCRIPT.tex & SCRIPT.pdf:
+    - Update Slide 8 description to walk through Supp Fig 2 callouts.
+    - Update Slide 11 description to walk through Supp Fig 8 callouts.
+    - Ensure timing budget remains exactly 25:00 for Part I (handover at 12:45).
+    - Compile with pdflatex SCRIPT.tex and verify 0 errors.
+
+[ ] 3. SCREENPLAY.txt:
+    - Update spoken text for Slide 8 (Evita) with explicit (Point at pair bias
+      injection), (Point at sigmoid gating).
+    - Update spoken text for Slide 11 (Ben) with explicit (Point at blue pair
+      stream), (Point at green 3D point stream), (Point at local invert node).
+    - Verify spoken word count matches target rehearsal duration.
+
+[ ] 4. Visual Quality Inspection:
+    - Render updated slides to PNG and inspect visually for boundary clearances,
+      label alignment, and contrast.
+    - Verify git status is clean and push to origin/main.
+================================================================================
